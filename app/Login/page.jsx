@@ -1,6 +1,6 @@
 import react from "react"
 import LoginCard from "./LoginCard"
-import Navbar from "../Navbar/Navbar"
+import Navbar from "../Components/Navbar/Navbar"
 
 export default function Login(){
 

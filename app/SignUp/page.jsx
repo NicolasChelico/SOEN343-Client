@@ -99,13 +99,16 @@ export default function SignUp() {
           onChange={handleChange}
         />
       </div>
-      <div className="text-center">
+      <div className="flex flex-col gap-4 items-center text-center">
         <button
-          className="text-xl rounded-lg bg-black text-white px-24 py-2 m-4 ml-9 uppercase"
+          className="w-64 py-2 px-6 text-xl rounded-lg bg-black text-white uppercase"
           onClick={handleClick}
         >
           Sign Up
         </button>
+        <Link className="text" href="/Login">
+          Already a user? Sign In
+        </Link>
       </div>
     </FormHolder>
   );

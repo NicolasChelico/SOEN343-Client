@@ -40,7 +40,7 @@ export default function Login() {
   return (
     <FormHolder>
       <h1 className="text-4xl py-8 text-center font-sans">Welcome Back! </h1>
-      <div className="py-5 ml-16">
+      <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Username</label>
         <input
           type="text"
@@ -49,7 +49,7 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="py-5 ml-16">
+      <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Password</label>
         <input
           type="password"
@@ -58,12 +58,15 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex justify-center gap-4 text-center">
-        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white" href="/">
-          <button onClick={handleLogin}className="uppercase"> Sign In</button>
+      <div className="flex flex-col gap-4 items-center text-center">
+        <Link
+          className="w-64 py-2 px-6 text-xl rounded-lg bg-black text-white uppercase"
+          href="/SimulatorForm"
+        >
+          Sign In
         </Link>
-        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase" href="/SignUp">
-          Sign Up
+        <Link className="text" href="/SignUp">
+          Not a user? Sign Up
         </Link>
       </div>
     </FormHolder>

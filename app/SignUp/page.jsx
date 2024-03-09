@@ -6,7 +6,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
 
-export default function LoginCard() {
+export default function SignUp() {
   const [user, setUser] = useState({
     username: "",
     password: "",

@@ -1,30 +1,69 @@
 "use client";
-import react from "react";
+import { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-
-import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter();
   const [user, setUser] = useState({
     name: "",
     userName: "",
     password: "",
+    confirmPass: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Clear any previous error messages
+    setSuccessMessage(""); // Clear any previous success messages
+
+    if (user.name === "" || user.userName === "" || user.password === "") {
+      setErrorMessage("Please fill in all fields");
+      return;
+    }
+
+    if (user.password !== user.confirmPass) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:8080/User/AddUser", {
+        name: user.name,
+        userName: user.userName,
+        password: user.password,
+        role: "Stranger",
+      });
+      console.log(res);
+      setSuccessMessage("Sign up successful!");
+      // Optionally, redirect the user or clear the form here
+      router.push("/Dashboard");
+    } catch (err) {
+      console.log(err);
+      setErrorMessage("Sign up failed. Please try again.");
+    }
   };
 
   return (
     <FormHolder>
       <h1 className="text-4xl py-8 text-center font-sans">Welcome Back! </h1>
-      <div className="py-5 ml-16">
+
+      {errorMessage && (
+        <p className="text-red-500 text-center">{errorMessage}</p>
+      )}
+      {successMessage && (
+        <p className="text-green-500 text-center">{successMessage}</p>
+      )}
+
+      <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Full Name</label>
         <input
           type="text"
@@ -33,16 +72,16 @@ export default function SignUp() {
           onChange={handleChange}
         />
       </div>
-      <div className="py-5 ml-16">
-        <label className="text-xl">Name</label>
+      <div className="flex justify-between px-12 items-center">
+        <label className="text-xl">User Name</label>
         <input
           type="text"
-          name="username"
+          name="userName"
           className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
           onChange={handleChange}
         />
       </div>
-      <div className="py-5 ml-16">
+      <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Password</label>
         <input
           type="password"
@@ -51,21 +90,22 @@ export default function SignUp() {
           onChange={handleChange}
         />
       </div>
-      <div className="py-5 ml-16">
+      <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Confirm Password</label>
         <input
           type="password"
-          name="password"
+          name="confirmPass"
           className="ml-4 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
           onChange={handleChange}
         />
       </div>
       <div className="text-center">
-        <Link href="/SimulatorForm">
-          <button className="text-xl rounded-lg bg-black text-white px-24 py-2 m-4 ml-9 uppercase">
-            Sign In
-          </button>
-        </Link>
+        <button
+          className="text-xl rounded-lg bg-black text-white px-24 py-2 m-4 ml-9 uppercase"
+          onClick={handleClick}
+        >
+          Sign Up
+        </button>
       </div>
     </FormHolder>
   );

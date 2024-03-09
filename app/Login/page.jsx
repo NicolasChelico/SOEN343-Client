@@ -6,6 +6,7 @@ import FormHolder from "../Components/FormHolder";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
+  
 
   localStorage.clear;
   const [credentials, setCredentials] = useState({
@@ -70,17 +71,10 @@ export default function Login() {
         />
       </div>
       <div className="flex justify-center gap-4 text-center">
-        <Link
-          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
-          href="/" 
-        >
-         <button onClick={handleLogin} >Sign In</button>
-         <button onClick={handleLogin} >Sign In</button>
+        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white" href="/">
+          <button onClick={handleLogin}className="uppercase"> Sign In</button>
         </Link>
-        <Link
-          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
-          href="/SignUp"
-        >
+        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase" href="/SignUp">
           Sign Up
         </Link>
       </div>

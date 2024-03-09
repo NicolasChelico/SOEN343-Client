@@ -7,7 +7,6 @@ export default function SimulatorFormContainer() {
    <HomeWrapper>
     {/* SimulatorForm is just the login card container that is grey */}
      <SimulatorForm>
-
      </SimulatorForm>
    </HomeWrapper>
   )

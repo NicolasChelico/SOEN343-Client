@@ -11,17 +11,27 @@ export default function SimulatorForm(props) {
             <p className="text-gray-400/90 font-sans">Please enter the home specifications.</p>
         </div>
         <div className="flex flex-col text-justify w-2/4 justify-center ml-40">
-            <div className="my-4">
-                <label htmlFor=""># of Rooms: </label>
-                <input type ="number" name="NumRooms" max='4' min='1'  className="w-16 text-center" placeholder="e.g 1"/>      
+            <div className="my-2">
+                <span>
+                    <label htmlFor="">Inside temperature: </label>
+                    <input type ="number" name="insideTemp"  className="w-16 text-center"/> 
+                    °C 
+                </span> 
             </div>
-            <div className="my-4">
+            <div className="my-2">
+                <span>
+                    <label htmlFor="">Outside temperature:</label>
+                    <input type ="number" name="outdoorTemp"  className="w-16 text-center"/>    
+                     °C 
+                </span> 
+            </div>
+            <div className="my-2">
                 <label htmlFor="">Set Date: </label>
-                <input type ="date" name="NumRooms" max='3' min='0' />        
+                <input type ="date" name="date"  />        
             </div>
-            <div className="my-4">
+            <div className="my-2">
                 <label htmlFor="">Set Time: </label>
-                <input type ="time" name="NumRooms" max='3' min='0' />        
+                <input type ="time" name="time" />        
             </div>
             <div>
         </div>

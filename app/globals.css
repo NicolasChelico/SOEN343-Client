@@ -16,6 +16,8 @@ h1 {
 /* Adjust the path to the image relative to the 'public' directory */
 /* Assuming 'LoginHero.jpg' is directly in the 'public/Images' directory */
 
-
+body {
+    height: 100vh;
+}
 
 /* Your custom styles here */

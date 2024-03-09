@@ -40,11 +40,18 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="text-center">
-        <Link href="/SimulatorForm">
-          <button className="text-xl rounded-lg bg-black text-white px-24 py-2 m-4 ml-9 uppercase">
-            Sign In
-          </button>
+      <div className="flex justify-center gap-4 text-center">
+        <Link
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/SimulatorForm"
+        >
+          Sign In
+        </Link>
+        <Link
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/SignUp"
+        >
+          Sign Up
         </Link>
       </div>
     </FormHolder>

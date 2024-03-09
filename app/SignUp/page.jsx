@@ -8,7 +8,8 @@ import FormHolder from "../Components/FormHolder";
 
 export default function SignUp() {
   const [user, setUser] = useState({
-    username: "",
+    name: "",
+    userName: "",
     password: "",
   });
 
@@ -20,12 +21,20 @@ export default function SignUp() {
     e.preventDefault();
   };
 
-  console.log(user);
   return (
     <FormHolder>
       <h1 className="text-4xl py-8 text-center font-sans">Welcome Back! </h1>
       <div className="py-5 ml-16">
-        <label className="text-xl">Username</label>
+        <label className="text-xl">Full Name</label>
+        <input
+          type="text"
+          name="name"
+          className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="py-5 ml-16">
+        <label className="text-xl">Name</label>
         <input
           type="text"
           name="username"
@@ -35,6 +44,15 @@ export default function SignUp() {
       </div>
       <div className="py-5 ml-16">
         <label className="text-xl">Password</label>
+        <input
+          type="password"
+          name="password"
+          className="ml-4 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="py-5 ml-16">
+        <label className="text-xl">Confirm Password</label>
         <input
           type="password"
           name="password"

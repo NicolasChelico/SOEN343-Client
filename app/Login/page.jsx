@@ -70,12 +70,15 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex justify-center gap-4 text-center">
-        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white" href="/">
-          <button onClick={handleLogin}className="uppercase"> Sign In</button>
+      <div className="flex flex-col gap-4 items-center text-center">
+        <Link
+          className="w-64 py-2 px-6 text-xl rounded-lg bg-black text-white uppercase"
+          href="/SimulatorForm"
+        >
+          Sign In
         </Link>
-        <Link className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase" href="/SignUp">
-          Sign Up
+        <Link className="text" href="/SignUp">
+          Not a user? Sign Up
         </Link>
       </div>
     </FormHolder>

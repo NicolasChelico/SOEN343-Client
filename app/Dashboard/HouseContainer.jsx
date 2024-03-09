@@ -6,7 +6,7 @@ export default function HouseContainer(props) {
 
 
 
-  console.log(HouseLayout.map(obj => { return obj}))
+
 
 
   return (

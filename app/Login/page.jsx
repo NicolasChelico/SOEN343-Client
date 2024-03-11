@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
 import axios from 'axios'
+import axios from 'axios'
 import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
-  
 
   localStorage.clear;
   const [credentials, setCredentials] = useState({
@@ -70,15 +70,18 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col gap-4 items-center text-center">
+      <div className="flex justify-center gap-4 text-center">
         <Link
-          className="w-64 py-2 px-6 text-xl rounded-lg bg-black text-white uppercase"
-          href="/SimulatorForm"
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/" 
         >
-          Sign In
+         <button onClick={handleLogin} >Sign In</button>
         </Link>
-        <Link className="text" href="/SignUp">
-          Not a user? Sign Up
+        <Link
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/SignUp"
+        >
+          Sign Up
         </Link>
       </div>
     </FormHolder>

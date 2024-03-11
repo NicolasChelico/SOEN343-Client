@@ -9,7 +9,7 @@ export default function SideNav(props){
 
   const [simulation, setSimulation] = useState(false);
   
-
+  
   return (
     <div className="flex w-48 h-screen">
       <div className="w-48 bg-gray-800 text-white pt-6 p-2">

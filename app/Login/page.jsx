@@ -1,24 +1,45 @@
 "use client";
 import Link from "next/link";
-
+import axios from 'axios'
 import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
 
 export default function Login() {
-  const [user, setUser] = useState({
-    username: "",
+
+  localStorage.clear;
+  const [credentials, setCredentials] = useState({
+    userName: "",
     password: "",
   });
 
   const handleChange = (e) => {
-    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    
   };
 
-  const handleClick = (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-  };
 
-  console.log(user);
+    try{
+      const response = await axios.post('http://localhost:8080/User/AuthenticateUser',credentials);
+      console.log('response data', response.data)
+      localStorage.setItem('userId', response.data.userId)
+      localStorage.setItem('role', response.data.role)
+      localStorage.setItem('userName', response.data.userName)
+      alert('works')
+      
+    }catch(error){
+      console.log('Login failed. ' , error.response.data)
+      alert('Wrong credentials. ');   
+    }
+  }
+
+  console.log('Role: from local ',localStorage.getItem('role'))
+
+
+
+ 
   return (
     <FormHolder>
       <h1 className="text-4xl py-8 text-center font-sans">Welcome Back! </h1>
@@ -26,7 +47,7 @@ export default function Login() {
         <label className="text-xl">Username</label>
         <input
           type="text"
-          name="username"
+          name="userName"
           className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
           onChange={handleChange}
         />
@@ -40,15 +61,18 @@ export default function Login() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col gap-4 items-center text-center">
+      <div className="flex justify-center gap-4 text-center">
         <Link
-          className="w-64 py-2 px-6 text-xl rounded-lg bg-black text-white uppercase"
-          href="/SimulatorForm"
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/" 
         >
-          Sign In
+         <button onClick={handleLogin} >Sign In</button>
         </Link>
-        <Link className="text" href="/SignUp">
-          Not a user? Sign Up
+        <Link
+          className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
+          href="/SignUp"
+        >
+          Sign Up
         </Link>
       </div>
     </FormHolder>

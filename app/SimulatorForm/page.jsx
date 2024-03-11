@@ -44,7 +44,7 @@ export default function SimulatorFormContainer() {
         </div>
         <div></div>
         <div className="flex">
-          <Link href="/Dashboard">
+          <Link href="/Dashboard" >
             <button className="text-l rounded-lg bg-black text-white px-16 py-2 m-8 uppercase ">
               submit
             </button>

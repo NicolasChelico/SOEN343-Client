@@ -9,9 +9,9 @@ const getHomeLayout = async () => {
     });
 };
 
-const toggleLight = async (roomId, elementId) => {
+const toggleSmartElement = async (roomId, elementId) => {
   return await axios
-    .post(`http://localhost:8080/HomeController/ToggleSmartElement`, {
+    .post(`http://localhost:8080/SmartElementController/ToggleSmartElement`, {
       roomId,
       elementId,
     })
@@ -21,4 +21,14 @@ const toggleLight = async (roomId, elementId) => {
     });
 };
 
-export { getHomeLayout, toggleLight };
+const toggleAllLights = async () => {
+  return await axios
+    .post(`http://localhost:8080/HomeController/toggleAllElements`, {
+      elementType: "Light",
+    })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    });
+};
+export { getHomeLayout, toggleSmartElement, toggleAllLights };

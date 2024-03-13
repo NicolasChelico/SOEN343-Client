@@ -24,7 +24,9 @@ export default function Room({ roomData }) {
   );
 
   return (
+
     <div className="bg-slate-400 border border-black flex flex-col items-center justify-center">
+
       <div>{room.roomType}</div>
 
       <div className="flex justify-center items-center">

@@ -77,6 +77,8 @@ export default function SmartHomeSimulator() {
     setActiveElement(e);
   };
 
+  
+
   return (
     <div className="flex flex-row">
       <SideNav role={role} name={userName} />

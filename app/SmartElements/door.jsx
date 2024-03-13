@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaDoorOpen } from "react-icons/fa";
 import { FaDoorClosed } from "react-icons/fa";
+import { toggleSmartElement } from "../lib/home";
 
 export default function Door({ doorData, roomId }) {
   const [door, setDoor] = useState(doorData);

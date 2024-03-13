@@ -84,7 +84,7 @@ export default function SmartHomeSimulator() {
       <SideNav role={role} name={userName} />
       <CommandsContainer>
         <div>
-        <ul className="flex space-x-4 bg-slate-800 py-4">
+          <ul className="flex space-x-4 bg-slate-800 py-4">
             <li
               onClick={() => handleClick("SHS")}
               className={`cursor-pointer border-2 border-white my-2 mx-1 px-6 py-2 ${

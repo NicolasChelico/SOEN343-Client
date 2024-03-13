@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import SideNav from "../Components/SideNav/SideNav";
-import CommandsContainer from "./CommandsContainer";
-import HouseContainer from "./HouseContainer";
-import Home from "../HomeComponents/Home";
-import SHC from "../Modules/SHC";
-import SHS from "../Modules/SHS";
-import { roomsData } from "../HouseLayoutFile/HouseLayout";
+'use client';
+import React, {useEffect, useState, useRef, useCallback} from 'react'
+import SideNav from '../Components/SideNav/SideNav'
+import CommandsContainer from './CommandsContainer';
+import HouseContainer from './HouseContainer';
+import Home from '../HomeComponents/Home'
+import SHC from  '../Modules/SHC'
+import SHS from '../Modules/SHS';
+import { roomsData } from "../HouseLayoutFile/HouseLayout"
 
 export default function SmartHomeSimulator() {
   let role = localStorage.getItem("role");
@@ -68,30 +68,33 @@ export default function SmartHomeSimulator() {
     });
   };
 
-  const handleClick = (e) => {
-    setActiveElement(e);
-    console.log(activeElement);
-  };
+  
+    const handleClick = (e) => {
+        setActiveElement(e)
+        console.log(activeElement)
+    }
 
-  const [users, setUsers] = useState([]);
+const [users, setUsers] = useState([]);
 
-  useEffect(() => {
+useEffect(()=> {
     const fetchUsers = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8080/User`);
-        setUsers(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+        try{
+            const res = await axios.get(`http://localhost:8080/User`); 
+            setUsers(res.data)
+        }catch(err){
+            console.log(err)
+        }      
+    }
     fetchUsers();
-  }, [localStorage]);
+},[localStorage])
 
-  const onDelete = (userId) => {
+
+const onDelete = userId => {
     console.log(userId);
-  };
+}
 
-  console.log(roomsData);
+
+  console.log(roomsData)
   return (
     <div className="flex flex-row">
       {/* // This is the sidebar holding all the modules // */}

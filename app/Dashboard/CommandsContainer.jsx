@@ -69,10 +69,10 @@ export default function CommandsContainer(props) {
         </ul>
         </div> */}
 
-      {/* {activeElement === 'SHS' && (<SHS />)} */}
-      {activeElement === "SHC" && ""}
-
-      {props.children}
+    {/* {activeElement === 'SHS' && (<SHS />)} */}
+    {activeElement === 'SHC' && ("")}
+        
+        {props.children}
     </div>
   );
 }

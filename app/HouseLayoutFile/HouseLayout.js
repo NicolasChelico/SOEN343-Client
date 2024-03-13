@@ -11,6 +11,7 @@ const roomsData = {
           type: "Door",
           elementId: 1,
           elementType: "Door",
+          open: false,
         },
         {
           type: "Window",
@@ -40,6 +41,7 @@ const roomsData = {
           type: "Door",
           elementId: 1,
           elementType: null,
+          open: false,
         },
         {
           type: "Window",
@@ -81,6 +83,7 @@ const roomsData = {
           type: "Door",
           elementId: 1,
           elementType: "Door",
+          open: false,
         },
         {
           type: "Window",

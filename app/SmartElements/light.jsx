@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
+
 export default function Light({ lightData, roomId }) {
   const [light, setLight] = useState(lightData);
 
@@ -19,6 +20,6 @@ export default function Light({ lightData, roomId }) {
       className={`p-2 m-1 rounded-full ${
         light.open ? "bg-yellow-500" : "bg-gray-500"
       }`}
-    ></button>
+    > </button>
   );
 }

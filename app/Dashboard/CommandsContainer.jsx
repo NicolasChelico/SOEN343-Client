@@ -30,7 +30,7 @@ export default function CommandsContainer(props) {
 
   return (
     <div className="flex flex-col w-2/4 h-7/8 mt-12 ml-4 mb-12 rounded-md border-2 border-slate-800">
-      
+        
 
       {props.children}
     </div>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Light from "../SmartElements/light";
+import Door from "../SmartElements/door";
 
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
-
+  
   useEffect(() => {
     console.log("Room data changed in room: " + roomData.roomId);
     setRoom(roomData);
@@ -20,7 +21,7 @@ export default function Room({ roomData }) {
 
   return (
     <div
-      className="h-80 border border-black flex items-center justify-center"
+      className="h-80 w-40 border border-black flex items-center flex-col justify-center"
       style={{
         backgroundColor: generateRandomColor(),
       }}
@@ -29,9 +30,14 @@ export default function Room({ roomData }) {
       {room.smartElements.map((element, index) => {
         if (element.elementType === "Light") {
           return <Light key={index} lightData={element} roomId={room.roomId} />;
+       
+        }
+        else if (element.type === "Door") {
+          return <Door key={index} doorData={element} roomId={room.roomId} />;
         }
         return null;
       })}
+     
     </div>
   );
 }

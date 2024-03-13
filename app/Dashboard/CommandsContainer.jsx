@@ -35,7 +35,7 @@ const onDelete = userId => {
 
   return (
     <div className="flex flex-col w-2/4 h-7/8 mt-12 ml-4 mb-12 rounded-md border-2 border-slate-800 2/1">
-      <div>
+      {/* <div>
         <ul className="flex space-x-4 bg-slate-800 py-4">
             <li onClick={() => handleClick('SHS') } 
             className={`cursor-pointer border-2 border-white my-2 mx-1 px-6 py-2 ${activeElement === 'SHS' ? 'bg-white text-bg-slate-800' : 'text-white bg-slate-800'}`}>
@@ -54,9 +54,9 @@ const onDelete = userId => {
                 SHH
             </li>
         </ul>
-        </div>
+        </div> */}
 
-    {activeElement === 'SHS' && (<SHS />)}
+    {/* {activeElement === 'SHS' && (<SHS />)} */}
     {activeElement === 'SHC' && ("")}
         
         {props.children}

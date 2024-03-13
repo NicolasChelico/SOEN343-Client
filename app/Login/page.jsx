@@ -49,7 +49,6 @@ export default function Login() {
         <input
           type="text"
           name="userName"
-          name="userName"
           className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
           onChange={handleChange}
         />

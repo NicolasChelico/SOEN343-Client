@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import { IoPersonOutline } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
-
+import Clock from './Clock';
 
 export default function SideNav(props){
 
@@ -11,7 +11,7 @@ export default function SideNav(props){
   
   
   return (
-    <div className="flex w-48 h-screen">
+    <div className="flex w-64 h-screen">
       <div className="w-48 bg-gray-800 text-white pt-6 p-2">
         {/* Your side navigation content goes here */}
         <div className='mb-16'>
@@ -44,11 +44,11 @@ export default function SideNav(props){
               <div className="text-justify">
                 <p className="mb-4">Outside temp. wef{props.outsideTemp} C</p>
                 <p className="mb-4">Date: {props.currentDate}</p>
-                <p>Time: {props.time}</p>
+                <p><Clock /></p>
                 
               </div>
-              <label>Time speed.</label>
-                <input type="range" min="-20" max ="20"/>
+              {/* <label>Time speed.</label>
+                <input type="range" min="-20" max ="20"/> */}
             </div>
 
           </li>

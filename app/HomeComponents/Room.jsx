@@ -10,22 +10,10 @@ export default function Room({ roomData }) {
     setRoom(roomData);
   }, [roomData]);
 
-  function generateRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+
 
   return (
-    <div
-      className="h-80 w-40 border border-black flex items-center flex-col justify-center"
-      style={{
-        backgroundColor: generateRandomColor(),
-      }}
-    >
+    <div className="h-60 w-40 border bg-white border-black flex items-center flex-col justify-center" >
       {room.roomType}
       {room.smartElements.map((element, index) => {
         if (element.elementType === "Light") {
@@ -35,6 +23,7 @@ export default function Room({ roomData }) {
         else if (element.type === "Door") {
           return <Door key={index} doorData={element} roomId={room.roomId} />;
         }
+        
         return null;
       })}
      

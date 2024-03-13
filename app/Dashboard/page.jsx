@@ -84,7 +84,7 @@ export default function SmartHomeSimulator() {
       }
     };
     fetchUsers();
-  }, [localStorage]);
+  }, []);
 
 
 

@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-
+import { toggleLight } from "../lib/home";
 
 export default function Light({ lightData, roomId }) {
   const [light, setLight] = useState(lightData);
 
-  const handleCLick = () => {
-    setLight({ ...light, open: !light.open });
+  const handleCLick = async () => {
+    const updatedLight = await toggleLight(roomId, light.elementId);
+    setLight(updatedLight);
     console.log(`Toggle light: ${light.elementId} in room: ${roomId}`);
   };
 
@@ -18,8 +19,10 @@ export default function Light({ lightData, roomId }) {
     <button
       onClick={handleCLick}
       className={`p-2 m-1 rounded-full ${
-        light.open ? "bg-yellow-500" : "bg-gray-500"
+        light.isOpen ? "bg-yellow-500" : "bg-gray-500"
       }`}
-    > </button>
+    >
+      {" "}
+    </button>
   );
 }

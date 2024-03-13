@@ -77,12 +77,54 @@ export default function SmartHomeSimulator() {
     setActiveElement(e);
   };
 
+  
+
   return (
     <div className="flex flex-row">
       <SideNav role={role} name={userName} />
       <CommandsContainer>
         <div>
-          <ul className="flex space-x-4 bg-slate-800 py-4">
+        <ul className="flex space-x-4 bg-slate-800 py-4">
+            <li
+              onClick={() => handleClick("SHS")}
+              className={`cursor-pointer border-2 border-white my-2 mx-1 px-6 py-2 ${
+                activeElement === "SHS"
+                  ? "bg-white text-bg-slate-800"
+                  : "text-white bg-slate-800"
+              }`}
+            >
+              SHS
+            </li>
+            <li
+              onClick={() => handleClick("SHC")}
+              className={`cursor-pointer border-2 border-white m-2 px-6 py-2  ${
+                activeElement === "SHC"
+                  ? "bg-white text-bg-slate-800"
+                  : "text-white"
+              }`}
+            >
+              SHC
+            </li>
+            <li
+              onClick={() => handleClick("SHP")}
+              className={`cursor-pointer border-2 border-white m-2 px-6 py-2  ${
+                activeElement === "SHP"
+                  ? "bg-white text-bg-slate-800"
+                  : "text-white"
+              }`}
+            >
+              SHP
+            </li>
+            <li
+              onClick={() => handleClick("SHH")}
+              className={`cursor-pointer border-2 border-white mx-1 my-2 px-6 py-2  ${
+                activeElement === "SHH"
+                  ? "bg-white text-bg-slate-800"
+                  : "text-white border-1"
+              }`}
+            >
+              SHH
+            </li>
             {/* Navigation items */}
             {/* ... */}
           </ul>

@@ -10,14 +10,7 @@ export default function Room({ roomData }) {
     setRoom(roomData);
   }, [roomData]);
 
-  function generateRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+
 
   const Lights = room.smartElementList.filter(
     (element) => element.elementType === "Light"
@@ -28,6 +21,7 @@ export default function Room({ roomData }) {
   );
 
   return (
+
     <div
       className="border border-black flex flex-col items-center justify-center"
       style={{

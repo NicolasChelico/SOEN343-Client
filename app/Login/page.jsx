@@ -29,7 +29,6 @@ export default function Login() {
       localStorage.setItem('userId', response.data.userId)
       localStorage.setItem('role', response.data.role)
       localStorage.setItem('userName', response.data.userName)
-      alert('works')
       router.push("/Dashboard")
       
     }catch(error){

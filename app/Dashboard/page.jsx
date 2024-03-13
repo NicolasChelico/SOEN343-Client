@@ -73,8 +73,7 @@ export default function SmartHomeSimulator() {
     console.log(activeElement);
   };
 
-  const [users, setUsers] = useState([]);
-
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -87,9 +86,7 @@ export default function SmartHomeSimulator() {
     fetchUsers();
   }, [localStorage]);
 
-  const onDelete = (userId) => {
-    console.log(userId);
-  };
+
 
   console.log(roomsData);
   return (

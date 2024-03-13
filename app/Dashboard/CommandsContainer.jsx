@@ -1,37 +1,50 @@
-import React, {useState, useEffect} from 'react'
-import SHS from '../Modules/SHS'
-import axios from 'axios';
-import SHC from '../Modules/SHC';
-
-
+import React, { useState, useEffect } from "react";
+import SHS from "../Modules/SHS";
+import axios from "axios";
+import SHC from "../Modules/SHC";
 
 export default function CommandsContainer(props) {
-    const [activeElement, setActiveElement] = useState("SHC");
-    const handleClick = (e) => {
-        setActiveElement(e)
-        console.log(activeElement)
-    }
+  const [activeElement, setActiveElement] = useState("SHC");
+  const handleClick = (e) => {
+    setActiveElement(e);
+    console.log(activeElement);
+  };
 
-const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
 
-useEffect(()=> {
+  useEffect(() => {
     const fetchUsers = async () => {
-        try{
-            const res = await axios.get(`http://localhost:8080/User`); 
-            setUsers(res.data)
-        }catch(err){
-            console.log(err)
-        }      
-    }
+      try {
+        const res = await axios.get(`http://localhost:8080/User`);
+        setUsers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     fetchUsers();
-},[localStorage])
+  }, [localStorage]);
 
-
-const onDelete = userId => {
+  const onDelete = (userId) => {
     console.log(userId);
-}
+  };
 
-    
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8080/User`);
+        setUsers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUsers();
+  }, [localStorage]);
+
+  const onDelete = (userId) => {
+    console.log(userId);
+  };
 
   return (
     <div className="flex flex-col w-2/4 h-7/8 mt-12 ml-4 mb-12 rounded-md border-2 border-slate-800 2/1">
@@ -56,11 +69,10 @@ const onDelete = userId => {
         </ul>
         </div> */}
 
-    {/* {activeElement === 'SHS' && (<SHS />)} */}
-    {activeElement === 'SHC' && ("")}
-        
-        {props.children}
+      {/* {activeElement === 'SHS' && (<SHS />)} */}
+      {activeElement === "SHC" && ""}
+
+      {props.children}
     </div>
-    
-  )
+  );
 }

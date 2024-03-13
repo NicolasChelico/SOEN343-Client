@@ -105,4 +105,4 @@ const roomsData = {
   ],
 };
 
-export  { roomsData };
+export { roomsData };

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 export default function Light({ lightData, roomId }) {
   const [light, setLight] = useState(lightData);
-  
+
   const handleCLick = () => {
     setLight({ ...light, open: !light.open });
     console.log(`Toggle light: ${light.elementId} in room: ${roomId}`);

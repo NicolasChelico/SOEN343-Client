@@ -1,10 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 export default function SHC({
   toggleAllLights,
   toggleRoomLights,
   changeRoomRef,
 }) {
+  const [selectValue, setSelectValue] = useState("true");
+
+  const handleSelectChange = (event) => {
+    setSelectValue(event.target.value);
+  };
+
   const roomNumberRef = useRef(0);
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
@@ -26,7 +32,7 @@ export default function SHC({
               defaultValue={roomNumberRef.current}
               onChange={handleChange}
             />
-            <select>
+            <select value={selectValue} onChange={handleSelectChange}>
               <option value="true">ON</option>
               <option value="false">OFF</option>
             </select>
@@ -41,7 +47,7 @@ export default function SHC({
         <label>Turn off All lights:</label>
         <button
           className="rounded-md bg-slate-800 text-white px-2 m-2"
-          onClick={() => toggleAllLights()}
+          onClick={() => toggleAllLights(selectValue === "true" ? true : false)}
         >
           TURN OFF ALL
         </button>

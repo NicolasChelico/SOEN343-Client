@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { FaDoorOpen } from "react-icons/fa";
 import { FaDoorClosed } from "react-icons/fa";
+
 export default function Door({ doorData, roomId }) {
   const [door, setDoor] = useState(doorData);
 
-  const handleClick = () => {
-    setDoor((prevDoor) => ({ ...prevDoor, open: !prevDoor.open }));
-    console.log(`Toggle Door in room: ${roomId}`);
+  const handleClick = async () => {
+    console.log(
+      `Toggling ${door.elementType}: ${door.elementId} in room: ${roomId}`
+    );
+    const updatedSmartElement = await toggleSmartElement(
+      roomId,
+      door.elementId
+    );
+
+    setDoor(updatedSmartElement);
+    console.log(
+      `Toggled ${door.elementType}: ${door.elementId} in room: ${roomId}`
+    );
   };
 
   useEffect(() => {
@@ -14,11 +25,12 @@ export default function Door({ doorData, roomId }) {
   }, [doorData]);
 
   return (
-    <button
-      onClick={handleClick}
-      className={`p-2 m-1`}
-    >
-      {door.open ? <FaDoorClosed size={30}/>:<FaDoorOpen size={30}/>}
+    <button onClick={handleClick} className={`p-2 m-1`}>
+      {door.isOpen ? (
+        <FaDoorClosed size={30} color="black" />
+      ) : (
+        <FaDoorOpen size={30} color="black" />
+      )}
     </button>
   );
 }

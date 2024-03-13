@@ -9,7 +9,7 @@ import Room from "../HomeComponents/Room";
 import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
 
-import { getHomeLayout } from "../lib/home";
+import { getHomeLayout, toggleAllLights } from "../lib/home";
 
 export default function SmartHomeSimulator() {
   const role = localStorage.getItem("role");
@@ -32,7 +32,7 @@ export default function SmartHomeSimulator() {
     roomNumberRef.current = e.target.value;
   };
 
-  const toggleRoomLights = useCallback((roomId) => {
+  const changeRoomLights = useCallback((roomId) => {
     const roomIdInt = parseInt(roomId);
     setHouseLayout((prevState) => {
       const updatedRooms = prevState.roomList.map((room) => {
@@ -53,21 +53,24 @@ export default function SmartHomeSimulator() {
     });
   }, []);
 
-  const toggleAllLights = () => {
-    setHouseLayout((prevState) => {
-      const updatedRooms = prevState.roomList.map((room) => {
-        return {
-          ...room,
-          smartElementList: room.smartElementList.map((element) => {
-            if (element.elementType === "Light") {
-              return { ...element, isOpen: false };
-            }
-            return element;
-          }),
-        };
-      });
-      return { ...prevState, roomList: updatedRooms };
-    });
+  const changeAllLights = async () => {
+    const updatedHouseLayout = await toggleAllLights();
+    setHouseLayout(updatedHouseLayout);
+
+    // setHouseLayout((prevState) => {
+    //   const updatedRooms = prevState.roomList.map((room) => {
+    //     return {
+    //       ...room,
+    //       smartElementList: room.smartElementList.map((element) => {
+    //         if (element.elementType === "Light") {
+    //           return { ...element, isOpen: isOn };
+    //         }
+    //         return element;
+    //       }),
+    //     };
+    //   });
+    //   return { ...prevState, roomList: updatedRooms };
+    // });
   };
 
   const handleClick = (e) => {
@@ -129,8 +132,8 @@ export default function SmartHomeSimulator() {
         {/* Depending which element is chosen from the nav, load the appropriate module. */}
         {activeElement === "SHC" && (
           <SHC
-            toggleAllLights={toggleAllLights}
-            toggleRoomLights={toggleRoomLights}
+            toggleAllLights={changeAllLights}
+            toggleRoomLights={changeRoomLights}
             changeRoomRef={handleChange}
           />
         )}

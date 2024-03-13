@@ -12,20 +12,34 @@ export default function Room({ roomData }) {
 
 
 
+  const Lights = room.smartElementList.filter(
+    (element) => element.elementType === "Light"
+  );
+
+  const Doors = room.smartElementList.filter(
+    (element) => element.elementType === "Door"
+  );
+
   return (
-    <div className="h-60 w-40 border bg-white border-black flex items-center flex-col justify-center" >
-      {room.roomType}
-      {room &&
-        room.smartElementList.map((element, index) => {
-          if (element.elementType === "Light") {
-            return (
-              <Light key={index} lightData={element} roomId={room.roomId} />
-            );
-          } else if (element.type === "Door") {
-            return <Door key={index} doorData={element} roomId={room.roomId} />;
-          }
-          return null;
-        })}
+
+    <div
+      className="border border-black flex flex-col items-center justify-center"
+      style={{
+        backgroundColor: generateRandomColor(),
+      }}
+    >
+      <div>{room.roomType}</div>
+
+      <div className="flex justify-center items-center">
+        {room &&
+          Lights.map((light, index) => (
+            <Light key={index} lightData={light} roomId={room.roomId} />
+          ))}
+        {room &&
+          Doors.map((door, index) => (
+            <Door key={index} doorData={door} roomId={room.roomId} />
+          ))}
+      </div>
     </div>
   );
 }

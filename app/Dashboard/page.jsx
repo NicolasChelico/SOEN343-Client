@@ -74,6 +74,22 @@ export default function SmartHomeSimulator() {
     setActiveElement(e);
   };
 
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8080/User`);
+        setUsers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+
+
+  console.log(roomsData);
   return (
     <div className="flex flex-row">
       <SideNav role={role} name={userName} />

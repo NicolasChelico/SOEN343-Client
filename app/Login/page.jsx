@@ -3,8 +3,10 @@ import Link from "next/link";
 import axios from 'axios'
 import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
 
   localStorage.clear;
   const [credentials, setCredentials] = useState({
@@ -28,6 +30,7 @@ export default function Login() {
       localStorage.setItem('role', response.data.role)
       localStorage.setItem('userName', response.data.userName)
       alert('works')
+      router.push("/Dashboard")
       
     }catch(error){
       console.log('Login failed. ' , error.response.data)
@@ -36,6 +39,7 @@ export default function Login() {
   }
 
   console.log('Role: from local ',localStorage.getItem('role'))
+
 
 
 
@@ -64,7 +68,7 @@ export default function Login() {
       <div className="flex justify-center gap-4 text-center">
         <Link
           className="text-xl rounded-lg py-2 px-6 bg-black text-white  uppercase"
-          href="/" 
+          href="/Dashboard"
         >
          <button onClick={handleLogin} >Sign In</button>
         </Link>

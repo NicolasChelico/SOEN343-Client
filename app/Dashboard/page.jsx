@@ -1,64 +1,66 @@
 "use client";
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import axios from "axios";
+
 import SideNav from "../Components/SideNav/SideNav";
 import CommandsContainer from "./CommandsContainer";
 import HouseContainer from "./HouseContainer";
-import Home from "../HomeComponents/Home";
+import Room from "../HomeComponents/Room";
 import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
-import { roomsData } from "../HouseLayoutFile/HouseLayout";
+
+import { getHomeLayout } from "../lib/home";
 
 export default function SmartHomeSimulator() {
-  let role = localStorage.getItem("role");
-  let userName = localStorage.getItem("userName");
-  const [houseLayout, setHouseLayout] = useState(roomsData);
-  const roomNumberRef = useRef(0);
-  const [activeElement, setActiveElement] = useState("SHC");
+  const role = localStorage.getItem("role");
+  const userName = localStorage.getItem("userName");
 
+  const [houseLayout, setHouseLayout] = useState(null);
+  const [activeElement, setActiveElement] = useState("SHC");
   const [open, setOpen] = useState(false);
+
+  const roomNumberRef = useRef(0);
+
+  // Fetch home layout on component mount
+  useEffect(() => {
+    getHomeLayout().then((data) => {
+      setHouseLayout(data);
+    });
+  }, []);
 
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
   };
 
-  const toggleRoomLights = useCallback(
-    (roomId) => {
-      console.log(`Toggle lights in room: ${roomId}`);
-      var roomIdInt = parseInt(roomId);
-      setHouseLayout((prevState) => {
-        const updatedRooms = prevState.roomList.map((room) => {
-          if (room.roomId === roomIdInt) {
-            console.log(room);
-            return {
-              ...room,
-              smartElements: room.smartElements.map((element) => {
-                console.log(element);
-                if (element.elementType === "Light") {
-                  return { ...element, open: false };
-                }
-                return element;
-              }),
-            };
-          }
-          return room;
-        });
-        return { ...prevState, roomList: updatedRooms };
-      });
-    },
-    [setHouseLayout]
-  );
-
-  const toggleAllLights = () => {
-    console.log(`Toggle all lights`);
+  const toggleRoomLights = useCallback((roomId) => {
+    const roomIdInt = parseInt(roomId);
     setHouseLayout((prevState) => {
       const updatedRooms = prevState.roomList.map((room) => {
-        console.log(room);
+        if (room.roomId === roomIdInt) {
+          return {
+            ...room,
+            smartElementList: room.smartElementList.map((element) => {
+              if (element.elementType === "Light") {
+                return { ...element, open: false };
+              }
+              return element;
+            }),
+          };
+        }
+        return room;
+      });
+      return { ...prevState, roomList: updatedRooms };
+    });
+  }, []);
+
+  const toggleAllLights = () => {
+    setHouseLayout((prevState) => {
+      const updatedRooms = prevState.roomList.map((room) => {
         return {
           ...room,
-          smartElements: room.smartElements.map((element) => {
-            console.log(element);
+          smartElementList: room.smartElementList.map((element) => {
             if (element.elementType === "Light") {
-              return { ...element, open: false };
+              return { ...element, isOpen: false };
             }
             return element;
           }),
@@ -70,32 +72,16 @@ export default function SmartHomeSimulator() {
 
   const handleClick = (e) => {
     setActiveElement(e);
-    console.log(activeElement);
   };
 
   
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8080/User`);
-        setUsers(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUsers();
-  }, []);
 
-
-
-  console.log(roomsData);
   return (
     <div className="flex flex-row">
-      {/* // This is the sidebar holding all the modules // */}
       <SideNav role={role} name={userName} />
       <CommandsContainer>
         <div>
-          <ul className="flex space-x-4 bg-slate-800 py-4">
+        <ul className="flex space-x-4 bg-slate-800 py-4">
             <li
               onClick={() => handleClick("SHS")}
               className={`cursor-pointer border-2 border-white my-2 mx-1 px-6 py-2 ${
@@ -136,6 +122,8 @@ export default function SmartHomeSimulator() {
             >
               SHH
             </li>
+            {/* Navigation items */}
+            {/* ... */}
           </ul>
         </div>
         {/* Depending which element is chosen from the nav, load the appropriate module. */}
@@ -146,11 +134,13 @@ export default function SmartHomeSimulator() {
             changeRoomRef={handleChange}
           />
         )}
-
         {activeElement === "SHS" && <SHS />}
       </CommandsContainer>
       <HouseContainer>
-        <Home houseLayout={houseLayout} roomNumberRef={roomNumberRef.current} />
+        {houseLayout &&
+          houseLayout.roomList.map((room, index) => {
+            return <Room key={index} roomData={room} />;
+          })}
       </HouseContainer>
     </div>
   );

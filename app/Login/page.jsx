@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const router = useRouter()
-  
+  localStorage.clear();
   const [credentials, setCredentials] = useState({
     userName: "",
     password: "",
@@ -28,6 +28,7 @@ export default function Login() {
       localStorage.setItem('userId', response.data.userId);
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('userName', response.data.userName);
+      localStorage.setItem('location', response.data.location)
       alert('Login successful');
       router.push("/SimulatorForm"); // Use router.push to navigate to another page
     } catch (error) {

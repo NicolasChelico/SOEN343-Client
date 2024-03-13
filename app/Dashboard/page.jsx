@@ -12,9 +12,12 @@ import SHS from "../Modules/SHS";
 import { getHomeLayout, toggleAllLights } from "../lib/home";
 
 export default function SmartHomeSimulator() {
-  const role = localStorage.getItem("role");
-  const userName = localStorage.getItem("userName");
-
+  let role = localStorage.getItem("role");
+  let userName = localStorage.getItem("userName");
+  let outdoorTemp = localStorage.getItem("outdoorTemp");
+  let indoorTemp = localStorage.getItem("indoorTemp");
+  let date = localStorage.getItem("date")
+  let location = console.log(localStorage.getItem('location'))
   const [houseLayout, setHouseLayout] = useState(null);
   const [activeElement, setActiveElement] = useState("SHC");
   const [open, setOpen] = useState(false);
@@ -81,7 +84,14 @@ export default function SmartHomeSimulator() {
 
   return (
     <div className="flex flex-row">
-      <SideNav role={role} name={userName} />
+      <SideNav 
+        role={role} 
+        name={userName} 
+        outdoorTemp={outdoorTemp} 
+        indoorTemp={indoorTemp} 
+        date={date}
+        location={location}
+      />
       <CommandsContainer>
         <div>
           <ul className="flex space-x-4 bg-slate-800 py-4">

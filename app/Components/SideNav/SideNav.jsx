@@ -8,8 +8,8 @@ import Clock from './Clock';
 export default function SideNav(props){
 
   const [simulation, setSimulation] = useState(false);
-  
-  
+  console.log()
+
   return (
     <div className="flex w-64 h-screen">
       <div className="w-48 bg-gray-800 text-white pt-6 p-2">
@@ -32,7 +32,7 @@ export default function SideNav(props){
               <div className="flex flex-col justify-start text-justify">
                   <p className=''>Name:{props.name}</p>
                   <p className=''>Role: {props.role} </p>
-                  <p className=''>Location: {props.location} </p>
+                  <p className=''>Location: {localStorage.getItem('location')} </p>
               </div>
               
           </li>
@@ -42,8 +42,9 @@ export default function SideNav(props){
                   <MdHome size={40}/>
               </div>
               <div className="text-justify">
-                <p className="mb-4">Outside temp. wef{props.outsideTemp} C</p>
-                <p className="mb-4">Date: {props.currentDate}</p>
+              <p className="mb-4">Inside temp: {localStorage.getItem('indoorTemp')} C</p>
+                <p className="mb-4">Outside temp: {localStorage.getItem('outdoorTemp')} C</p>
+                <p className="mb-4">Date: {localStorage.getItem('date')}</p>
                 <p><Clock /></p>
                 
               </div>

@@ -16,8 +16,21 @@ export default function SHS() {
     fetchUsers();
   }, [localStorage]);
 
-  console.log(users);
+ 
 
+  const onDelete = async (user) => {
+    console.log(user);
+    try {
+      const res = await axios.delete(`http://localhost:8080/User/DeleteUser`, {
+        data: { id: user.id } // Assuming user.id is the ID of the user to delete
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  
   return (
     <>
       <div>
@@ -40,7 +53,7 @@ export default function SHS() {
                 <td className="border-none">
                   <button
                     className="px-2 py-2 bg-red-300"
-                    onClick={() => onDelete(user.id)}
+                    onClick={() => onDelete(user)}
                   >
                     Delete
                   </button>

@@ -1,8 +1,33 @@
-import React from "react";
+'use client'
+import React, {useState} from "react";
 import FormHolder from "../Components/FormHolder";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 export default function SimulatorFormContainer() {
+  const router = useRouter()
+  const [homeSpecifications, setHomeSpecifications] = useState({
+    indoorTemp:null,
+    outdoorTemp:null,
+    date: null,
+    time: null
+  })
+
+  console.log(homeSpecifications)
+  const handleChange = e => {
+    setHomeSpecifications((prev) => ({...prev,[e.target.name]: e.target.value}))
+  }
+
+  const submitSpecifications = e => {
+    e.preventDefault();
+    localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
+    localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
+    localStorage.setItem('date', homeSpecifications.date)
+    router.push('/Dashboard')
+  }
+
+
+
   return (
     <FormHolder>
       <div className="flex flex-col text-center mb-8">
@@ -11,44 +36,53 @@ export default function SimulatorFormContainer() {
           Please enter the home specifications.
         </p>
       </div>
-      <div className="flex flex-col text-justify w-2/4 justify-center ml-40">
-        <div className="my-2">
-          <span>
-            <label htmlFor="">Inside temperature: </label>
+      <div className="flex flex-col text-justify w-3/4 justify-center ml-24">
+ 
+        <div className=" flex flex-row my-2">
+            <label>Inside temperature:</label>
             <input
               type="number"
-              name="insideTemp"
-              className="w-16 text-center"
+              name="indoorTemp"
+              className="w-16 text-center inline-block"
+              onChange={handleChange}
             />
-            °C
-          </span>
-        </div>
-        <div className="my-2">
-          <span>
-            <label htmlFor="">Outside temperature:</label>
+            <p className="">°C</p>
+          </div>
+
+          <div className=" flex flex-row my-2">
+            <label>Outdoor temperature:</label>
             <input
               type="number"
               name="outdoorTemp"
-              className="w-16 text-center"
+              className="w-16 text-center inline-block"
+              onChange={handleChange}
             />
-            °C
-          </span>
-        </div>
+            <p className="">°C</p>
+          </div>
+
         <div className="my-2">
           <label htmlFor="">Set Date: </label>
-          <input type="date" name="date" />
+          <input 
+            type="date" 
+            name="date" 
+            onChange={handleChange}
+          />
         </div>
         <div className="my-2">
           <label htmlFor="">Set Time: </label>
-          <input type="time" name="time" />
+          <input 
+            type="time" 
+            name="time" 
+            onChange={handleChange} 
+          />
         </div>
         <div></div>
         <div className="flex">
-          <Link href="/Dashboard" >
-            <button className="text-l rounded-lg bg-black text-white px-16 py-2 m-8 uppercase ">
+          
+            <button onClick={submitSpecifications} className="text-l rounded-lg bg-black text-white px-16 py-2 m-8 uppercase ">
               submit
             </button>
-          </Link>
+      
         </div>
       </div>
     </FormHolder>

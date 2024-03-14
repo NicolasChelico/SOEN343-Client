@@ -16,8 +16,21 @@ export default function SHS() {
     fetchUsers();
   }, [localStorage]);
 
-  console.log(users);
+ 
 
+  const onDelete = async (user) => {
+    console.log(user);
+    try {
+      const res = await axios.delete(`http://localhost:8080/User/DeleteUser`, {
+        data: { id: user.id } // Assuming user.id is the ID of the user to delete
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  
   return (
     <>
       <div>
@@ -40,7 +53,7 @@ export default function SHS() {
                 <td className="border-none">
                   <button
                     className="px-2 py-2 bg-red-300"
-                    onClick={() => onDelete(user.id)}
+                    onClick={() => onDelete(user)}
                   >
                     Delete
                   </button>
@@ -76,21 +89,23 @@ export default function SHS() {
           <p className="mt-2">Change Outdoor temp.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input className="h-7 border-2" type="text" placeholder="Name" />
-              <select className="h-7 w-1/5">
-                <option value="Parent">Parent</option>
-                <option value="Child">Child</option>
-                <option value="Stranger">Stranger</option>
-              </select>
-              <select className="h-7 w-1/5">
-                <option value="Inside">Inside</option>
-                <option value="Outside">Outside</option>
-              </select>
+              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" />°C  
             </div>
             <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4">
-              Add+
+              SET
             </button>
           </div>
+
+          <p className="mt-2">Change Indoor temp.</p>
+          <div className="flex flex-row ">
+            <div className="flex justify-between rounded-md border-slate-800 ">
+              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" />°C  
+            </div>
+            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={(e) => localStorage.setItem('indoorTemp',e.target.value)}>
+              SET
+            </button>
+          </div>
+          
         </div>
       </div>
     </>

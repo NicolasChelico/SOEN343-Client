@@ -9,7 +9,7 @@ import Room from "../HomeComponents/Room";
 import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
 
-import { getHomeLayout, toggleAllLights } from "../lib/home";
+import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 
 export default function SmartHomeSimulator() {
   const role = localStorage.getItem("role");
@@ -32,26 +32,23 @@ export default function SmartHomeSimulator() {
     roomNumberRef.current = e.target.value;
   };
 
-  const changeRoomLights = useCallback((roomId) => {
+  const changeRoomLights = async (roomId) => {
     const roomIdInt = parseInt(roomId);
+    const updatedRoom = await toggleRoomLights(roomIdInt);
+
     setHouseLayout((prevState) => {
       const updatedRooms = prevState.roomList.map((room) => {
         if (room.roomId === roomIdInt) {
           return {
             ...room,
-            smartElementList: room.smartElementList.map((element) => {
-              if (element.elementType === "Light") {
-                return { ...element, open: false };
-              }
-              return element;
-            }),
+            updatedRoom,
           };
         }
         return room;
       });
       return { ...prevState, roomList: updatedRooms };
     });
-  }, []);
+  };
 
   const changeAllLights = async () => {
     const updatedHouseLayout = await toggleAllLights();
@@ -76,8 +73,6 @@ export default function SmartHomeSimulator() {
   const handleClick = (e) => {
     setActiveElement(e);
   };
-
-  
 
   return (
     <div className="flex flex-row">

@@ -31,4 +31,16 @@ const toggleAllLights = async () => {
       return response.data;
     });
 };
-export { getHomeLayout, toggleSmartElement, toggleAllLights };
+
+const toggleRoomLights = async (roomId) => {
+  return await axios
+    .post("http://localhost:8080/RoomController/ToggleRoom", {
+      roomId,
+      elementType: "Light",
+    })
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    });
+};
+export { getHomeLayout, toggleSmartElement, toggleAllLights, toggleRoomLights };

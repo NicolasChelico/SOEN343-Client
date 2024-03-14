@@ -23,7 +23,7 @@ const toggleSmartElement = async (roomId, elementId) => {
 
 const toggleAllLights = async (isOpen) => {
   return await axios
-    .post(`http://localhost:8080/HomeController/setAllElements`, {
+    .post(`http://localhost:8080/HomeController/SetAllElements`, {
       elementType: "Light",
       isOpen,
     })

@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import SideNav from "../Components/SideNav/SideNav";
@@ -12,6 +13,8 @@ import SHS from "../Modules/SHS";
 import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 
 export default function SmartHomeSimulator() {
+  const router = useRouter();
+
   let role = localStorage.getItem("role");
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
@@ -55,7 +58,9 @@ export default function SmartHomeSimulator() {
   const changeAllLights = async (isOpen) => {
     console.log(isOpen);
     const updatedHouseLayout = await toggleAllLights(isOpen);
-    setHouseLayout(updatedHouseLayout);
+    window.location.reload();
+
+    // setHouseLayout(updatedHouseLayout);
 
     // setHouseLayout((prevState) => {
     //   const updatedRooms = prevState.roomList.map((room) => {

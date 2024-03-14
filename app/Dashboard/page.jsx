@@ -16,13 +16,12 @@ export default function SmartHomeSimulator() {
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
   let indoorTemp = localStorage.getItem("indoorTemp");
-  let date = localStorage.getItem("date")
-  let location = console.log(localStorage.getItem('location'))
+  let date = localStorage.getItem("date");
   const [houseLayout, setHouseLayout] = useState(null);
   const [activeElement, setActiveElement] = useState("SHC");
   const [open, setOpen] = useState(false);
 
-  const roomNumberRef = useRef(0);
+  const roomNumberRef = useRef("1");
 
   // Fetch home layout on component mount
   useEffect(() => {
@@ -53,8 +52,9 @@ export default function SmartHomeSimulator() {
     });
   };
 
-  const changeAllLights = async () => {
-    const updatedHouseLayout = await toggleAllLights();
+  const changeAllLights = async (isOpen) => {
+    console.log(isOpen);
+    const updatedHouseLayout = await toggleAllLights(isOpen);
     setHouseLayout(updatedHouseLayout);
 
     // setHouseLayout((prevState) => {
@@ -79,11 +79,11 @@ export default function SmartHomeSimulator() {
 
   return (
     <div className="flex flex-row">
-      <SideNav 
-        role={role} 
-        name={userName} 
-        outdoorTemp={outdoorTemp} 
-        indoorTemp={indoorTemp} 
+      <SideNav
+        role={role}
+        name={userName}
+        outdoorTemp={outdoorTemp}
+        indoorTemp={indoorTemp}
         date={date}
         location={location}
       />

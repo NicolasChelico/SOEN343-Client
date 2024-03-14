@@ -6,12 +6,13 @@ export default function SHC({
   changeRoomRef,
 }) {
   const [selectValue, setSelectValue] = useState("true");
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleSelectChange = (event) => {
     setSelectValue(event.target.value);
   };
 
-  const roomNumberRef = useRef(0);
+  const roomNumberRef = useRef(1);
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
     console.log(roomNumberRef);
@@ -47,10 +48,19 @@ export default function SHC({
         <label>Turn off All lights:</label>
         <button
           className="rounded-md bg-slate-800 text-white px-2 m-2"
-          onClick={() => toggleAllLights(selectValue === "true" ? true : false)}
+          onClick={() => toggleAllLights(false)}
         >
           TURN OFF ALL
         </button>
+        <div className="flex flex-row items-center">
+          <label>Turn on All lights:</label>
+          <button
+            className="rounded-md bg-slate-800 text-white px-2 m-2"
+            onClick={() => toggleAllLights(true)}
+          >
+            TURN ON ALL
+          </button>
+        </div>
       </div>
     </div>
   );

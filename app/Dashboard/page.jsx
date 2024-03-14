@@ -18,7 +18,7 @@ export default function SmartHomeSimulator() {
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
   const [houseLayout, setHouseLayout] = useState(null);
-  const [activeElement, setActiveElement] = useState("SHC");
+  const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
 
   const roomNumberRef = useRef("1");

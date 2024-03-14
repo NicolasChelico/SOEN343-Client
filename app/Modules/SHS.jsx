@@ -1,9 +1,42 @@
 import React, { useState, useEffect } from "react";
+import {deleteUser, generateRandomStrings, onAddUser} from '../lib/users'
 import axios from "axios";
+import e from "cors";
 
 export default function SHS() {
   const [users, setUsers] = useState([]);
+  const [randomUsername, randomPassword] = generateRandomStrings(8)
+  const [indoorTemp, setIndoorTemp] = useState(""); // State variable to store the value of the input field
+  const [outdoorTemp, setOutdoorTemp] = useState(""); 
 
+  const handleIndoorChange = (e) => {
+    setIndoorTemp(e.target.value); // Update the state variable with the input field value
+  };
+
+  const handleOutDoorChange = (e) => {
+    setOutdoorTemp(e.target.value); // Update the state variable with the input field value
+  };
+
+  useEffect(()=> {
+    
+  },[])
+  const handleSetIndoorTemp = () => {
+    localStorage.setItem('indoorTemp', indoorTemp); // Access the value of the input field from the state variable
+  };
+
+  const handleSetOutdoorTemp = () => {
+    localStorage.setItem('outdoorTemp', outdoorTemp); // Access the value of the input field from the state variable
+  };
+
+  const [newProfile, setNewProfile] = useState({
+    name: '',
+    userName: randomUsername,
+    password: randomPassword,
+    role: '',
+    location: ''
+  })
+
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -14,22 +47,18 @@ export default function SHS() {
       }
     };
     fetchUsers();
-  }, [localStorage]);
+  }, [localStorage, users]);
 
- 
-
-  const onDelete = async (user) => {
-    console.log(user);
-    try {
-      const res = await axios.delete(`http://localhost:8080/User/DeleteUser`, {
-        data: { id: user.id } // Assuming user.id is the ID of the user to delete
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const onUserChange = e => {
+    setNewProfile(prev => ({...prev, [e.target.name]: e.target.value}))
   }
   
+  useEffect(()=> {
+    console.log(newProfile)
+  },[newProfile])
+ 
+
+
   
   return (
     <>
@@ -53,7 +82,7 @@ export default function SHS() {
                 <td className="border-none">
                   <button
                     className="px-2 py-2 bg-red-300"
-                    onClick={() => onDelete(user)}
+                    onClick={() => deleteUser(user)}
                   >
                     Delete
                   </button>
@@ -69,18 +98,20 @@ export default function SHS() {
           <p className="mt-2">Add new profile.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input className="h-7 border-2" type="text" placeholder="Name" />
-              <select className="h-7 w-1/5">
+              <input className="h-7 border-2" type="text" placeholder="Name" name="name" onChange={onUserChange}/>
+              <select onChange={onUserChange} className="h-7 w-1/5" name="role">
+                <option value="">--</option>
                 <option value="Parent">Parent</option>
                 <option value="Child">Child</option>
                 <option value="Stranger">Stranger</option>
               </select>
-              <select className="h-7 w-1/5">
+              <select className="h-7 w-1/5" name="location" onChange={onUserChange}>
+              <option value="">--</option>
                 <option value="Inside">Inside</option>
                 <option value="Outside">Outside</option>
               </select>
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4">
+            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=>onAddUser(newProfile)}>
               Add+
             </button>
           </div>
@@ -89,9 +120,9 @@ export default function SHS() {
           <p className="mt-2">Change Outdoor temp.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" />°C  
+              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" onChange={handleOutDoorChange} />°C  
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4">
+            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={handleSetOutdoorTemp}>
               SET
             </button>
           </div>
@@ -99,9 +130,9 @@ export default function SHS() {
           <p className="mt-2">Change Indoor temp.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" />°C  
+              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" onChange={handleIndoorChange}/>°C  
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={(e) => localStorage.setItem('indoorTemp',e.target.value)}>
+            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={handleSetIndoorTemp}>
               SET
             </button>
           </div>

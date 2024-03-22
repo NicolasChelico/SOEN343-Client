@@ -44,4 +44,11 @@ const toggleRoomLights = async (roomId) => {
       return response.data;
     });
 };
+
+
+
+
+
+
+
 export { getHomeLayout, toggleSmartElement, toggleAllLights, toggleRoomLights };

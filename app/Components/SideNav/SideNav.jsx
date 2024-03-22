@@ -7,8 +7,8 @@ import Clock from './Clock';
 
 export default function SideNav(props){
 
-  const [simulation, setSimulation] = useState(false);
-  console.log()
+  // const [simulation, setSimulation] = useState(false);
+  console.log(props.simulation, 'this is im')
 
   return (
     <div className="flex w-64 h-screen">
@@ -17,9 +17,9 @@ export default function SideNav(props){
         <div className='mb-16'>
           <h2 className="text-xl font-bold  mb-4 text-center ">Simulation</h2>
           <div className="flex flex-col">
-            <button onClick={(e) => setSimulation(!simulation)}>
+            <button onClick={props.onClickSimulation}>
               <span>Simulation: 
-                <p className='bg-white text-slate-800 border'>{simulation ? 'ON':'OFF'}</p>
+                <p className='bg-white text-slate-800 border'>{props.simulation ? 'ON':'OFF'}</p>
               </span>
             </button>
           </div>
@@ -45,7 +45,7 @@ export default function SideNav(props){
               <p className="mb-4">Inside temp: {localStorage.getItem('indoorTemp')} C</p>
                 <p className="mb-4">Outside temp: {localStorage.getItem('outdoorTemp')} C</p>
                 <p className="mb-4">Date: {localStorage.getItem('date')}</p>
-                <p><Clock /></p>
+                <p><Clock simulation={props.simulation}/></p>
                 
               </div>
               {/* <label>Time speed.</label>

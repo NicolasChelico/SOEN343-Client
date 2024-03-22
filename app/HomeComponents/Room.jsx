@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import Light from "../SmartElements/light";
 import Door from "../SmartElements/door";
 import Window from "../SmartElements/window";
-
+import { IoMan } from "react-icons/io5";
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
-
+  const [userRoom, setUserRoom] = useState(false)
   useEffect(() => {
-    console.log("Room data changed in room: " + roomData.roomId);
+ 
+    if(room.userList.length > 0){
+      setUserRoom(true)
+    }
     setRoom(roomData);
   }, [roomData]);
 
@@ -23,6 +26,7 @@ export default function Room({ roomData }) {
     (element) => element.elementType === "Window"
   );
 
+  // console.log(userRoom , ' room status in ' , room.roomId)
   return (
 
     <div className="bg-slate-400 border border-black flex flex-col items-center justify-center">
@@ -42,7 +46,11 @@ export default function Room({ roomData }) {
           Windows.map((window, index) => (
             <Window key={index} windowData={window} roomId={room.roomId} />
           ))}
+          {
+            userRoom ? <IoMan size={30}/>:""
+          }        
       </div>
+      
     </div>
   );
 }

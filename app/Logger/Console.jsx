@@ -8,14 +8,17 @@ const ConsoleLogger = (message) => {
 };
 
 function LogsContainer() {
-  const [logs, setLogs] = useState([]);
-  const logsEndRef = useRef(null); // Create a ref for the end of the logs
+  const [logs, setLogs] = useState(() => {
+    const logHistoryStr = localStorage.getItem("logHistory");
+    return logHistoryStr ? JSON.parse(logHistoryStr) : [];
+  });
+
+  const logsEndRef = useRef(null);
 
   const scrollToBottom = () => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // run once!
   useEffect(() => {
     const hookedConsole = Hook(
       window.console,
@@ -24,6 +27,11 @@ function LogsContainer() {
     );
     return () => Unhook(hookedConsole);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("logHistory", JSON.stringify(logs));
+    scrollToBottom();
+  }, [logs]);
 
   return (
     <div className="bg-white mx-4 border border-black rounded">

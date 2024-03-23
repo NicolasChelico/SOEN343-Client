@@ -12,7 +12,7 @@ import SHS from "../Modules/SHS";
 import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
-import LogsContainer from "../Logger/Console";
+import { LogsContainer } from "../Logger/Console";
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
@@ -53,7 +53,6 @@ export default function SmartHomeSimulator() {
   const changeRoomLights = async (roomId) => {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
-    console.log(updatedRoom);
     setHouseLayout((prevState) => {
       const updatedRooms = prevState.roomList.map((room) => {
         if (room.roomId === roomIdInt) {
@@ -69,7 +68,6 @@ export default function SmartHomeSimulator() {
   };
 
   const changeAllLights = async (isOpen) => {
-    console.log(isOpen);
     const updatedHouseLayout = await toggleAllLights(isOpen);
     window.location.reload();
 
@@ -181,13 +179,15 @@ export default function SmartHomeSimulator() {
         {activeElement === "SHS" && <SHS />}
         {activeElement === "SHH" && <SHH />}
       </CommandsContainer>
-      <HouseContainer>
-        {houseLayout &&
-          houseLayout.roomList.map((room, index) => {
-            return <Room key={index} roomData={room} />;
-          })}
+      <div className="flex flex-col w-1/2">
+        <HouseContainer>
+          {houseLayout &&
+            houseLayout.roomList.map((room, index) => {
+              return <Room key={index} roomData={room} />;
+            })}
+        </HouseContainer>
         <LogsContainer />
-      </HouseContainer>
+      </div>
     </div>
   );
 }

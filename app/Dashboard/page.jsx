@@ -165,7 +165,7 @@ export default function SmartHomeSimulator() {
             {/* ... */}
           </ul>
         </div>):
-          <SimulationOff />
+          <SimulationOff title={"SIMULATION TURNED OFF"}/>
               
         }
         {/* Depending which element is chosen from the nav, load the appropriate module. */}

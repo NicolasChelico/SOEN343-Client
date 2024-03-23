@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { getHomeLayout } from '../lib/home'
+import SimulationOff from '../Dashboard/SimulationOff'
 
 export default function SHH() {
   const [roomList, setRoomList] = useState([])
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(true)
 
   useEffect(()=> {
     getHomeLayout()
@@ -31,6 +32,7 @@ export default function SHH() {
 
   return (
     <div>
+        {active ? 
           <div>
             <div className="mx-4 my-4">
           <button onClick={onClickSetActive}>
@@ -143,7 +145,15 @@ export default function SHH() {
               SET
             </button>
           </div>
-        </div>
+        </div> : (
+          <SimulationOff title={"SHH MODULE OFF"}>
+            <button className="pt-8"onClick={onClickSetActive}>
+              <span>
+                <p className='bg-slate-800 text-white border px-8 py-2'>SHH: {active ? 'ON':'OFF'}</p>
+              </span>
+            </button>
+          </SimulationOff>
+        )}
     </div>
   )
 }

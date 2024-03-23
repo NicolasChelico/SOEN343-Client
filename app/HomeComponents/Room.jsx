@@ -32,6 +32,7 @@ export default function Room({ roomData }) {
     <div className="bg-slate-400 border border-black flex flex-col items-center justify-center">
 
       <div>{room.roomType}</div>
+      <div>Zone: 1</div>
 
       <div className="flex justify-center items-center">
         {room &&

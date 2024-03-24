@@ -14,6 +14,10 @@ import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
 
+import { toggleClock } from "../lib/clock";
+
+
+
 export default function SmartHomeSimulator() {
   const router = useRouter();
 
@@ -22,7 +26,9 @@ export default function SmartHomeSimulator() {
   let outdoorTemp = localStorage.getItem("outdoorTemp");
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
+
   const [houseLayout, setHouseLayout] = useState(null);
+  const [rooms, setRooms] = useState([]);
   const [activeElement, setActiveElement] = useState("SHH");
   const [open, setOpen] = useState(false);
   const [latestState, setLatestState] = useState("");
@@ -31,6 +37,7 @@ export default function SmartHomeSimulator() {
 
   // Fetch home layout on component mount
   useEffect(() => {
+    toggleClock(true);
     getHomeLayout().then((data) => {
       data.roomList.map((room) => {
         if (room.roomType === localStorage.getItem("location")) {
@@ -43,8 +50,13 @@ export default function SmartHomeSimulator() {
         }
       });
       setHouseLayout(data);
+      setRooms(data.roomList);
     });
   }, []);
+
+  useEffect(() => {
+    setHouseLayout((prevLayout) => ({ ...prevLayout, roomList: rooms }));
+  }, [rooms]);
 
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
@@ -53,43 +65,31 @@ export default function SmartHomeSimulator() {
   const changeRoomLights = async (roomId) => {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
-    setHouseLayout((prevState) => {
-      const updatedRooms = prevState.roomList.map((room) => {
+
+
+    setRooms((prevRooms) => {
+      return prevRooms.map((room) => {
+
         if (room.roomId === roomIdInt) {
+          // Create a new room object with updated smartElementList
           return {
             ...room,
-            updatedRoom,
+            smartElementList: updatedRoom.smartElementList,
           };
         }
         return room;
       });
-      return { ...prevState, roomList: updatedRooms };
     });
   };
 
   const changeAllLights = async (isOpen) => {
     const updatedHouseLayout = await toggleAllLights(isOpen);
     window.location.reload();
-
-    // setHouseLayout(updatedHouseLayout);
-
-    // setHouseLayout((prevState) => {
-    //   const updatedRooms = prevState.roomList.map((room) => {
-    //     return {
-    //       ...room,
-    //       smartElementList: room.smartElementList.map((element) => {
-    //         if (element.elementType === "Light") {
-    //           return { ...element, isOpen: isOn };
-    //         }
-    //         return element;
-    //       }),
-    //     };
-    //   });
-    //   return { ...prevState, roomList: updatedRooms };
-    // });
   };
 
-  const onClickSimumlation = (e) => {
+
+  const onClickSimumlation = async (e) => {
+
     e.preventDefault();
     if (simulation) {
       setLatestState(activeElement);
@@ -97,6 +97,9 @@ export default function SmartHomeSimulator() {
     } else {
       setActiveElement(latestState);
     }
+
+    await toggleClock(!simulation);
+
     setSimulation(!simulation);
   };
 
@@ -180,12 +183,9 @@ export default function SmartHomeSimulator() {
         {activeElement === "SHH" && <SHH />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
-        <HouseContainer>
-          {houseLayout &&
-            houseLayout.roomList.map((room, index) => {
-              return <Room key={index} roomData={room} />;
-            })}
-        </HouseContainer>
+
+        <HouseContainer houseLayout={houseLayout} />
+
         <LogsContainer />
       </div>
     </div>

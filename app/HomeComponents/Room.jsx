@@ -3,9 +3,11 @@ import Light from "../SmartElements/light";
 import Door from "../SmartElements/door";
 import Window from "../SmartElements/window";
 import { IoMan } from "react-icons/io5";
+
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
   const [userRoom, setUserRoom] = useState(false);
+
   useEffect(() => {
     if (room.userList.length > 0) {
       setUserRoom(true);

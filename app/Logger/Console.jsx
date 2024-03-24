@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Console, Hook, Unhook } from "console-feed";
 
+
 const ConsoleLogger = (eventType, eventDescription, details) => {
   const timestamp = new Date().toLocaleString("en-US");
   const deviceId = "Thermostat-001"; // Assuming this is fixed for this example
@@ -14,6 +15,7 @@ const ConsoleLogger = (eventType, eventDescription, details) => {
   };
 
   console.log(JSON.stringify(logEntry));
+
 };
 
 function LogsContainer() {
@@ -41,6 +43,7 @@ function LogsContainer() {
     localStorage.setItem("logHistory", JSON.stringify(logs));
     scrollToBottom();
   }, [logs]);
+
 
   const onClearLogs = () => {
     setLogs([]);

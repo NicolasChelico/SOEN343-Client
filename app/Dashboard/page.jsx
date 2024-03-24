@@ -13,7 +13,10 @@ import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
+
 import { toggleClock } from "../lib/clock";
+
+
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
@@ -63,8 +66,10 @@ export default function SmartHomeSimulator() {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
 
+
     setRooms((prevRooms) => {
       return prevRooms.map((room) => {
+
         if (room.roomId === roomIdInt) {
           // Create a new room object with updated smartElementList
           return {
@@ -82,7 +87,9 @@ export default function SmartHomeSimulator() {
     window.location.reload();
   };
 
+
   const onClickSimumlation = async (e) => {
+
     e.preventDefault();
     if (simulation) {
       setLatestState(activeElement);
@@ -90,7 +97,9 @@ export default function SmartHomeSimulator() {
     } else {
       setActiveElement(latestState);
     }
+
     await toggleClock(!simulation);
+
     setSimulation(!simulation);
   };
 
@@ -174,7 +183,9 @@ export default function SmartHomeSimulator() {
         {activeElement === "SHH" && <SHH />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
+
         <HouseContainer houseLayout={houseLayout} />
+
         <LogsContainer />
       </div>
     </div>

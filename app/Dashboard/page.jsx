@@ -14,6 +14,11 @@ import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 
+import Modal from '../Modals/Modal'
+import ModalContent from "../Modals/ModalContent";
+import ModalToggler from "../Modals/ModalToggler";
+import EditContext from "../Components/SideNav/EditContext";
+
 export default function SmartHomeSimulator() {
   const router = useRouter();
 
@@ -117,7 +122,30 @@ export default function SmartHomeSimulator() {
         location={location}
         onClickSimulation={onClickSimumlation}
         simulation={simulation}
-      />
+
+      >
+
+        <div className="mt-4 text-center border-white border-2">
+          <Modal>
+              <ModalToggler>
+                <div>
+                  <button>Edit Simulation</button>
+                </div>
+              </ModalToggler>
+              <ModalContent
+                title="Edit Simulation Context"
+                description="Edit the information associated with the simulation. We will generate the rest for you!"
+                onExit={() => console.log("exit")}
+              >
+                <EditContext name={userName}/>
+              </ModalContent>
+            </Modal>
+            
+        </div>
+
+
+
+      </SideNav>
       <CommandsContainer>
         {simulation ? (<div>
           <ul className="flex space-x-4 bg-slate-800 py-4">

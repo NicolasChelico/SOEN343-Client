@@ -107,8 +107,13 @@ export default function SHS() {
               </select>
               <select className="h-7 w-1/5" name="location" onChange={onUserChange}>
               <option value="">--</option>
-                <option value="Inside">Inside</option>
-                <option value="Outside">Outside</option>
+              <option name="LivingRoom" value="LivingRoom"> Living Room</option>
+                <option name="Kitchen" value="Kitchen"> Kitchen</option>
+                <option name="Garage" value="Garage"> Garage</option>
+                <option name="Bedroom" value="Bedroom"> Bedroom</option>
+                <option name="BuildingEntrance" value="BuildingEntrance"> Building Entrance</option>
+                <option name="Outdoor" value="Outdoor"> Outdoor</option>
+                <option name="Backyard" value="Backyard"> Backyard</option>
               </select>
             </div>
             <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=>onAddUser(newProfile)}>

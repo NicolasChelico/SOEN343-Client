@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
-import { getHomeLayout } from '../lib/home'
-import SimulationOff from '../Dashboard/SimulationOff'
+import React, { useState, useEffect } from "react";
+import { getHomeLayout } from "../lib/home";
+import SimulationOff from "../Dashboard/SimulationOff";
 
 export default function SHH() {
   const [roomList, setRoomList] = useState([])
@@ -12,22 +12,20 @@ export default function SHH() {
     NIGHT: 0
   })
 
-  useEffect(()=> {
+  useEffect(() => {
     getHomeLayout()
-    .then(res => {
-      
-      setRoomList(res.roomList)
-    }).catch(err => {
-      console.log(err)
-    })
-  },[])
+      .then((res) => {
+        setRoomList(res.roomList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  const onClickSetActive = e => {
+  const onClickSetActive = (e) => {
     e.preventDefault();
-    setActive(!active)
-  }
-
-
+    setActive(!active);
+  };
 
   console.log(' this is Home layout ', roomList)
 
@@ -35,6 +33,13 @@ export default function SHH() {
     setNewZone(prev => ({...prev, [e.target.name]: e.target.value}))
     console.log(newZone)
   }
+
+  const onClickSetRoomTemp = (e) => {};
+
+  const onUserChange = (e) => {
+    // setNewProfile(prev => ({...prev, [e.target.name]: e.target.value}))
+  };
+
 
   const handleNewZone = e => {
     e.preventDefault();
@@ -46,14 +51,17 @@ export default function SHH() {
 
   return (
     <div>
-        {active ? 
-          <div>
-            <div className="mx-4 my-4">
-          <button onClick={onClickSetActive}>
+      {active ? (
+        <div>
+          <div className="mx-4 my-4">
+            <button onClick={onClickSetActive}>
               <span>
-                <p className='bg-slate-800 text-white border px-8 py-2'>SHH: {active ? 'ON':'OFF'}</p>
+                <p className="bg-slate-800 text-white border px-8 py-2">
+                  SHH: {active ? "ON" : "OFF"}
+                </p>
               </span>
             </button>
+
             </div>
             <div>
            
@@ -120,8 +128,12 @@ export default function SHH() {
                 <option name="NIGHT" value="NIGHT">NIGHT</option>
               </select>
               <input className="h-7 w-2/5 border-2" type="text" placeholder="Temperature" name="temperature" />
+
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=> onAddUser(newProfile)}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={() => onAddUser(newProfile)}
+            >
               SET
             </button>
           </div>
@@ -137,8 +149,12 @@ export default function SHH() {
                 })}
               </select>
               <input className="h-7 w-2/5 border-2" type="text" placeholder="Temperature" name="temperature" />
+
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=> onAddUser(newProfile)}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={() => onAddUser(newProfile)}
+            >
               SET
             </button>
           </div>
@@ -154,20 +170,27 @@ export default function SHH() {
                 })}
               </select>
               <input className="h-7 w-2/5 border-2" type="text" placeholder="Zone #" name="temperature" />
+
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=>onAddUser(newProfile)}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={() => onAddUser(newProfile)}
+            >
               SET
             </button>
           </div>
-        </div> : (
-          <SimulationOff title={"SHH MODULE OFF"}>
-            <button className="pt-8"onClick={onClickSetActive}>
-              <span>
-                <p className='bg-slate-800 text-white border px-8 py-2'>SHH: {active ? 'ON':'OFF'}</p>
-              </span>
-            </button>
-          </SimulationOff>
-        )}
+        </div>
+      ) : (
+        <SimulationOff title={"SHH MODULE OFF"}>
+          <button className="pt-8" onClick={onClickSetActive}>
+            <span>
+              <p className="bg-slate-800 text-white border px-8 py-2">
+                SHH: {active ? "ON" : "OFF"}
+              </p>
+            </span>
+          </button>
+        </SimulationOff>
+      )}
     </div>
-  )
+  );
 }

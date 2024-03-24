@@ -1,16 +1,17 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { toggleLight, toggleSmartElement } from "../lib/home";
+import { toggleSmartElement } from "../lib/home";
 
 export default function Light({ lightData, roomId }) {
   const [light, setLight] = useState(lightData);
 
   const handleClick = async () => {
-    console.log(`Toggling light: ${light.elementId} in room: ${roomId}`);
-    const updatedLight = await toggleSmartElement(roomId, light.elementId);
+    const updatedLight = await toggleSmartElement(
+      roomId,
+      light.elementId,
+      light.elementType
+    );
 
     setLight(updatedLight);
-    console.log(`Toggled light: ${light.elementId} in room: ${roomId}`);
   };
 
   useEffect(() => {

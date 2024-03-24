@@ -3,8 +3,14 @@ import { getHomeLayout } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
 
 export default function SHH() {
-  const [roomList, setRoomList] = useState([]);
-  const [active, setActive] = useState(true);
+  const [roomList, setRoomList] = useState([])
+  const [active, setActive] = useState(true)
+  const [newZone, setNewZone] = useState({
+    zone:0,
+    AM:0,
+    PM: 0,
+    NIGHT: 0
+  })
 
   useEffect(() => {
     getHomeLayout()
@@ -21,11 +27,27 @@ export default function SHH() {
     setActive(!active);
   };
 
+  console.log(' this is Home layout ', roomList)
+
+  const onZoneChange = e => {
+    setNewZone(prev => ({...prev, [e.target.name]: e.target.value}))
+    console.log(newZone)
+  }
+
   const onClickSetRoomTemp = (e) => {};
 
   const onUserChange = (e) => {
     // setNewProfile(prev => ({...prev, [e.target.name]: e.target.value}))
   };
+
+
+  const handleNewZone = e => {
+    e.preventDefault();
+
+    
+
+  }
+
 
   return (
     <div>
@@ -39,98 +61,74 @@ export default function SHH() {
                 </p>
               </span>
             </button>
-          </div>
-          <div>
-            <table className="w-3/4 border-2 my-4">
-              <thead className="bg-gray-500 text-white">
-                <tr>
-                  <th>Zone #</th>
-                  <th>AM</th>
-                  <th>PM</th>
-                  <th>NIGHT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {roomList.map((room) => {
-                  return (
-                    <tr className="border-2" key={room.roomId}>
-                      <td className="border-2">Zone {room.roomType}</td>
-                      <td className="border-2">{room.zone}</td>
-                      <td className="border-2">{room.zone}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
 
-          <p className="font-bold ml-4">Create Zone:</p>
-          <table className="w-full my-4 ">
-            <thead>
-              <tr>
-                <th>Zone #</th>
-                <th>AM</th>
-                <th>PM</th>
-                <th>NIGHT</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-center">
-                <td>
-                  <input type="number" className="w-2/4 border-2 border-md" />
-                </td>
-                <td>
-                  <input type="number" className="w-2/4 border-2 border-md" />
-                  °C{" "}
-                </td>
-                <td>
-                  <input type="number" className="w-2/4 border-2 border-md" />
-                  °C{" "}
-                </td>
-                <td>
-                  <input type="number" className="w-2/4 border-2 border-md" />
-                  °C{" "}
-                </td>
-                <td>
-                  <button
-                    className="rounded-md bg-slate-800 text-white ml-4 px-8"
-                    onClick={() => onAddUser(newProfile)}
-                  >
-                    SET
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <p className="mt-2 font-bold">Set Zone Settings</p>
+            </div>
+            <div>
+           
+              <table className="w-3/4 border-2 my-4">
+                <thead className="bg-gray-500 text-white">
+                
+                  <tr>
+                    <th>Zone #</th>
+                    <th>AM</th>
+                    <th>PM</th>
+                    <th>NIGHT</th>
+                  </tr>
+                </thead>
+                <tbody >
+                    {roomList.map(room => {
+                      return(
+                        <tr className="border-2" key={room.roomId}>
+                            <td className="border-2">Zone {room.roomType}</td>
+                            <td className="border-2">{room.zone}</td>
+                            <td className="border-2">{room.zone}</td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+            </div>
+    
+        <p className="font-bold ml-4">Create Zone:</p>
+        <table className="w-full my-4 ">
+          <thead>
+            <tr >
+                    <th>Zone #</th>
+                    <th>AM</th>
+                    <th>PM</th>
+                    <th>NIGHT</th>
+                    <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="text-center">
+              <td><input name="zone" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/></td>
+              <td><input name="AM" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
+              <td><input name="PM" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
+              <td><input name="NIGHT" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
+              <td> 
+                <button className="rounded-md bg-slate-800 text-white ml-4 px-8" onClick={()=>onAddZone(newZone)}>
+                  SET
+                </button>
+            </td>
+            </tr>
+          </tbody>
+        </table>
+       
+        <p className="mt-2 font-bold">Set Zone Settings</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <select
-                onChange={onUserChange}
-                className="h-7 w-1/5 border-2"
-                name="role"
-                placeholder="zone#"
-              >
-                <option value="1">1</option>
+              
+              <select className="h-7 w-1/5 border-2" name="role" placeholder="zone#">               
+                  <option min='1' value="">1</option>
               </select>
-              <select
-                onChange={onUserChange}
-                className="h-7 border-2 w-1/4"
-                name="role"
-              >
-                <option value="AM">AM</option>
-                <option value="PM">PM</option>
-                <option value="NIGHT">NIGHT</option>
+              <select onChange={onZoneChange} className="h-7 border-2 w-1/4" name="role">
+                <option name="AM" value="AM">AM</option>
+                <option name="PM"value="PM">PM</option>
+                <option name="NIGHT" value="NIGHT">NIGHT</option>
               </select>
-              <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Temperature"
-                name="temperature"
-                onChange={onUserChange}
-              />
+              <input className="h-7 w-2/5 border-2" type="text" placeholder="Temperature" name="temperature" />
+
             </div>
             <button
               className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
@@ -142,22 +140,16 @@ export default function SHH() {
           <p className="mt-2 font-bold">Set Room Temperature</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <select
-                onChange={onUserChange}
-                className="h-7 border-2"
-                name="role"
-              >
-                {roomList.map((room) => {
-                  return <option value={room.roomId}>{room.roomType}</option>;
+              
+              <select  className="h-7 border-2" name="role">
+                {roomList.map(room => {
+                  return(
+                  <option value={room.roomId}>{room.roomType}</option>
+                  )
                 })}
               </select>
-              <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Temperature"
-                name="temperature"
-                onChange={onUserChange}
-              />
+              <input className="h-7 w-2/5 border-2" type="text" placeholder="Temperature" name="temperature" />
+
             </div>
             <button
               className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
@@ -169,22 +161,16 @@ export default function SHH() {
           <p className="mt-2 font-bold">Assign Room to Zone</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <select
-                onChange={onUserChange}
-                className="h-7 border-2"
-                name="role"
-              >
-                {roomList.map((room) => {
-                  return <option value={room.roomId}>{room.roomType}</option>;
+              
+              <select  className="h-7 border-2" name="role">
+                {roomList.map(room => {
+                  return(
+                  <option value={room.roomId}>{room.roomType}</option>
+                  )
                 })}
               </select>
-              <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Zone #"
-                name="temperature"
-                onChange={onUserChange}
-              />
+              <input className="h-7 w-2/5 border-2" type="text" placeholder="Zone #" name="temperature" />
+
             </div>
             <button
               className="w-1/5 rounded-md bg-slate-800 text-white ml-4"

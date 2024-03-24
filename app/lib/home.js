@@ -17,9 +17,14 @@ const toggleSmartElement = async (roomId, elementId, elementType) => {
     })
     .then((response) => {
       ConsoleLogger(
-        `Toggled ${elementType}: ${elementId} in room: ${roomId} - ${
-          response.data.isOpen ? "open" : "close"
-        }`
+        "Toggled Smart Element",
+        `${elementType} ${elementId} in room ${roomId} was toggled.`,
+        {
+          previousState: !response.data.isOpen ? "On" : "Off",
+          currentState: response.data.isOpen ? "On" : "Off",
+          reason: "User Interaction",
+          user: localStorage.getItem("userName"),
+        }
       );
       return response.data;
     });

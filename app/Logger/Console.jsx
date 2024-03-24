@@ -1,10 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Console, Hook, Unhook } from "console-feed";
 
-const ConsoleLogger = (message) => {
-  var date = new Date();
-  date = date.toLocaleString("en-US");
-  console.log(`${date} - ${message}`);
+const ConsoleLogger = (eventType, eventDescription, details) => {
+  const timestamp = new Date().toLocaleString("en-US");
+  const deviceId = "Thermostat-001"; // Assuming this is fixed for this example
+
+  const logEntry = {
+    timestamp,
+    deviceId,
+    eventType,
+    eventDescription,
+    details,
+  };
+
+  console.log(JSON.stringify(logEntry));
 };
 
 function LogsContainer() {
@@ -33,9 +42,20 @@ function LogsContainer() {
     scrollToBottom();
   }, [logs]);
 
+  const onClearLogs = () => {
+    setLogs([]);
+  };
+
   return (
     <div className="bg-white mx-4 border border-black rounded">
-      <p className="w-full bg-slate-300 text-center sticky top-0"> Console </p>
+      <div className="w-full bg-slate-300 text-center sticky top-0 flex justify-between px-2">
+        <button disabled className="text-slate-300">
+          Clear
+        </button>
+        <p> Console </p>
+        <button onClick={onClearLogs}>Clear</button>
+      </div>
+
       <div className="overflow-scroll h-64">
         <Console logs={logs} variant="light" filter={["log"]} />
         <div ref={logsEndRef} />

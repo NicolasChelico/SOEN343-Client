@@ -7,18 +7,13 @@ export default function Door({ doorData, roomId }) {
   const [door, setDoor] = useState(doorData);
 
   const handleClick = async () => {
-    console.log(
-      `Toggling ${door.elementType}: ${door.elementId} in room: ${roomId}`
-    );
     const updatedSmartElement = await toggleSmartElement(
       roomId,
-      door.elementId
+      door.elementId,
+      door.elementType
     );
 
     setDoor(updatedSmartElement);
-    console.log(
-      `Toggled ${door.elementType}: ${door.elementId} in room: ${roomId}`
-    );
   };
 
   useEffect(() => {

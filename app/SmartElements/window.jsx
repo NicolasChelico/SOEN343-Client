@@ -1,17 +1,18 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { toggleLight, toggleSmartElement } from "../lib/home";
+import { toggleSmartElement } from "../lib/home";
 import { GiWindow, GiWindowBars } from "react-icons/gi";
 
 export default function Window({ windowData, roomId }) {
   const [window, setWindow] = useState(windowData);
 
   const handleClick = async () => {
-    console.log(`Toggling window: ${window.elementId} in room: ${roomId}`);
-    const updatedWindow = await toggleSmartElement(roomId, window.elementId);
+    const updatedWindow = await toggleSmartElement(
+      roomId,
+      window.elementId,
+      window.elementType
+    );
 
     setWindow(updatedWindow);
-    console.log(`Toggled window: ${window.elementId} in room: ${roomId}`);
   };
 
   useEffect(() => {

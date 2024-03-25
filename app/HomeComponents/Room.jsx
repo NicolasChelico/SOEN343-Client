@@ -7,25 +7,37 @@ import { IoMan } from "react-icons/io5";
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
   const [userRoom, setUserRoom] = useState(false);
+  const [lights, setLights] = useState(
+    room.smartElementList.filter((element) => element.elementType === "Light")
+  );
+  const [doors, setDoors] = useState(
+    room.smartElementList.filter((element) => element.elementType === "Door")
+  );
+  const [windows, setWindows] = useState(
+    room.smartElementList.filter((element) => element.elementType === "Window")
+  );
 
   useEffect(() => {
     if (room.userList.length > 0) {
       setUserRoom(true);
     }
     setRoom(roomData);
+    setLights(
+      roomData.smartElementList.filter(
+        (element) => element.elementType === "Light"
+      )
+    );
+    setDoors(
+      roomData.smartElementList.filter(
+        (element) => element.elementType === "Door"
+      )
+    );
+    setWindows(
+      roomData.smartElementList.filter(
+        (element) => element.elementType === "Window"
+      )
+    );
   }, [roomData]);
-
-  const Lights = room.smartElementList.filter(
-    (element) => element.elementType === "Light"
-  );
-
-  const Doors = room.smartElementList.filter(
-    (element) => element.elementType === "Door"
-  );
-
-  const Windows = room.smartElementList.filter(
-    (element) => element.elementType === "Window"
-  );
 
   // console.log(userRoom , ' room status in ' , room.roomId)
   return (
@@ -36,15 +48,15 @@ export default function Room({ roomData }) {
 
       <div className="flex w-full justify-center items-center">
         {room &&
-          Lights.map((light, index) => (
+          lights.map((light, index) => (
             <Light key={index} lightData={light} roomId={room.roomId} />
           ))}
         {room &&
-          Doors.map((door, index) => (
+          doors.map((door, index) => (
             <Door key={index} doorData={door} roomId={room.roomId} />
           ))}
         {room &&
-          Windows.map((window, index) => (
+          windows.map((window, index) => (
             <Window key={index} windowData={window} roomId={room.roomId} />
           ))}
         {userRoom ? <IoMan size={30} /> : ""}

@@ -16,7 +16,7 @@ export default function Light({ lightData, roomId }) {
 
   useEffect(() => {
     setLight(lightData);
-  }, []);
+  }, [lightData]);
 
   return (
     <button

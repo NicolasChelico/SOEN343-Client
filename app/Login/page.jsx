@@ -36,7 +36,6 @@ export default function Login() {
     }
   };
 
-  console.log('Role from local:', localStorage.getItem('role'));
 
   return (
     <FormHolder>

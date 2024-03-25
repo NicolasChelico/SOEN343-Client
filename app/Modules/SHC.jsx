@@ -15,7 +15,7 @@ export default function SHC({
   const roomNumberRef = useRef(1);
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
-    console.log(roomNumberRef);
+    // console.log(roomNumberRef);
   };
   return (
     <div>

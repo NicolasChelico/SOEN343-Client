@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getHomeLayout } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
-
+import { getZones, addZone } from "../lib/zones";
 export default function SHH() {
   const [roomList, setRoomList] = useState([])
   const [active, setActive] = useState(true)
+  const [zones, setZones] = useState([])
+
   const [newZone, setNewZone] = useState({
-    zone:0,
-    AM:0,
-    PM: 0,
-    NIGHT: 0
+    zone:0.0,
+    AM:0.0,
+    PM: 0.0,
+    NIGHT: 0.0
   })
 
   useEffect(() => {
@@ -22,31 +24,48 @@ export default function SHH() {
       });
   }, []);
 
+
+  useEffect(() => {
+    getZones()
+    .then(res => {
+        setZones(res);
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}, [newZone]);
+
+
+ 
+ 
   const onClickSetActive = (e) => {
     e.preventDefault();
     setActive(!active);
   };
 
-  console.log(' this is Home layout ', roomList)
-
   const onZoneChange = e => {
     setNewZone(prev => ({...prev, [e.target.name]: e.target.value}))
-    console.log(newZone)
+    
   }
 
   const onClickSetRoomTemp = (e) => {};
 
-  const onUserChange = (e) => {
-    // setNewProfile(prev => ({...prev, [e.target.name]: e.target.value}))
-  };
 
-
-  const handleNewZone = e => {
+  const onAddZone = async (e) => {
     e.preventDefault();
+    try {
+        // Call addZone function to add the new zone
+        await addZone(newZone);   
+        // Fetch the updated zones data after adding the new zone
+        // const updatedZones = await getZones();
+        
+        // // Update the zones state with the updated data
+       
+    } catch (error) {
+        console.log(error);
+    }
+};
 
-    
-
-  }
 
 
   return (
@@ -76,15 +95,16 @@ export default function SHH() {
                   </tr>
                 </thead>
                 <tbody >
-                    {roomList.map(room => {
+                    {zones && (zones.map(zone => {
                       return(
-                        <tr className="border-2" key={room.roomId}>
-                            <td className="border-2">Zone {room.roomType}</td>
-                            <td className="border-2">{room.zone}</td>
-                            <td className="border-2">{room.zone}</td>
+                        <tr className="border-2" key={zone.zoneId}>
+                            <td className="border-2">Zone {zone.zoneId}</td>
+                            <td className="border-2">{zone.amTemp}</td>
+                            <td className="border-2">{zone.pmTemp}</td>
+                            <td className="border-2">{zone.nightTemp}</td>
                         </tr>
                       )
-                    })}
+                    }))}
                 </tbody>
               </table>
             </div>
@@ -102,12 +122,12 @@ export default function SHH() {
           </thead>
           <tbody>
             <tr className="text-center">
-              <td><input name="zone" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/></td>
+              <td><input name="zone" min="2" max="4" type="number" onChange={onZoneChange} className="w-3/4 border-2 border-md"/></td>
               <td><input name="AM" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
               <td><input name="PM" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
               <td><input name="NIGHT" type="number" onChange={onZoneChange} className="w-2/4 border-2 border-md"/>°C </td>
               <td> 
-                <button className="rounded-md bg-slate-800 text-white ml-4 px-8" onClick={()=>onAddZone(newZone)}>
+                <button className="rounded-md bg-slate-800 text-white ml-4 px-8" onClick={onAddZone}>
                   SET
                 </button>
             </td>

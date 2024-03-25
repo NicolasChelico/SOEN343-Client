@@ -25,6 +25,7 @@ export default function ({name}) {
 
       const handleUserChange = e => {
         setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
+        const role = users.find((user) =>  simulationUser.userName === user.name)
       }
 
       
@@ -33,6 +34,7 @@ export default function ({name}) {
         const role = users.find((user) =>  simulationUser.userName === user.name)
         localStorage.setItem("userName", role.name)
         localStorage.setItem("role", role.role)
+        localStorage.setItem("location",simulationUser.location)
         localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
         localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
         localStorage.setItem('date', simulationContext.date)
@@ -77,19 +79,19 @@ export default function ({name}) {
           <div className=" flex flex-row ml-16 mt-8 mb-2">
             <label className="text-black">Set User location:</label>
               <select 
-                name="userName" 
+                name="location" 
                 id="" 
                 value={simulationUser.location} 
                 onChange={handleUserChange}
                 className="text-black border-2 border-gray-300 rounded-md"
                 >
-                <option name="LivingRoom" value="LivingRoom"> Living Room</option>
-                <option name="Kitchen" value="Kitchen"> Kitchen</option>
-                <option name="Garage" value="Garage"> Garage</option>
-                <option name="Bedroom" value="Bedroom"> Bedroom</option>
-                <option name="BuildingEntrance" value="BuildingEntrance"> Building Entrance</option>
-                <option name="Outdoor" value="Outdoor"> Outdoor</option>
-                <option name="Backyard" value="Backyard"> Backyard</option>
+                <option name="location" value="LivingRoom"> Living Room</option>
+                <option name="location" value="Kitchen"> Kitchen</option>
+                <option name="location" value="Garage"> Garage</option>
+                <option name="location" value="Bedroom"> Bedroom</option>
+                <option name="location" value="BuildingEntrance"> Building Entrance</option>
+                <option name="location" value="Outdoor"> Outdoor</option>
+                <option name="location" value="Backyard"> Backyard</option>
 
         </select>
           </div>

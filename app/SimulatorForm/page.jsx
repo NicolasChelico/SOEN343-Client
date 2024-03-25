@@ -13,7 +13,6 @@ export default function SimulatorFormContainer() {
     time: null
   })
 
-  console.log(homeSpecifications)
   const handleChange = e => {
     setHomeSpecifications((prev) => ({...prev,[e.target.name]: e.target.value}))
   }

@@ -14,12 +14,15 @@ const Clock = (props) => {
 
   // Effect to fetch the current time from the server every 2 seconds and update the state
   useEffect(() => {
+    
+    if(simulationContext){
     const intervalId = setInterval(async () => {
       const time = await getClock();
       setTime(new Date(time));
     }, 2000);
 
     return () => clearInterval(intervalId);
+  }
   }, []);
 
   // Handler to change the speed factor

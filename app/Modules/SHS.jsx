@@ -54,7 +54,7 @@ export default function SHS() {
   }
   
   useEffect(()=> {
-    console.log(newProfile)
+    // console.log(newProfile)
   },[newProfile])
  
 

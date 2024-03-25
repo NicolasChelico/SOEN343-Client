@@ -42,7 +42,7 @@ export default function SignUp() {
         password: user.password,
         role: "Stranger",
       });
-      console.log(res);
+      
       setSuccessMessage("Sign up successful!");
       // Optionally, redirect the user or clear the form here
       router.push("/Dashboard");

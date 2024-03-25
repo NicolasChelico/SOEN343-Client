@@ -17,7 +17,6 @@ const toggleSmartElement = async (roomId, elementId, elementType) => {
     })
     .then((response) => {
       ConsoleLogger(
-
         "Toggled Smart Element",
         `${elementType} ${elementId} in room ${roomId} was toggled.`,
         {
@@ -26,8 +25,6 @@ const toggleSmartElement = async (roomId, elementId, elementType) => {
           reason: "User Interaction",
           user: localStorage.getItem("userName"),
         }
-
-
       );
       return response.data;
     });
@@ -40,6 +37,16 @@ const toggleAllLights = async (isOpen) => {
       isOpen,
     })
     .then((response) => {
+      ConsoleLogger(
+        "Toggled All Lights",
+        `All lights were toggled ${isOpen ? "on" : "off"}.`,
+        {
+          previousState: !response.data.isOpen ? "On" : "Off",
+          currentState: response.data.isOpen ? "On" : "Off",
+          reason: "User Interaction",
+          user: localStorage.getItem("userName"),
+        }
+      );
       return response.data;
     });
 };
@@ -51,6 +58,16 @@ const toggleRoomLights = async (roomId) => {
       elementType: "Light",
     })
     .then((response) => {
+      ConsoleLogger(
+        "Toggled Room Lights",
+        `All lights in ${response.data.roomType} were toggled.`,
+        {
+          previousState: !response.data.isOpen ? "On" : "Off",
+          currentState: response.data.isOpen ? "On" : "Off",
+          reason: "User Interaction",
+          user: localStorage.getItem("userName"),
+        }
+      );
       return response.data;
     });
 };

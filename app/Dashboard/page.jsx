@@ -16,9 +16,7 @@ import { LogsContainer } from "../Logger/Console";
 
 import { toggleClock } from "../lib/clock";
 
-
-
-import Modal from '../Modals/Modal'
+import Modal from "../Modals/Modal";
 import ModalContent from "../Modals/ModalContent";
 import ModalToggler from "../Modals/ModalToggler";
 import EditContext from "../Components/SideNav/EditContext";
@@ -71,10 +69,8 @@ export default function SmartHomeSimulator() {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
 
-
     setRooms((prevRooms) => {
       return prevRooms.map((room) => {
-
         if (room.roomId === roomIdInt) {
           // Create a new room object with updated smartElementList
           return {
@@ -89,12 +85,10 @@ export default function SmartHomeSimulator() {
 
   const changeAllLights = async (isOpen) => {
     const updatedHouseLayout = await toggleAllLights(isOpen);
-    window.location.reload();
+    setRooms(updatedHouseLayout.roomList);
   };
 
-
   const onClickSimumlation = async (e) => {
-
     e.preventDefault();
     if (simulation) {
       setLatestState(activeElement);
@@ -123,29 +117,23 @@ export default function SmartHomeSimulator() {
         location={location}
         onClickSimulation={onClickSimumlation}
         simulation={simulation}
-
       >
-
         <div className="mt-4 text-center border-white border-2">
           <Modal>
-              <ModalToggler>
-                <div>
-                  <button>Edit Simulation</button>
-                </div>
-              </ModalToggler>
-              <ModalContent
-                title="Edit Simulation Context"
-                description="Edit the information associated with the simulation. We will generate the rest for you!"
-                onExit={() => console.log("exit")}
-              >
-                <EditContext name={userName}/>
-              </ModalContent>
-            </Modal>
-            
+            <ModalToggler>
+              <div>
+                <button>Edit Simulation</button>
+              </div>
+            </ModalToggler>
+            <ModalContent
+              title="Edit Simulation Context"
+              description="Edit the information associated with the simulation. We will generate the rest for you!"
+              onExit={() => console.log("exit")}
+            >
+              <EditContext name={userName} />
+            </ModalContent>
+          </Modal>
         </div>
-
-
-
       </SideNav>
       <CommandsContainer>
         {simulation ? (
@@ -211,8 +199,7 @@ export default function SmartHomeSimulator() {
         {activeElement === "SHH" && <SHH />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
-
-        <HouseContainer houseLayout={houseLayout} />
+        <HouseContainer houseLayout={houseLayout} rooms={rooms} />
 
         <LogsContainer />
       </div>

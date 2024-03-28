@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Console, Hook, Unhook } from "console-feed";
+import { getClock } from "../lib/clock";
 
-
-const ConsoleLogger = (eventType, eventDescription, details) => {
-  const timestamp = new Date().toLocaleString("en-US");
+const ConsoleLogger = async (eventType, eventDescription, details) => {
+  const timestamp = await getClock();
   const deviceId = "Thermostat-001"; // Assuming this is fixed for this example
 
   const logEntry = {
@@ -15,7 +15,6 @@ const ConsoleLogger = (eventType, eventDescription, details) => {
   };
 
   console.log(JSON.stringify(logEntry));
-
 };
 
 function LogsContainer() {
@@ -44,9 +43,9 @@ function LogsContainer() {
     scrollToBottom();
   }, [logs]);
 
-
   const onClearLogs = () => {
     setLogs([]);
+    localStorage.removeItem("logHistory");
   };
 
   return (

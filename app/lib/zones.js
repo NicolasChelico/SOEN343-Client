@@ -22,4 +22,18 @@ const addZone = async (zone) => {
     });
 };
 
-export { getZones, addZone };
+const addRoomToZone = async (zoneId, roomId) => {
+  return await axios
+    .post("http://localhost:8080/ZoneController/AddRoomToZone", {
+      zoneId,
+      roomId,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export { getZones, addZone, addRoomToZone };

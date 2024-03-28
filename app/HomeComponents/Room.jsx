@@ -42,8 +42,13 @@ export default function Room({ roomData }) {
   // console.log(userRoom , ' room status in ' , room.roomId)
   return (
     <div className="bg-slate-400 border border-black flex flex-1 flex-col items-start justify-start">
-      <div className="bg-white border border-black px-2  top-0 left-0">
-        {room.roomType} Zone: 1
+      <div className="flex">
+        <div className="bg-white border border-black px-2  top-0 left-0">
+          {room.roomType} Zone: 1
+        </div>
+        <div className="bg-white border border-black px-2  top-0 right-0">
+          {room.temperature}˚C
+        </div>
       </div>
 
       <div className="flex w-full justify-center items-center">

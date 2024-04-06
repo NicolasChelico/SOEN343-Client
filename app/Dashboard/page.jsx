@@ -61,6 +61,14 @@ export default function SmartHomeSimulator() {
     setHouseLayout((prevLayout) => ({ ...prevLayout, roomList: rooms }));
   }, [rooms]);
 
+  useEffect(() => {
+    setTimeout(async () => {
+      const newHomeLayout = await getHomeLayout();
+      setHouseLayout(newHomeLayout);
+      setRooms(newHomeLayout.roomList);
+    }, 2000); // 2-second delay
+  }, [houseLayout]);
+
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
   };
@@ -196,7 +204,7 @@ export default function SmartHomeSimulator() {
           />
         )}
         {activeElement === "SHS" && <SHS />}
-        {activeElement === "SHH" && <SHH />}
+        {activeElement === "SHH" && <SHH rooms={rooms} />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
         <HouseContainer houseLayout={houseLayout} rooms={rooms} />

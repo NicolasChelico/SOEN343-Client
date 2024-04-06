@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { getHomeLayout } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
-import { getZones, addZone } from "../lib/zones";
+import { getZones, addZone, addRoomToZone } from "../lib/zones";
 export default function SHH() {
   const [roomList, setRoomList] = useState([]);
   const [active, setActive] = useState(true);
   const [zones, setZones] = useState([]);
+  const [assignedSelectedRoom, setAssignedSelectedRoom] = useState();
+  const [assignedZone, setAssignedZone] = useState();
 
   const [newZone, setNewZone] = useState({
     zone: 0.0,
@@ -13,6 +15,14 @@ export default function SHH() {
     PM: 0.0,
     NIGHT: 0.0,
   });
+
+  useEffect(() => {
+    async function fetchData() {
+      const homeLayout = await getHomeLayout();
+      setRoomList(homeLayout.roomList);
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,20 +41,28 @@ export default function SHH() {
     setNewZone((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const onClickSetRoomTemp = (e) => {};
-
   const onAddZone = async (e) => {
     e.preventDefault();
     try {
       // Call addZone function to add the new zone
-      await addZone(newZone);
+      const response = await addZone(newZone);
       // Fetch the updated zones data after adding the new zone
-      // const updatedZones = await getZones();
+      setZones((prev) => [...prev, response]);
 
       // // Update the zones state with the updated data
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleZoneAssignment = async (e) => {
+    e.preventDefault();
+    console.log(assignedSelectedRoom, assignedZone);
+    if (!assignedSelectedRoom || !assignedZone) {
+      console.log("Please select a room and a zone");
+      return;
+    }
+    await addRoomToZone(assignedSelectedRoom, assignedZone);
   };
 
   return (
@@ -193,13 +211,14 @@ export default function SHH() {
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
               <select className="h-7 border-2" name="role">
-                {roomList.map((room, index) => {
-                  return (
-                    <option key={index} value={room.roomId}>
-                      {room.roomType}
-                    </option>
-                  );
-                })}
+                {roomList &&
+                  roomList.map((room, index) => {
+                    return (
+                      <option key={index} value={room.roomId}>
+                        {room.roomType}
+                      </option>
+                    );
+                  })}
               </select>
               <input
                 className="h-7 w-2/5 border-2"
@@ -217,26 +236,40 @@ export default function SHH() {
           </div>
           <p className="mt-2 font-bold">Assign Room to Zone</p>
           <div className="flex flex-row ">
-            <div className="flex justify-between rounded-md border-slate-800 ">
-              <select className="h-7 border-2" name="role">
-                {roomList.map((room, index) => {
-                  return (
-                    <option key={index} value={room.roomId}>
-                      {room.roomType}
-                    </option>
-                  );
-                })}
+            <div className="flex justify-between items-center rounded-md border-slate-800 ">
+              <select
+                className="h-7 border-2"
+                name="role"
+                onChange={(e) => setAssignedSelectedRoom(e.target.value)}
+                value={assignedSelectedRoom}
+              >
+                {roomList &&
+                  roomList.map((room) => {
+                    return (
+                      <option key={room.roomId} value={room.roomId}>
+                        {room.roomType}
+                      </option>
+                    );
+                  })}
               </select>
-              <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Zone #"
-                name="temperature"
-              />
+              <p>Zone #</p>
+              <select
+                onChange={(e) => setAssignedZone(e.target.value)}
+                value={assignedZone}
+              >
+                {zones &&
+                  zones.map((zone) => {
+                    return (
+                      <option key={zone.zoneId} value={zone.zoneId}>
+                        {zone.zoneId}
+                      </option>
+                    );
+                  })}
+              </select>
             </div>
             <button
               className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-              onClick={() => onAddUser(newProfile)}
+              onClick={handleZoneAssignment}
             >
               SET
             </button>

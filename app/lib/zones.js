@@ -29,7 +29,6 @@ const addRoomToZone = async (zoneId, roomId) => {
       roomId,
     })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {

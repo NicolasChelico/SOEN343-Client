@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getHomeLayout } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
-import { getZones, addZone } from "../lib/zones";
+import { getZones, addZone, addRoomToZone } from "../lib/zones";
 export default function SHH() {
   const [roomList, setRoomList] = useState([]);
   const [active, setActive] = useState(true);
@@ -18,8 +18,8 @@ export default function SHH() {
 
   useEffect(() => {
     async function fetchData() {
-      const rooms = await getHomeLayout().roomList;
-      setRoomList(rooms);
+      const homeLayout = await getHomeLayout();
+      setRoomList(homeLayout.roomList);
     }
     fetchData();
   }, []);
@@ -57,7 +57,12 @@ export default function SHH() {
 
   const handleZoneAssignment = async (e) => {
     e.preventDefault();
-    await addZoneToRoom(assignedSelectedRoom, assignedZone);
+    console.log(assignedSelectedRoom, assignedZone);
+    if (!assignedSelectedRoom || !assignedZone) {
+      console.log("Please select a room and a zone");
+      return;
+    }
+    await addRoomToZone(assignedSelectedRoom, assignedZone);
   };
 
   return (
@@ -231,11 +236,12 @@ export default function SHH() {
           </div>
           <p className="mt-2 font-bold">Assign Room to Zone</p>
           <div className="flex flex-row ">
-            <div className="flex justify-between rounded-md border-slate-800 ">
+            <div className="flex justify-between items-center rounded-md border-slate-800 ">
               <select
                 className="h-7 border-2"
                 name="role"
                 onChange={(e) => setAssignedSelectedRoom(e.target.value)}
+                value={assignedSelectedRoom}
               >
                 {roomList &&
                   roomList.map((room) => {
@@ -246,15 +252,10 @@ export default function SHH() {
                     );
                   })}
               </select>
-              <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Zone #"
-                name="temperature"
-              />
+              <p>Zone #</p>
               <select
-                value={assignedZone}
                 onChange={(e) => setAssignedZone(e.target.value)}
+                value={assignedZone}
               >
                 {zones &&
                   zones.map((zone) => {

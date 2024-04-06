@@ -44,7 +44,7 @@ export default function Room({ roomData }) {
     <div className="bg-slate-400 border border-black flex flex-1 flex-col items-start justify-start">
       <div className="flex">
         <div className="bg-white border border-black px-2  top-0 left-0">
-          {room.roomType} Zone: 1
+          {room.roomType} Zone: {room.zoneId}
         </div>
         <div className="bg-white border border-black px-2  top-0 right-0">
           {room.temperature}˚C

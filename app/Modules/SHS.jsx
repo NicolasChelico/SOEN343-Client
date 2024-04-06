@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {deleteUser, generateRandomStrings, onAddUser} from '../lib/users'
 import axios from "axios";
 import e from "cors";
+import PermissionModal from "../Permissions/PermissionModal";
 
 export default function SHS() {
   const [users, setUsers] = useState([]);
@@ -145,6 +146,15 @@ export default function SHS() {
           
         </div>
       </div>
+      <div className= 'h-full relative'>
+              <PermissionModal
+                module={'SHS'}
+                parents={'Full access'}
+                children={'Half'}
+                guest={'guest'}
+                stranger={'stranger'}
+              />
+        </div>
     </>
   );
 }

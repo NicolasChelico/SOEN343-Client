@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getHomeLayout } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
 import { getZones, addZone, addRoomToZone } from "../lib/zones";
+import PermissionModal from "../Permissions/PermissionModal";
 export default function SHH() {
   const [roomList, setRoomList] = useState([]);
   const [active, setActive] = useState(true);
@@ -66,6 +67,7 @@ export default function SHH() {
   };
 
   return (
+    <>
     <div>
       {active ? (
         <div>
@@ -286,6 +288,18 @@ export default function SHH() {
           </button>
         </SimulationOff>
       )}
+   
     </div>
+    <div className= 'h-full relative'>
+        <PermissionModal
+          module={'SHH'}
+          parents={'All permissions granted to operate the SHH from home, or remotely.'}
+          children={'Permission to increase/decrease the temperature of the room where they are physically located.'}
+          guest={'Permission to increase/decrease the temperature of the room where they are physically located.'}
+          stranger={'Non-identified users have no permissions no matter where they are located.'}
+        />
+  </div>
+  </>
   );
+
 }

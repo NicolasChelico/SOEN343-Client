@@ -8,6 +8,7 @@ import HouseContainer from "./HouseContainer";
 import Room from "../HomeComponents/Room";
 import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
+import SHP from "../Modules/SHP";
 
 import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
 import SHH from "../Modules/SHH";
@@ -205,6 +206,7 @@ export default function SmartHomeSimulator() {
         )}
         {activeElement === "SHS" && <SHS />}
         {activeElement === "SHH" && <SHH rooms={rooms} />}
+        {activeElement === "SHP" && <SHP />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
         <HouseContainer houseLayout={houseLayout} rooms={rooms} />

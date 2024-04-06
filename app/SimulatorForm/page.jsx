@@ -3,41 +3,81 @@ import React, {useState} from "react";
 import FormHolder from "../Components/FormHolder";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-
+import axios from "axios";
 export default function SimulatorFormContainer() {
   const router = useRouter()
   const [homeSpecifications, setHomeSpecifications] = useState({
-    indoorTemp:null,
-    outdoorTemp:null,
-    date: null,
+    date: new Date().toISOString().slice(0, 10), // Set default date to current date
     time: null
-  })
+  });
 
   const handleChange = e => {
-    setHomeSpecifications((prev) => ({...prev,[e.target.name]: e.target.value}))
-  }
+    const { name, value } = e.target;
 
-  const submitSpecifications = e => {
+    // If the date input changes, update the time to the current time
+    if (name === 'date') {
+      const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
+      setHomeSpecifications(prev => ({
+        ...prev,
+        [name]: value,
+        time: currentTime
+      }));
+    } else {
+      setHomeSpecifications(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    console.log(homeSpecifications)
+  };
+
+  const submitSpecifications = async e => {
     e.preventDefault();
-    localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
-    localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
-    localStorage.setItem('date', homeSpecifications.date)
-    router.push('/Dashboard')
-  }
-
-
+  
+    try {
+      // Format date and time strings
+      const formattedDate = homeSpecifications.date;
+      const formattedTime = homeSpecifications.time ? homeSpecifications.time : new Date().toLocaleTimeString('en-US', { hour12: false });
+  
+      // Concatenate date and time strings
+      const dateTimeString = new Date(formattedDate + " " + formattedTime);
+      const dateSeconds = dateTimeString.getTime().toString();
+      
+      const response = await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', {
+        date: dateSeconds
+      });
+      
+      if (response.status === 200) {
+        localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp);
+        localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp);
+        localStorage.setItem('date', formattedDate);
+        localStorage.setItem('time', formattedTime);
+        router.push('/Dashboard');
+      }
+    } catch (error) {
+      console.error('Failed to update simulation time:', error);
+      // Handle error appropriately
+    }
+  };
+    // localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
+    // localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
+    // localStorage.setItem('date', homeSpecifications.date)
+    // router.push('/Dashboard')
+  
 
   return (
     <FormHolder>
       <div className="flex flex-col text-center mb-8">
-        <h1 className="text-4xl font-sans pt-8 pb-2 ">Smart Home Simulator.</h1>
+        <h1 className="text-4xl font-sans pt-8 pb-2">
+          Smart Home Simulator.
+        </h1>
         <p className="text-gray-400/90 font-sans">
           Please enter the home specifications.
         </p>
       </div>
       <div className="flex flex-col text-justify w-3/4 justify-center ml-24">
  
-        <div className=" flex flex-row my-2">
+        {/* <div className=" flex flex-row my-2">
             <label>Inside temperature:</label>
             <input
               type="number"
@@ -57,7 +97,7 @@ export default function SimulatorFormContainer() {
               onChange={handleChange}
             />
             <p className="">°C</p>
-          </div>
+          </div> */}
 
         <div className="my-2">
           <label htmlFor="">Set Date: </label>

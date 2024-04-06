@@ -37,4 +37,10 @@ const toggleClock = async (simulation) => {
     });
 };
 
+
+const setInitialDate = async (date) => {
+  return await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', date)
+}
+
+
 export { getClock, setTimeSpeed, toggleClock };

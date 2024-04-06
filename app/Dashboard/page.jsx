@@ -32,7 +32,7 @@ export default function SmartHomeSimulator() {
 
   const [houseLayout, setHouseLayout] = useState(null);
   const [rooms, setRooms] = useState([]);
-  const [activeElement, setActiveElement] = useState("SHH");
+  const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
   const [latestState, setLatestState] = useState("");
   const [simulation, setSimulation] = useState(true);

@@ -103,6 +103,7 @@ export default function SHS() {
                 <option value="">--</option>
                 <option value="Parent">Parent</option>
                 <option value="Child">Child</option>
+                <option value="Guest">Guest</option>
                 <option value="Stranger">Stranger</option>
               </select>
               <select className="h-7 w-1/5" name="location" onChange={onUserChange}>

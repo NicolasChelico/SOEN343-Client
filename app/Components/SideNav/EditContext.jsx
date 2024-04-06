@@ -25,13 +25,14 @@ export default function ({name}) {
 
       const handleUserChange = e => {
         setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
-        const role = users.find((user) =>  simulationUser.userName === user.name)
+        console.log(users.find((user) =>  simulationUser.userName === user.name))
       }
 
       
       const submitSpecifications = e => {
         e.preventDefault();
         const role = users.find((user) =>  simulationUser.userName === user.name)
+        console.log(role)
         localStorage.setItem("userName", role.name)
         localStorage.setItem("role", role.role)
         localStorage.setItem("location",simulationUser.location)
@@ -39,6 +40,7 @@ export default function ({name}) {
         localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
         localStorage.setItem('date', simulationContext.date)
         toggle();
+        
       }
 
       useEffect(() => {
@@ -95,7 +97,7 @@ export default function ({name}) {
 
         </select>
           </div>
-        <div className=" flex flex-row ml-16 mb-2">
+        {/* <div className=" flex flex-row ml-16 mb-2">
             <label className="text-black">Inside temperature:</label>
             <input
               type="number"
@@ -105,9 +107,9 @@ export default function ({name}) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div>
+          </div> */}
 
-          <div className=" flex flex-row ml-16 my-2">
+          {/* <div className=" flex flex-row ml-16 my-2">
             <label className="text-black">Outdoor temperature:</label>
             <input
               type="number"
@@ -117,7 +119,7 @@ export default function ({name}) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div>
+          </div> */}
 
         <div className="my-2 ml-16">
           <label className="text-black" htmlFor="">Set Date: </label>

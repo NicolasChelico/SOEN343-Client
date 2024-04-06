@@ -13,6 +13,14 @@ export default function Login() {
     userName: "",
     password: "",
   });
+  const [simulationParameters, setSimulationParameters] = useState({
+    indoorTemp : "",
+    outdoorTemp: "",
+    date: ""
+    // localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
+    // localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
+    // localStorage.setItem('date', homeSpecifications.date)
+  })
   const [loginError, setLoginError] = useState(false);
   const errorMessage = "Wrong Credentials entered. ";
 
@@ -35,6 +43,7 @@ export default function Login() {
       setLoginError(true);
     }
   };
+
 
 
   return (

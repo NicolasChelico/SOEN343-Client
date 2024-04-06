@@ -35,4 +35,22 @@ function generateRandomStrings(length) {
     return [randomString1, randomString2];
 }
 
-export {deleteUser, onAddUser, generateRandomStrings}
+const updateCurrentUserLocation = async (userName,oldRoomId, newRoomId) => {
+
+  const oldRoom =oldRoomId.toString()
+  const newRoom = newRoomId.toString()
+
+  const data = {
+    userName: userName,
+    oldRoomId: oldRoom,
+    newRoomId: newRoom
+};
+
+
+    return await axios.post('http://localhost:8080/RoomController/ChangeUserLocation' ,data)
+    .then(res => {
+      return res.data;
+    });
+}
+
+export {deleteUser, onAddUser, generateRandomStrings, updateCurrentUserLocation}

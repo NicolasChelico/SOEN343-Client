@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-
+import PermissionModal from "../Permissions/PermissionModal";
 export default function SHC({
   toggleAllLights,
   toggleRoomLights,
@@ -18,6 +18,7 @@ export default function SHC({
     // console.log(roomNumberRef);
   };
   return (
+    <>
     <div>
       <h1>SHC</h1>
 
@@ -63,5 +64,15 @@ export default function SHC({
         </div>
       </div>
     </div>
+    <div className= 'h-full relative'>
+        <PermissionModal
+          module={'SHC'}
+          parents={'All permissions granted to open/close windows, unlock doors, open/close garage and turn on/off lights.'}
+          children={'Limited permission to turn on/off lights and open/close windows on the room that they are located. If they are not home, all permissions are revoked.'}
+          guest={'Limited permission to turn on/off lights and open/close windows on the room that they are located. If they are not home, all permissions are revoked.'}
+          stranger={'Non-identified users have no permissions no matter where they are located.'}
+        />
+  </div>
+    </>
   );
 }

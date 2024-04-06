@@ -62,7 +62,7 @@ export default function SHH() {
       console.log("Please select a room and a zone");
       return;
     }
-    await addRoomToZone(assignedSelectedRoom, assignedZone);
+    await addRoomToZone(assignedZone, assignedSelectedRoom);
   };
 
   return (

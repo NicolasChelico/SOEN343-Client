@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 const useAuthStore = create(set => ({
     userId: localStorage.getItem('userId') || '',
@@ -7,23 +7,20 @@ const useAuthStore = create(set => ({
     location: localStorage.getItem('location') || '',
     setUserId: userId => {
         localStorage.setItem('userId', userId);
-        set({userId});
+        set({ userId });
     },
     setUserName: userName => {
         localStorage.setItem('userName', userName);
-        set({userName});
+        set({ userName });
     },
     setRole: role => {
         localStorage.setItem('role', role);
-        set({role});
+        set({ role });
     },
     setLocation: location => {
-        localStorage.setItem('location',location)
-        set({location})
+        localStorage.setItem('location', location); 
+        set({ location });
     }
 }));
-
-
-
 
 export default useAuthStore;

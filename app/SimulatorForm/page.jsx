@@ -4,12 +4,18 @@ import FormHolder from "../Components/FormHolder";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
+import useAuthStore from "../Zustand/userStore";
 export default function SimulatorFormContainer() {
   const router = useRouter()
   const [homeSpecifications, setHomeSpecifications] = useState({
     date: new Date().toISOString().slice(0, 10), // Set default date to current date
     time: null
   });
+
+
+  const {userName } = useAuthStore();
+  console.log('usernme of zustand: ', userName)
+
 
   const handleChange = e => {
     const { name, value } = e.target;

@@ -17,7 +17,6 @@ export default function HouseContainer() {
         })}
       <div className="w-full items-center">
         <p className="text-white font-bold text-800">Outside: {temp}˚C</p>
-        <p className="text-white font-bold text-800">Outside: {temp}˚C</p>
       </div>
     </div>
   );

@@ -106,43 +106,6 @@ export default function SHH() {
                 </tbody>
               </table>
             </div>
-      <div>
-        {active ? (
-          <div>
-            <div className="mx-4 my-4">
-              <button onClick={onClickSetActive}>
-                <span>
-                  <p className="bg-slate-800 text-white border px-8 py-2">
-                    SHH: {active ? "ON" : "OFF"}
-                  </p>
-                </span>
-              </button>
-            </div>
-            <div>
-              <table className="w-3/4 border-2 my-4">
-                <thead className="bg-gray-500 text-white">
-                  <tr>
-                    <th>Zone #</th>
-                    <th>AM</th>
-                    <th>PM</th>
-                    <th>NIGHT</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {zones.length > 0 &&
-                    zones.map((zone) => {
-                      return (
-                        <tr className="border-2" key={zone.zoneId}>
-                          <td className="border-2">Zone {zone.zoneId}</td>
-                          <td className="border-2">{zone.amTemp}˚ C</td>
-                          <td className="border-2">{zone.pmTemp}˚ C</td>
-                          <td className="border-2">{zone.nightTemp}˚ C</td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
 
             <p className="font-bold ml-4">Create Zone:</p>
             <table className="w-full my-4 ">
@@ -348,8 +311,6 @@ export default function SHH() {
             "Non-identified users have no permissions no matter where they are located."
           }
         />
-      </div>
-    </>
       </div>
     </>
   );

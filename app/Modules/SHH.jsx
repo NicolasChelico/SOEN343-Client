@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { getHomeLayout } from "../lib/home";
+import { getHomeLayout, resetRoomTemp, setRoomTemp } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
 import { getZones, addZone, addRoomToZone } from "../lib/zones";
+import e from "cors";
 export default function SHH() {
   const [roomList, setRoomList] = useState([]);
   const [active, setActive] = useState(true);
   const [zones, setZones] = useState([]);
   const [assignedSelectedRoom, setAssignedSelectedRoom] = useState();
   const [assignedZone, setAssignedZone] = useState();
+
+  const [setTemp, setSetTemp] = useState(0);
+  const [tempRoomId, setTempRoomId] = useState();
 
   const [newZone, setNewZone] = useState({
     zone: 0.0,
@@ -63,6 +67,14 @@ export default function SHH() {
       return;
     }
     await addRoomToZone(assignedZone, assignedSelectedRoom);
+  };
+
+  const handleSetTemp = async (e) => {
+    await setRoomTemp(tempRoomId, setTemp);
+  };
+
+  const handleTempReset = async (e) => {
+    await resetRoomTemp(tempRoomId);
   };
 
   return (
@@ -210,7 +222,12 @@ export default function SHH() {
           <p className="mt-2 font-bold">Set Room Temperature</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <select className="h-7 border-2" name="role">
+              <select
+                className="h-7 border-2"
+                name="role"
+                value={tempRoomId}
+                onChange={(e) => setTempRoomId(e.target.value)}
+              >
                 {roomList &&
                   roomList.map((room, index) => {
                     return (
@@ -221,17 +238,23 @@ export default function SHH() {
                   })}
               </select>
               <input
-                className="h-7 w-2/5 border-2"
-                type="text"
-                placeholder="Temperature"
-                name="temperature"
+                name="Temperature"
+                type="number"
+                onChange={(e) => setSetTemp(e.target.value)}
+                className="w-2/4 border-2 border-md"
               />
             </div>
             <button
               className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-              onClick={() => onAddUser(newProfile)}
+              onClick={handleSetTemp}
             >
               SET
+            </button>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={handleTempReset}
+            >
+              RESET
             </button>
           </div>
           <p className="mt-2 font-bold">Assign Room to Zone</p>

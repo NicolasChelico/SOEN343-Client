@@ -9,11 +9,11 @@ import ModalContent from '@/app/Modals/ModalContent';
 import ModalToggler from '@/app/Modals/ModalToggler';
 import SimulatorForm from '@/app/SimulatorForm/SimulatorForm';
 import EditContext from './EditContext';
-
+import useSimlulationStore from '@/app/Zustand/simulationStore';
 export default function SideNav(props){
 
   // const [simulation, setSimulation] = useState(false);
- 
+  const {date, outdoorTemp, insideTemp} = useSimlulationStore();
 
   return (
     <div className="flex w-64 h-screen">
@@ -50,9 +50,9 @@ export default function SideNav(props){
                   <MdHome size={40}/>
               </div>
               <div className="text-justify">
-              {/* <p className="mb-4">Inside temp: {localStorage.getItem('indoorTemp')} C</p> */}
-                <p className="mb-4">Outside temp: {localStorage.getItem('outdoorTemp')} C</p>
-                <p className="mb-4">Date: {localStorage.getItem('date')}</p>
+              <p className="mb-4">Inside temp: {insideTemp} C</p>
+                <p className="mb-4">Outside temp: {outdoorTemp} C</p>
+                <p className="mb-4">Date: {date}</p>
                 <p><Clock simulation={props.simulation}/></p>
                 
               </div>

@@ -4,15 +4,16 @@ import axios from 'axios';
 import { updateCurrentUserLocation } from '@/app/lib/users';
 import { getHomeLayout } from "../../lib/home"
 import useAuthStore from '@/app/Zustand/userStore';
-
-export default function ({name}) {
+import useSimlulationStore from '@/app/Zustand/simulationStore';
+export default function EditContext({name}) {
+    const {date, setDate, outdoorTemp, setOutdoorTemp, insideTemp, setInsideTemp} = useSimlulationStore()
     const { toggle } = useModal();
     const {location, userName, role, setLocation, setUserName, setRole} = useAuthStore();
     const [users, setUsers] = useState([])
     const [roomList, setRoomList] = useState([]);
     // const originalLocation = localStorage.getItem('location');
     const originalLocation = location;
-
+  
     const [simulationUser, setSimulationUser] = useState({
         userName: userName,
         role: '',
@@ -20,8 +21,9 @@ export default function ({name}) {
     })
     const [simulationContext, setSimulationContext] = useState({
         indoorTemp: localStorage.getItem("indoorTemp"),
-        outdoorTemp: localStorage.getItem("outdoorTemp"),
-        date: localStorage.getItem("date"),
+        outdoorTemp: outdoorTemp,
+        insideTemp: insideTemp,
+        date: date,
         time: null
       })
 
@@ -64,11 +66,9 @@ export default function ({name}) {
         setUserName(role.name)
         setRole(role.role)
         setLocation(simulationUser.location)
-        //localStorage.setItem("userName", role.name)
-        // localStorage.setItem("role", role.role)
-        // localStorage.setItem("location",simulationUser.location)
-        // localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
-        // localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
+        setDate(simulationContext.date)
+        setOutdoorTemp(simulationContext.outdoorTemp)
+        setInsideTemp(simulationContext.insideTemp)
         localStorage.setItem('date', simulationContext.date)
       
         toggle();
@@ -127,30 +127,23 @@ export default function ({name}) {
                       </option>
                     );
                   })}
-              
-                {/* <option name="location" value="LivingRoom"> Living Room</option>
-                <option name="location" value="Kitchen"> Kitchen</option>
-                <option name="location" value="Garage"> Garage</option>
-                <option name="location" value="Bedroom"> Bedroom</option>
-                <option name="location" value="BuildingEntrance"> Building Entrance</option>
-                <option name="location" value="Outdoor"> Outdoor</option>
-                <option name="location" value="Backyard"> Backyard</option> */}
+
 
         </select>
           </div>
-        {/* <div className=" flex flex-row ml-16 mb-2">
+        <div className=" flex flex-row ml-16 mb-2">
             <label className="text-black">Inside temperature:</label>
             <input
               type="number"
-              name="indoorTemp"
-              value={simulationContext.indoorTemp}
+              name="insideTemp"
+              value={simulationContext.insideTemp}
               className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div> */}
+          </div>
 
-          {/* <div className=" flex flex-row ml-16 my-2">
+          <div className=" flex flex-row ml-16 my-2">
             <label className="text-black">Outdoor temperature:</label>
             <input
               type="number"
@@ -160,7 +153,7 @@ export default function ({name}) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div> */}
+          </div>
 
         <div className="my-2 ml-16">
           <label className="text-black" htmlFor="">Set Date: </label>

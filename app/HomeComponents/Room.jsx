@@ -4,6 +4,7 @@ import Door from "../SmartElements/door";
 import Window from "../SmartElements/window";
 import { IoMan } from "react-icons/io5";
 import { FaFan } from "react-icons/fa";
+import { ConsoleLogger } from "../Logger/Console";
 
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
@@ -27,6 +28,16 @@ export default function Room({ roomData }) {
   const [windows, setWindows] = useState(
     room.smartElementList.filter((element) => element.elementType === "Window")
   );
+
+  if (room.temperature < 0) {
+    ConsoleLogger(
+      "Temperature Alert!",
+      "Temperature in " + room.roomType + " is below 0˚C",
+      {
+        reason: "System Alert",
+      }
+    );
+  }
 
   useEffect(() => {
     if (room.userList.length > 0) {

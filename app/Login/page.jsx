@@ -1,12 +1,14 @@
 'use client'
 import Link from "next/link";
 import axios from 'axios';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FormHolder from "../Components/FormHolder";
 import { useRouter } from 'next/navigation';
-
+import { getHomeLayout } from "../lib/home";
+import { addUserToRoom } from "../lib/users";
 
 export default function Login() {
+  const [roomList, setRoomList] = useState([]);
   const router = useRouter()
   localStorage.clear();
   const [credentials, setCredentials] = useState({
@@ -21,12 +23,24 @@ export default function Login() {
     // localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
     // localStorage.setItem('date', homeSpecifications.date)
   })
+
+  useEffect(() => {
+    async function fetchData() {
+      const homeLayout = await getHomeLayout();
+      setRoomList(homeLayout.roomList);
+    }
+    fetchData();
+  }, []);
+
   const [loginError, setLoginError] = useState(false);
   const errorMessage = "Wrong Credentials entered. ";
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,11 +50,26 @@ export default function Login() {
       localStorage.setItem('userId', response.data.userId);
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('userName', response.data.userName);
-      localStorage.setItem('location', response.data.location)
+      localStorage.setItem('location', response.data.location);
+      
+      const roomId = roomList.find((room) => response.data.location === room.roomType).roomId.toString()
+     
+      console.log(response.data.userName)
+
+      const locationParameters = {
+        userName: response.data.userName,
+        roomId: roomId
+      }
+
+      const res = await addUserToRoom(locationParameters)
+      // ADD A USER WHEN LOGGING IN TO A ROOM
+      console.log(res)
+  
       alert('Login successful');
       router.push("/SimulatorForm"); // Use router.push to navigate to another page
     } catch (error) {
       setLoginError(true);
+      console.log(error)
     }
   };
 

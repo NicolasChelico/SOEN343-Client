@@ -4,11 +4,7 @@ import Link from 'next/link';
 import { IoPersonOutline } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import Clock from './Clock';
-import Modal from '../../Modals/Modal'
-import ModalContent from '@/app/Modals/ModalContent';
-import ModalToggler from '@/app/Modals/ModalToggler';
-import SimulatorForm from '@/app/SimulatorForm/SimulatorForm';
-import EditContext from './EditContext';
+
 
 export default function SideNav(props){
 

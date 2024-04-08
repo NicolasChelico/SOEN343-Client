@@ -44,14 +44,14 @@ export default function SmartHomeSimulator() {
     toggleClock(true);
     getHomeLayout().then((data) => {
       data.roomList.map((room) => {
-        if (room.roomType === localStorage.getItem("location")) {
-          room.userList.push({
-            userId: localStorage.getItem("userId"),
-            role: localStorage.getItem("role"),
-            userName: localStorage.getItem("userName"),
-            location: localStorage.getItem("location"),
-          });
-        }
+        // if (room.roomType === localStorage.getItem("location")) {
+        //   room.userList.push({
+        //     userId: localStorage.getItem("userId"),
+        //     role: localStorage.getItem("role"),
+        //     userName: localStorage.getItem("userName"),
+        //     location: localStorage.getItem("location"),
+        //   });
+        // }
       });
       setHouseLayout(data);
       setRooms(data.roomList);

@@ -39,7 +39,7 @@ export default function Room({ roomData }) {
     );
   }, [roomData]);
 
-  // console.log(userRoom , ' room status in ' , room.roomId)
+
   return (
     <div className="bg-slate-400 border border-black flex flex-1 flex-col items-start justify-start">
       <div className="flex">
@@ -69,3 +69,6 @@ export default function Room({ roomData }) {
     </div>
   );
 }
+
+// THINGS THAT WILL CHANGE THE LOADING OF THE USERS:
+// -- It should remove ALL USERS FROM ALL ROOMS , not just the previous one

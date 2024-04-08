@@ -46,11 +46,18 @@ const updateCurrentUserLocation = async (userName,oldRoomId, newRoomId) => {
     newRoomId: newRoom
 };
 
-
-    return await axios.post('http://localhost:8080/RoomController/ChangeUserLocation' ,data)
+    return await axios.post('http://localhost:8080/RoomController/ChangeUserLocation', data)
     .then(res => {
       return res.data;
     });
 }
 
-export {deleteUser, onAddUser, generateRandomStrings, updateCurrentUserLocation}
+
+const addUserToRoom = async data => {
+  return await axios.post("http://localhost:8080/RoomController/AddUserToRoom", data)
+  .then(res => {
+    return (res.data)
+  })
+}
+
+export {deleteUser, onAddUser, generateRandomStrings, updateCurrentUserLocation, addUserToRoom}

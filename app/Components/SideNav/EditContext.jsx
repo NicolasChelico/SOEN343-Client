@@ -10,7 +10,7 @@ export default function ({name}) {
     const [users, setUsers] = useState([])
     const [roomList, setRoomList] = useState([]);
     const originalLocation = localStorage.getItem('location');
-
+  console.log
     const [simulationUser, setSimulationUser] = useState({
         userName: localStorage.getItem("userName"),
         role: '',
@@ -22,6 +22,18 @@ export default function ({name}) {
         date: localStorage.getItem("date"),
         time: null
       })
+
+      useEffect(() => {
+        const fetchUsers = async () => {
+          try {
+            const res = await axios.get(`http://localhost:8080/User`);
+            setUsers(res.data);
+          } catch (err) {
+            console.log(err);
+          }
+        };
+        fetchUsers();
+      }, [localStorage]);
 
 
 
@@ -45,15 +57,17 @@ export default function ({name}) {
       
       const submitSpecifications = async e => {
         e.preventDefault();
-        const role = users.find((user) =>  simulationUser.userName === user.name)
-       
+        console.log(simulationUser.userName)
+        const role = users.find((user) => simulationUser.userName === user.name)
+       console.log(role)
+
         if(simulationUser.location !== originalLocation){
           const originalLocationId = roomList.find((room) => originalLocation === room.roomType)
           const newLocationId = roomList.find((room) => simulationUser.location === room.roomType)
         
           try{
             const response = await updateCurrentUserLocation(role.userName, originalLocationId.roomId, newLocationId.roomId)
-            // console.log(response)
+            console.log(response)
           }catch(err){
             console.log(err)
           }
@@ -66,7 +80,7 @@ export default function ({name}) {
         // localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
         localStorage.setItem('date', simulationContext.date)
       
-        // toggle();
+        toggle();
         
       }
 
@@ -100,7 +114,7 @@ export default function ({name}) {
         >
              {users.length > 0 && (
                 users.map((user) => {
-                   return <option name="userName" value={user.name}> {user.name} </option>
+                   return <option key={user.name} name="userName" value={user.name}> {user.name} </option>
                 })
              )}
 

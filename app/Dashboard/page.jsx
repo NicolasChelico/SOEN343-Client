@@ -21,7 +21,7 @@ import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
 
 import { useHomeStore } from "../Store/home.store";
-import useAuthStore from "../Zustand/userStore";
+import { useAuthStore } from "../Store/user.store";
 import { toggleClock } from "../lib/clock";
 
 import Modal from "../Modals/Modal";
@@ -39,8 +39,9 @@ export default function SmartHomeSimulator() {
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
 
-  const { initHome, setSelectedRoom, setRooms } = useHomeStore();
-  const { initTemp } = useTempStore();
+  const { initHome, setSelectedRoom, setRooms, getHome } = useHomeStore();
+  const { initTemp, getTemp } = useTempStore();
+  const outsideTemp = getTemp();
 
   const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
@@ -51,19 +52,18 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    getHomeLayout().then((data) => {
-      data.roomList.map((room) => {
-        if (room.roomType === localStorage.getItem("location")) {
-          room.userList.push({
-            userId: localStorage.getItem("userId"),
-            role: localStorage.getItem("role"),
-            userName: localStorage.getItem("userName"),
-            location: localStorage.getItem("location"),
-          });
-        }
-      });
-      setHouseLayout(data);
-      setRooms(data.roomList);
+    initHome();
+    initTemp();
+    const home = getHome();
+    home.roomList.map((room) => {
+      if (room.roomType === localStorage.getItem("location")) {
+        room.userList.push({
+          userId: localStorage.getItem("userId"),
+          role: localStorage.getItem("role"),
+          userName: localStorage.getItem("userName"),
+          location: localStorage.getItem("location"),
+        });
+      }
     });
 
     getOutsideTemp()

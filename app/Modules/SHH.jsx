@@ -6,7 +6,7 @@ import { useHomeStore } from "../Store/home.store";
 import { useZoneStore } from "../Store/zone.store";
 
 export default function SHH() {
-  const { init, getZones, addZone, addRoomToZone } = useZoneStore();
+  const { initZone, getZones, addZone, addRoomToZone } = useZoneStore();
   const { getRooms } = useHomeStore();
   const zones = getZones();
   const roomList = getRooms();
@@ -23,7 +23,7 @@ export default function SHH() {
   });
 
   useEffect(() => {
-    init();
+    initZone();
   }, []);
 
   const onClickSetActive = (e) => {

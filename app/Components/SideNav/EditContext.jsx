@@ -1,12 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {useModal} from "../../Modals/Modal";
 import axios from 'axios';
+import { updateCurrentUserLocation } from '@/app/lib/users';
+import { getHomeLayout } from "../../lib/home"
 
 
 export default function ({name}) {
     const { toggle } = useModal();
     const [users, setUsers] = useState([])
-    let role = ''
+    const [roomList, setRoomList] = useState([]);
+    const originalLocation = localStorage.getItem('location');
+
     const [simulationUser, setSimulationUser] = useState({
         userName: localStorage.getItem("userName"),
         role: '',
@@ -18,27 +22,52 @@ export default function ({name}) {
         date: localStorage.getItem("date"),
         time: null
       })
-    
+
+
+
+      useEffect(() => {
+        async function fetchData() {
+          const homeLayout = await getHomeLayout();
+          setRoomList(homeLayout.roomList);
+        }
+        fetchData();
+      }, []);
+
       const handleChange = e => {
         setSimulationContext((prev) => ({...prev,[e.target.name]: e.target.value}))
       }
 
       const handleUserChange = e => {
         setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
-        const role = users.find((user) =>  simulationUser.userName === user.name)
+        console.log(users.find((user) =>  simulationUser.userName === user.name))
       }
 
       
-      const submitSpecifications = e => {
+      const submitSpecifications = async e => {
         e.preventDefault();
         const role = users.find((user) =>  simulationUser.userName === user.name)
+       
+        if(simulationUser.location !== originalLocation){
+          const originalLocationId = roomList.find((room) => originalLocation === room.roomType)
+          const newLocationId = roomList.find((room) => simulationUser.location === room.roomType)
+        
+          try{
+            const response = await updateCurrentUserLocation(role.userName, originalLocationId.roomId, newLocationId.roomId)
+            // console.log(response)
+          }catch(err){
+            console.log(err)
+          }
+        }
+     
         localStorage.setItem("userName", role.name)
         localStorage.setItem("role", role.role)
         localStorage.setItem("location",simulationUser.location)
-        localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
-        localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
+        // localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
+        // localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
         localStorage.setItem('date', simulationContext.date)
-        toggle();
+      
+        // toggle();
+        
       }
 
       useEffect(() => {
@@ -53,7 +82,9 @@ export default function ({name}) {
         fetchUsers();
       }, [localStorage]);
 
-      
+      const getRoomIds = () =>{
+
+      }
   return (
  
       <div className="flex flex-col text-justify w-3/4 border-2 border-black justify-center ">
@@ -85,17 +116,26 @@ export default function ({name}) {
                 onChange={handleUserChange}
                 className="text-black border-2 border-gray-300 rounded-md"
                 >
-                <option name="location" value="LivingRoom"> Living Room</option>
+                {roomList &&
+                  roomList.map((room, index) => {
+                    return (
+                      <option key={index} value={room.roomType} >
+                        {room.roomType}
+                      </option>
+                    );
+                  })}
+              
+                {/* <option name="location" value="LivingRoom"> Living Room</option>
                 <option name="location" value="Kitchen"> Kitchen</option>
                 <option name="location" value="Garage"> Garage</option>
                 <option name="location" value="Bedroom"> Bedroom</option>
                 <option name="location" value="BuildingEntrance"> Building Entrance</option>
                 <option name="location" value="Outdoor"> Outdoor</option>
-                <option name="location" value="Backyard"> Backyard</option>
+                <option name="location" value="Backyard"> Backyard</option> */}
 
         </select>
           </div>
-        <div className=" flex flex-row ml-16 mb-2">
+        {/* <div className=" flex flex-row ml-16 mb-2">
             <label className="text-black">Inside temperature:</label>
             <input
               type="number"
@@ -105,9 +145,9 @@ export default function ({name}) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div>
+          </div> */}
 
-          <div className=" flex flex-row ml-16 my-2">
+          {/* <div className=" flex flex-row ml-16 my-2">
             <label className="text-black">Outdoor temperature:</label>
             <input
               type="number"
@@ -117,7 +157,7 @@ export default function ({name}) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div>
+          </div> */}
 
         <div className="my-2 ml-16">
           <label className="text-black" htmlFor="">Set Date: </label>

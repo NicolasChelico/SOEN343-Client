@@ -36,4 +36,14 @@ const addRoomToZone = async (zoneId, roomId) => {
     });
 };
 
-export { getZones, addZone, addRoomToZone };
+const addMotionDetectors = async (sensor) => {
+  return await axios
+  .post("https://localhost:8080/RoomController/addMotionDetector", sensor)
+  .then( res => {
+    return res.data;
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+export { getZones, addZone, addRoomToZone, addMotionDetectors };

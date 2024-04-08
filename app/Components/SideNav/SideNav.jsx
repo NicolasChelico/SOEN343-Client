@@ -50,7 +50,7 @@ export default function SideNav(props){
                   <MdHome size={40}/>
               </div>
               <div className="text-justify">
-              <p className="mb-4">Inside temp: {localStorage.getItem('indoorTemp')} C</p>
+              {/* <p className="mb-4">Inside temp: {localStorage.getItem('indoorTemp')} C</p> */}
                 <p className="mb-4">Outside temp: {localStorage.getItem('outdoorTemp')} C</p>
                 <p className="mb-4">Date: {localStorage.getItem('date')}</p>
                 <p><Clock simulation={props.simulation}/></p>

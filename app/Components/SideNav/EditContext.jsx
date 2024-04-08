@@ -29,13 +29,13 @@ export default function EditContext({name}) {
 
 
 
-      useEffect(() => {
-        async function fetchData() {
-          const homeLayout = await getHomeLayout();
-          setRoomList(homeLayout.roomList);
-        }
-        fetchData();
-      }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const homeLayout = await getHomeLayout();
+      setRoomList(homeLayout.roomList);
+    }
+    fetchData();
+  }, []);
 
       const handleChange = e => {
         setSimulationContext((prev) => ({...prev,[e.target.name]: e.target.value}))
@@ -75,38 +75,38 @@ export default function EditContext({name}) {
         
       }
 
-      useEffect(() => {
-        const fetchUsers = async () => {
-          try {
-            const res = await axios.get(`http://localhost:8080/User`);
-            setUsers(res.data);
-          } catch (err) {
-            console.log(err);
-          }
-        };
-        fetchUsers();
-      }, [localStorage]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8080/User`);
+        setUsers(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUsers();
+  }, [localStorage]);
 
-     
   return (
- 
-      <div className="flex flex-col text-justify w-3/4 border-2 border-black justify-center ">
-         <div className=" flex flex-row ml-16 mt-8">
-            <label className="text-black">Change current user:</label>
+    <div className="flex flex-col text-justify w-3/4 border-2 border-black justify-center ">
+      <div className=" flex flex-row ml-16 mt-8">
+        <label className="text-black">Change current user:</label>
 
-        <select 
-        name="userName" 
-        id="" 
-        value={simulationUser.userName} 
-        onChange={handleUserChange}
-        className="text-black border-2 border-gray-300 rounded-md"
+        <select
+          name="userName"
+          id=""
+          value={simulationUser.userName}
+          onChange={handleUserChange}
+          className="text-black border-2 border-gray-300 rounded-md"
         >
-             {users.length > 0 && (
-                users.map((user) => {
-                   return <option name="userName" value={user.name}> {user.name} </option>
-                })
-             )}
-
+          {users.length > 0 &&
+            users.map((user, index) => {
+              return (
+                <option key={index} name="userName" value={user.name}>
+                  {" " + user.name + " "}
+                </option>
+              );
+            })}
         </select>
 
           </div>
@@ -155,24 +155,27 @@ export default function EditContext({name}) {
             <p className="text-black">°C</p>
           </div>
 
-        <div className="my-2 ml-16">
-          <label className="text-black" htmlFor="">Set Date: </label>
-          <input 
-            type="date" 
-            name="date" 
-            value={simulationContext.date}
-            onChange={handleChange}
-            className=" text-center inline-block border-2 border-gray-300 rounded-md text-black"
-          />
-        </div>
-        <div></div>
-        <div className="flex">     
-            <button onClick={submitSpecifications} className="text-l rounded-lg bg-black text-white px-16 py-2 m-8 uppercase ">
-              submit
-            </button>
-      
-        </div>
+      <div className="my-2 ml-16">
+        <label className="text-black" htmlFor="">
+          Set Date:{" "}
+        </label>
+        <input
+          type="date"
+          name="date"
+          value={simulationContext.date}
+          onChange={handleChange}
+          className=" text-center inline-block border-2 border-gray-300 rounded-md text-black"
+        />
       </div>
-
-  )
+      <div></div>
+      <div className="flex">
+        <button
+          onClick={submitSpecifications}
+          className="text-l rounded-lg bg-black text-white px-16 py-2 m-8 uppercase "
+        >
+          submit
+        </button>
+      </div>
+    </div>
+  );
 }

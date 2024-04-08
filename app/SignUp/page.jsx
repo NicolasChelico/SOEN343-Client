@@ -10,6 +10,7 @@ export default function SignUp() {
   const [user, setUser] = useState({
     name: "",
     userName: "",
+    role: "",
     password: "",
     confirmPass: "",
   });
@@ -25,7 +26,13 @@ export default function SignUp() {
     setErrorMessage(""); // Clear any previous error messages
     setSuccessMessage(""); // Clear any previous success messages
 
-    if (user.name === "" || user.userName === "" || user.password === "") {
+    if (
+      user.name === "" ||
+      user.userName === "" ||
+      user.password === "" ||
+      user.confirmPass === "" ||
+      user.role === ""
+    ) {
       setErrorMessage("Please fill in all fields");
       return;
     }
@@ -40,9 +47,9 @@ export default function SignUp() {
         name: user.name,
         userName: user.userName,
         password: user.password,
-        role: "Stranger",
+        role: user.role,
       });
-      
+
       setSuccessMessage("Sign up successful!");
       // Optionally, redirect the user or clear the form here
       router.push("/Dashboard");
@@ -80,6 +87,20 @@ export default function SignUp() {
           className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
           onChange={handleChange}
         />
+      </div>
+      <div className="flex justify-between px-12 items-center">
+        <label className="text-xl">Role</label>
+        <select
+          name="role"
+          className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
+          onChange={handleChange}
+        >
+          <option value="Admin">Admin</option>
+          <option value="Parent">Parent</option>
+          <option value="Child">Child</option>
+          <option value="Guest">Guest</option>
+          <option value="Stranger">Stranger</option>
+        </select>
       </div>
       <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Password</label>

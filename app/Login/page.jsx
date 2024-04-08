@@ -1,27 +1,36 @@
-'use client'
+"use client";
 import Link from "next/link";
-import axios from 'axios';
+import axios from "axios";
 import { useState } from "react";
 import FormHolder from "../Components/FormHolder";
-import { useRouter } from 'next/navigation';
-import useAuthStore from "../Zustand/userStore";
+import { useRouter } from "next/navigation";
+import useAuthStore from "../Store/user.store";
 
 export default function Login() {
-  const {userId, role, userName,location, setUserId, setRole, setUserName, setLocation} = useAuthStore();
-  const router = useRouter()
-  
+  const {
+    userId,
+    role,
+    userName,
+    location,
+    setUserId,
+    setRole,
+    setUserName,
+    setLocation,
+  } = useAuthStore();
+  const router = useRouter();
+
   const [credentials, setCredentials] = useState({
     userName: "",
     password: "",
   });
   const [simulationParameters, setSimulationParameters] = useState({
-    indoorTemp : "",
+    indoorTemp: "",
     outdoorTemp: "",
-    date: ""
+    date: "",
     // localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
     // localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
     // localStorage.setItem('date', homeSpecifications.date)
-  })
+  });
   const [loginError, setLoginError] = useState(false);
   const errorMessage = "Wrong Credentials entered. ";
 
@@ -33,25 +42,26 @@ export default function Login() {
     e.preventDefault();
     localStorage.clear();
     try {
-      const response = await axios.post('http://localhost:8080/User/AuthenticateUser', credentials);
+      const response = await axios.post(
+        "http://localhost:8080/User/AuthenticateUser",
+        credentials
+      );
       setUserId(response.data.userId);
       setRole(response.data.role);
-      setUserName(response.data.userName)
-      setLocation(response.data.location)
-      console.log(response.data)
+      setUserName(response.data.userName);
+      setLocation(response.data.location);
+      console.log(response.data);
       // localStorage.setItem('userId', response.data.userId);
       // localStorage.setItem('role', response.data.role);
       // localStorage.setItem('userName', response.data.userName);
       // localStorage.setItem('location', response.data.location)
-      alert('Login successful');
+      alert("Login successful");
       router.push("/SimulatorForm"); // Use router.push to navigate to another page
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setLoginError(true);
     }
   };
-
-
 
   return (
     <FormHolder>
@@ -77,14 +87,24 @@ export default function Login() {
             />
           </div>
         </div>
-        {loginError && (<p className="text-red-500 text-center">{errorMessage}</p>)}
+        {loginError && (
+          <p className="text-red-500 text-center">{errorMessage}</p>
+        )}
         <div className="flex justify-center gap-4 text-center">
-          <button className="text-xl rounded-lg py-2 px-6 bg-black text-white uppercase" onClick={handleLogin}>Sign In</button>
-          <Link href="/SignUp" className="text-xl rounded-lg py-2 px-6 bg-black text-white uppercase">Sign Up</Link>
+          <button
+            className="text-xl rounded-lg py-2 px-6 bg-black text-white uppercase"
+            onClick={handleLogin}
+          >
+            Sign In
+          </button>
+          <Link
+            href="/SignUp"
+            className="text-xl rounded-lg py-2 px-6 bg-black text-white uppercase"
+          >
+            Sign Up
+          </Link>
         </div>
       </div>
     </FormHolder>
   );
 }
-
-

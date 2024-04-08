@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { getHomeLayout, resetRoomTemp, setRoomTemp } from "../lib/home";
 import SimulationOff from "../Dashboard/SimulationOff";
-import { getZones, addZone, addRoomToZone } from "../lib/zones";
-import e from "cors";
-
 import PermissionModal from "../Permissions/PermissionModal";
 
+import { useHomeStore } from "../Store/home.store";
+import { useZoneStore } from "../Store/zone.store";
+
 export default function SHH() {
-  const [roomList, setRoomList] = useState([]);
+  const { initZone, getZones, addZone, addRoomToZone } = useZoneStore();
+  const { getRooms } = useHomeStore();
+  const zones = getZones();
+  const roomList = getRooms();
+
   const [active, setActive] = useState(true);
-  const [zones, setZones] = useState([]);
   const [assignedSelectedRoom, setAssignedSelectedRoom] = useState();
   const [assignedZone, setAssignedZone] = useState();
 
@@ -24,20 +26,8 @@ export default function SHH() {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      const homeLayout = await getHomeLayout();
-      setRoomList(homeLayout.roomList);
-    }
-    fetchData();
+    initZone();
   }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      const CurrentZones = await getZones();
-      setZones(CurrentZones);
-    }
-    fetchData();
-  }, [newZone]);
 
   const onClickSetActive = (e) => {
     e.preventDefault();
@@ -52,9 +42,7 @@ export default function SHH() {
     e.preventDefault();
     try {
       // Call addZone function to add the new zone
-      const response = await addZone(newZone);
-      // Fetch the updated zones data after adding the new zone
-      setZones((prev) => [...prev, response]);
+      addZone(newZone);
 
       // // Update the zones state with the updated data
     } catch (error) {
@@ -64,7 +52,6 @@ export default function SHH() {
 
   const handleZoneAssignment = async (e) => {
     e.preventDefault();
-
     if (!assignedSelectedRoom || !assignedZone) {
       console.log("Please select a room and a zone");
       return;
@@ -136,8 +123,7 @@ export default function SHH() {
                   <td>
                     <input
                       name="zone"
-                      min="2"
-                      max="4"
+                      min={zones.length + 1}
                       type="number"
                       onChange={onZoneChange}
                       className="w-3/4 border-2 border-md"
@@ -190,9 +176,14 @@ export default function SHH() {
                   name="role"
                   placeholder="zone#"
                 >
-                  <option min="1" value="">
-                    1
-                  </option>
+                  {zones &&
+                    zones.map((zone) => {
+                      return (
+                        <option key={zone.zoneId} value={zone.zoneId}>
+                          {zone.zoneId}
+                        </option>
+                      );
+                    })}
                 </select>
                 <select
                   onChange={onZoneChange}
@@ -226,12 +217,7 @@ export default function SHH() {
             <p className="mt-2 font-bold">Set Room Temperature</p>
             <div className="flex flex-row ">
               <div className="flex justify-between rounded-md border-slate-800 ">
-                <select
-                  className="h-7 border-2"
-                  name="role"
-                  value={tempRoomId}
-                  onChange={(e) => setTempRoomId(e.target.value)}
-                >
+                <select className="h-7 border-2" name="role">
                   {roomList &&
                     roomList.map((room, index) => {
                       return (
@@ -242,23 +228,17 @@ export default function SHH() {
                     })}
                 </select>
                 <input
-                  name="Temperature"
-                  type="number"
-                  onChange={(e) => setSetTemp(e.target.value)}
-                  className="w-2/4 border-2 border-md"
+                  className="h-7 w-2/5 border-2"
+                  type="text"
+                  placeholder="Temperature"
+                  name="temperature"
                 />
               </div>
               <button
                 className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-                onClick={handleSetTemp}
+                onClick={() => onAddUser(newProfile)}
               >
                 SET
-              </button>
-              <button
-                className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-                onClick={handleTempReset}
-              >
-                RESET
               </button>
             </div>
             <p className="mt-2 font-bold">Assign Room to Zone</p>
@@ -320,6 +300,7 @@ export default function SHH() {
           parents={
             "All permissions granted to operate the SHH from home, or remotely."
           }
+          // eslint-disable-next-line react/no-children-prop
           children={
             "Permission to increase/decrease the temperature of the room where they are physically located."
           }

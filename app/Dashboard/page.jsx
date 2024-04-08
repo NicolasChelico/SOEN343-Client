@@ -19,29 +19,31 @@ import {
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
-import useAuthStore from "../Zustand/userStore";
+
+import { useHomeStore } from "../Store/home.store";
+import { useAuthStore } from "../Store/user.store";
 import { toggleClock } from "../lib/clock";
 
 import Modal from "../Modals/Modal";
 import ModalContent from "../Modals/ModalContent";
 import ModalToggler from "../Modals/ModalToggler";
 import EditContext from "../Components/SideNav/EditContext";
+import { useTempStore } from "../Store/temp.store";
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
-  
- 
- 
+
   let role = localStorage.getItem("role");
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
 
-  const [houseLayout, setHouseLayout] = useState(null);
-  const [rooms, setRooms] = useState([]);
-  const [outsideTemp, setOutsideTemp] = useState(0);
-  const [activeElement, setActiveElement] = useState("SHH");
+  const { initHome, setSelectedRoom, setRooms, getHome } = useHomeStore();
+  const { initTemp, getTemp } = useTempStore();
+  const outsideTemp = getTemp();
+
+  const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
   const [latestState, setLatestState] = useState("");
   const [simulation, setSimulation] = useState(true);
@@ -50,19 +52,18 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    getHomeLayout().then((data) => {
-      data.roomList.map((room) => {
-        if (room.roomType === localStorage.getItem("location")) {
-          room.userList.push({
-            userId: localStorage.getItem("userId"),
-            role: localStorage.getItem("role"),
-            userName: localStorage.getItem("userName"),
-            location: localStorage.getItem("location"),
-          });
-        }
-      });
-      setHouseLayout(data);
-      setRooms(data.roomList);
+    initHome();
+    initTemp();
+    const home = getHome();
+    home.roomList.map((room) => {
+      if (room.roomType === localStorage.getItem("location")) {
+        room.userList.push({
+          userId: localStorage.getItem("userId"),
+          role: localStorage.getItem("role"),
+          userName: localStorage.getItem("userName"),
+          location: localStorage.getItem("location"),
+        });
+      }
     });
 
     getOutsideTemp()
@@ -74,21 +75,6 @@ export default function SmartHomeSimulator() {
       });
   }, []);
 
-  useEffect(() => {
-    setHouseLayout((prevLayout) => ({ ...prevLayout, roomList: rooms }));
-  }, [rooms]);
-
-  useEffect(() => {
-    setTimeout(async () => {
-      const newHomeLayout = await getHomeLayout();
-      setHouseLayout(newHomeLayout);
-      setRooms(newHomeLayout.roomList);
-
-      const newOutsideTemp = await getOutsideTemp();
-      setOutsideTemp(newOutsideTemp);
-    }, 3000); // 2-second delay
-  }, [houseLayout]);
-
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
   };
@@ -96,19 +82,7 @@ export default function SmartHomeSimulator() {
   const changeRoomLights = async (roomId) => {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
-
-    setRooms((prevRooms) => {
-      return prevRooms.map((room) => {
-        if (room.roomId === roomIdInt) {
-          // Create a new room object with updated smartElementList
-          return {
-            ...room,
-            smartElementList: updatedRoom.smartElementList,
-          };
-        }
-        return room;
-      });
-    });
+    setSelectedRoom(updatedRoom);
   };
 
   const changeAllLights = async (isOpen) => {
@@ -224,15 +198,11 @@ export default function SmartHomeSimulator() {
           />
         )}
         {activeElement === "SHS" && <SHS />}
-        {activeElement === "SHH" && <SHH rooms={rooms} />}
+        {activeElement === "SHH" && <SHH />}
         {activeElement === "SHP" && <SHP />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
-        <HouseContainer
-          houseLayout={houseLayout}
-          rooms={rooms}
-          outsideTemp={outsideTemp}
-        />
+        <HouseContainer />
 
         <LogsContainer />
       </div>

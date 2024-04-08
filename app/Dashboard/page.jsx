@@ -19,7 +19,7 @@ import {
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
-
+import useAuthStore from "../Zustand/userStore";
 import { toggleClock } from "../lib/clock";
 
 import Modal from "../Modals/Modal";
@@ -29,7 +29,9 @@ import EditContext from "../Components/SideNav/EditContext";
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
-
+  
+ 
+ 
   let role = localStorage.getItem("role");
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
@@ -137,7 +139,7 @@ export default function SmartHomeSimulator() {
       <SideNav
         role={role}
         name={userName}
-        outdoorTemp={outdoorTemp}
+        outdoorTemp={outsideTemp}
         indoorTemp={indoorTemp}
         date={date}
         location={location}

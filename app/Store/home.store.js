@@ -7,7 +7,7 @@ export const useHomeStore = create((set, get) => ({
     selectedRoom: null,
     // Add other properties as needed
   },
-  init: async () => {
+  initHome: async () => {
     const homeData = await getHomeLayout();
     set({ home: homeData });
     // Start the interval to update home every 3 seconds

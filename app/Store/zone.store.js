@@ -4,7 +4,7 @@ import { addRoomToZone, addZone, getZones } from "../lib/zones";
 export const useZoneStore = create((set, get) => ({
   zones: [],
   selectedZone: null,
-  init: async () => {
+  initZone: async () => {
     const zonesData = await getZones();
     set({ zones: zonesData });
   },

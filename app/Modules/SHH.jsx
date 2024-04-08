@@ -15,6 +15,9 @@ export default function SHH() {
   const [assignedSelectedRoom, setAssignedSelectedRoom] = useState();
   const [assignedZone, setAssignedZone] = useState();
 
+  const [setTemp, setSetTemp] = useState(0);
+  const [tempRoomId, setTempRoomId] = useState();
+
   const [newZone, setNewZone] = useState({
     zone: 0.0,
     AM: 0.0,
@@ -53,11 +56,56 @@ export default function SHH() {
       console.log("Please select a room and a zone");
       return;
     }
-    await addRoomToZone(assignedSelectedRoom, assignedZone);
+    await addRoomToZone(assignedZone, assignedSelectedRoom);
+  };
+
+  const handleSetTemp = async (e) => {
+    await setRoomTemp(tempRoomId, setTemp);
+  };
+
+  const handleTempReset = async (e) => {
+    await resetRoomTemp(tempRoomId);
   };
 
   return (
     <>
+      <div>
+        {active ? (
+          <div>
+            <div className="mx-4 my-4">
+              <button onClick={onClickSetActive}>
+                <span>
+                  <p className="bg-slate-800 text-white border px-8 py-2">
+                    SHH: {active ? "ON" : "OFF"}
+                  </p>
+                </span>
+              </button>
+            </div>
+            <div>
+              <table className="w-3/4 border-2 my-4">
+                <thead className="bg-gray-500 text-white">
+                  <tr>
+                    <th>Zone #</th>
+                    <th>AM</th>
+                    <th>PM</th>
+                    <th>NIGHT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {zones.length > 0 &&
+                    zones.map((zone) => {
+                      return (
+                        <tr className="border-2" key={zone.zoneId}>
+                          <td className="border-2">Zone {zone.zoneId}</td>
+                          <td className="border-2">{zone.amTemp}˚ C</td>
+                          <td className="border-2">{zone.pmTemp}˚ C</td>
+                          <td className="border-2">{zone.nightTemp}˚ C</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
       <div>
         {active ? (
           <div>
@@ -300,6 +348,8 @@ export default function SHH() {
             "Non-identified users have no permissions no matter where they are located."
           }
         />
+      </div>
+    </>
       </div>
     </>
   );

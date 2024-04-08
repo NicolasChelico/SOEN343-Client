@@ -3,10 +3,22 @@ import Light from "../SmartElements/light";
 import Door from "../SmartElements/door";
 import Window from "../SmartElements/window";
 import { IoMan } from "react-icons/io5";
+import { FaFan } from "react-icons/fa";
+import { ConsoleLogger } from "../Logger/Console";
 
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
   const [userRoom, setUserRoom] = useState(false);
+  const [airConditioner, setAirConditioner] = useState(
+    roomData.smartElementList.filter(
+      (element) => element.elementType === "AirConditioner"
+    )
+  );
+  const [heater, setHeater] = useState(
+    roomData.smartElementList.filter(
+      (element) => element.elementType === "Heater"
+    )
+  );
   const [lights, setLights] = useState(
     room.smartElementList.filter((element) => element.elementType === "Light")
   );
@@ -16,6 +28,16 @@ export default function Room({ roomData }) {
   const [windows, setWindows] = useState(
     room.smartElementList.filter((element) => element.elementType === "Window")
   );
+
+  if (room.temperature < 0) {
+    ConsoleLogger(
+      "Temperature Alert!",
+      "Temperature in " + room.roomType + " is below 0˚C",
+      {
+        reason: "System Alert",
+      }
+    );
+  }
 
   useEffect(() => {
     if (room.userList.length > 0) {
@@ -65,6 +87,8 @@ export default function Room({ roomData }) {
             <Window key={index} windowData={window} roomId={room.roomId} />
           ))}
         {userRoom ? <IoMan size={30} /> : ""}
+        {airConditioner.length > 0 ? <FaFan size={30} /> : ""}
+        {heater.length > 0 ? <p className="text-2xl">🥵</p> : ""}
       </div>
     </div>
   );

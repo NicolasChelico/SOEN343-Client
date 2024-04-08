@@ -4,11 +4,12 @@ import axios from 'axios';
 import { useState } from "react";
 import FormHolder from "../Components/FormHolder";
 import { useRouter } from 'next/navigation';
-
+import useAuthStore from "../Zustand/userStore";
 
 export default function Login() {
+  const {userId, role, userName,location, setUserId, setRole, setUserName, setLocation} = useAuthStore();
   const router = useRouter()
-  localStorage.clear();
+  
   const [credentials, setCredentials] = useState({
     userName: "",
     password: "",
@@ -33,13 +34,19 @@ export default function Login() {
     localStorage.clear();
     try {
       const response = await axios.post('http://localhost:8080/User/AuthenticateUser', credentials);
-      localStorage.setItem('userId', response.data.userId);
-      localStorage.setItem('role', response.data.role);
-      localStorage.setItem('userName', response.data.userName);
-      localStorage.setItem('location', response.data.location)
+      setUserId(response.data.userId);
+      setRole(response.data.role);
+      setUserName(response.data.userName)
+      setLocation(response.data.location)
+      console.log(response.data)
+      // localStorage.setItem('userId', response.data.userId);
+      // localStorage.setItem('role', response.data.role);
+      // localStorage.setItem('userName', response.data.userName);
+      // localStorage.setItem('location', response.data.location)
       alert('Login successful');
       router.push("/SimulatorForm"); // Use router.push to navigate to another page
     } catch (error) {
+      console.log(error)
       setLoginError(true);
     }
   };

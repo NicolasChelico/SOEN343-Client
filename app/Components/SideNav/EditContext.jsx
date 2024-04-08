@@ -3,18 +3,20 @@ import {useModal} from "../../Modals/Modal";
 import axios from 'axios';
 import { updateCurrentUserLocation } from '@/app/lib/users';
 import { getHomeLayout } from "../../lib/home"
-
+import useAuthStore from '@/app/Zustand/userStore';
 
 export default function ({name}) {
     const { toggle } = useModal();
+    const {location, userName, role, setLocation, setUserName, setRole} = useAuthStore();
     const [users, setUsers] = useState([])
     const [roomList, setRoomList] = useState([]);
-    const originalLocation = localStorage.getItem('location');
+    // const originalLocation = localStorage.getItem('location');
+    const originalLocation = location;
 
     const [simulationUser, setSimulationUser] = useState({
-        userName: localStorage.getItem("userName"),
+        userName: userName,
         role: '',
-        location: localStorage.getItem("location")
+        location: location
     })
     const [simulationContext, setSimulationContext] = useState({
         indoorTemp: localStorage.getItem("indoorTemp"),
@@ -39,7 +41,8 @@ export default function ({name}) {
 
       const handleUserChange = e => {
         setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
-        console.log(users.find((user) =>  simulationUser.userName === user.name))
+        // console.log(users.find((user) =>  simulationUser.userName === user.name))
+        console.log(simulationUser, ' ', users)
       }
 
       
@@ -58,15 +61,17 @@ export default function ({name}) {
             console.log(err)
           }
         }
-     
-        localStorage.setItem("userName", role.name)
-        localStorage.setItem("role", role.role)
-        localStorage.setItem("location",simulationUser.location)
+        setUserName(role.name)
+        setRole(role.role)
+        setLocation(simulationUser.location)
+        //localStorage.setItem("userName", role.name)
+        // localStorage.setItem("role", role.role)
+        // localStorage.setItem("location",simulationUser.location)
         // localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
         // localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
         localStorage.setItem('date', simulationContext.date)
       
-        // toggle();
+        toggle();
         
       }
 
@@ -82,9 +87,7 @@ export default function ({name}) {
         fetchUsers();
       }, [localStorage]);
 
-      const getRoomIds = () =>{
-
-      }
+     
   return (
  
       <div className="flex flex-col text-justify w-3/4 border-2 border-black justify-center ">

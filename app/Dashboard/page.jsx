@@ -10,13 +10,18 @@ import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
 import SHP from "../Modules/SHP";
 
-import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
+import {
+  getHomeLayout,
+  getOutsideTemp,
+  toggleAllLights,
+  toggleRoomLights,
+} from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
 
 import { useHomeStore } from "../Store/home.store";
-
+import useAuthStore from "../Zustand/userStore";
 import { toggleClock } from "../lib/clock";
 
 import Modal from "../Modals/Modal";
@@ -46,8 +51,28 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    initHome();
-    initTemp();
+    getHomeLayout().then((data) => {
+      data.roomList.map((room) => {
+        if (room.roomType === localStorage.getItem("location")) {
+          room.userList.push({
+            userId: localStorage.getItem("userId"),
+            role: localStorage.getItem("role"),
+            userName: localStorage.getItem("userName"),
+            location: localStorage.getItem("location"),
+          });
+        }
+      });
+      setHouseLayout(data);
+      setRooms(data.roomList);
+    });
+
+    getOutsideTemp()
+      .then((data) => {
+        setOutsideTemp(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleChange = (e) => {
@@ -88,7 +113,7 @@ export default function SmartHomeSimulator() {
       <SideNav
         role={role}
         name={userName}
-        outdoorTemp={outdoorTemp}
+        outdoorTemp={outsideTemp}
         indoorTemp={indoorTemp}
         date={date}
         location={location}

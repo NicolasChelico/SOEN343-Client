@@ -23,6 +23,7 @@ import Modal from "../Modals/Modal";
 import ModalContent from "../Modals/ModalContent";
 import ModalToggler from "../Modals/ModalToggler";
 import EditContext from "../Components/SideNav/EditContext";
+import { useTempStore } from "../Store/temp.store";
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
@@ -33,7 +34,8 @@ export default function SmartHomeSimulator() {
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
 
-  const { init, setSelectedRoom, setRooms } = useHomeStore();
+  const { initHome, setSelectedRoom, setRooms } = useHomeStore();
+  const { initTemp } = useTempStore();
 
   const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
@@ -44,7 +46,8 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    init();
+    initHome();
+    initTemp();
   }, []);
 
   const handleChange = (e) => {

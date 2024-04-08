@@ -15,6 +15,8 @@ import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
 
+import { useHomeStore } from "../Store/home.store";
+
 import { toggleClock } from "../lib/clock";
 
 import Modal from "../Modals/Modal";
@@ -31,8 +33,8 @@ export default function SmartHomeSimulator() {
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
 
-  const [houseLayout, setHouseLayout] = useState(null);
-  const [rooms, setRooms] = useState([]);
+  const { init, setSelectedRoom, setRooms } = useHomeStore();
+
   const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
   const [latestState, setLatestState] = useState("");
@@ -42,33 +44,8 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    getHomeLayout().then((data) => {
-      data.roomList.map((room) => {
-        if (room.roomType === localStorage.getItem("location")) {
-          room.userList.push({
-            userId: localStorage.getItem("userId"),
-            role: localStorage.getItem("role"),
-            userName: localStorage.getItem("userName"),
-            location: localStorage.getItem("location"),
-          });
-        }
-      });
-      setHouseLayout(data);
-      setRooms(data.roomList);
-    });
+    init();
   }, []);
-
-  useEffect(() => {
-    setHouseLayout((prevLayout) => ({ ...prevLayout, roomList: rooms }));
-  }, [rooms]);
-
-  useEffect(() => {
-    setTimeout(async () => {
-      const newHomeLayout = await getHomeLayout();
-      setHouseLayout(newHomeLayout);
-      setRooms(newHomeLayout.roomList);
-    }, 2000); // 2-second delay
-  }, [houseLayout]);
 
   const handleChange = (e) => {
     roomNumberRef.current = e.target.value;
@@ -77,19 +54,7 @@ export default function SmartHomeSimulator() {
   const changeRoomLights = async (roomId) => {
     const roomIdInt = parseInt(roomId);
     const updatedRoom = await toggleRoomLights(roomIdInt);
-
-    setRooms((prevRooms) => {
-      return prevRooms.map((room) => {
-        if (room.roomId === roomIdInt) {
-          // Create a new room object with updated smartElementList
-          return {
-            ...room,
-            smartElementList: updatedRoom.smartElementList,
-          };
-        }
-        return room;
-      });
-    });
+    setSelectedRoom(updatedRoom);
   };
 
   const changeAllLights = async (isOpen) => {
@@ -205,11 +170,11 @@ export default function SmartHomeSimulator() {
           />
         )}
         {activeElement === "SHS" && <SHS />}
-        {activeElement === "SHH" && <SHH rooms={rooms} />}
+        {activeElement === "SHH" && <SHH />}
         {activeElement === "SHP" && <SHP />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
-        <HouseContainer houseLayout={houseLayout} rooms={rooms} />
+        <HouseContainer />
 
         <LogsContainer />
       </div>

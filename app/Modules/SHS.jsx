@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {deleteUser, generateRandomStrings, onAddUser} from '../lib/users'
+import { deleteUser, generateRandomStrings, onAddUser } from "../lib/users";
 import axios from "axios";
 import e from "cors";
 import PermissionModal from "../Permissions/PermissionModal";
 
 export default function SHS() {
   const [users, setUsers] = useState([]);
-  const [randomUsername, randomPassword] = generateRandomStrings(8)
+  const [randomUsername, randomPassword] = generateRandomStrings(8);
   const [indoorTemp, setIndoorTemp] = useState(""); // State variable to store the value of the input field
-  const [outdoorTemp, setOutdoorTemp] = useState(""); 
+  const [outdoorTemp, setOutdoorTemp] = useState("");
 
   const handleIndoorChange = (e) => {
     setIndoorTemp(e.target.value); // Update the state variable with the input field value
@@ -18,26 +18,23 @@ export default function SHS() {
     setOutdoorTemp(e.target.value); // Update the state variable with the input field value
   };
 
-  useEffect(()=> {
-    
-  },[])
+  useEffect(() => {}, []);
   const handleSetIndoorTemp = () => {
-    localStorage.setItem('indoorTemp', indoorTemp); // Access the value of the input field from the state variable
+    localStorage.setItem("indoorTemp", indoorTemp); // Access the value of the input field from the state variable
   };
 
   const handleSetOutdoorTemp = () => {
-    localStorage.setItem('outdoorTemp', outdoorTemp); // Access the value of the input field from the state variable
+    localStorage.setItem("outdoorTemp", outdoorTemp); // Access the value of the input field from the state variable
   };
 
   const [newProfile, setNewProfile] = useState({
-    name: '',
+    name: "",
     userName: randomUsername,
     password: randomPassword,
-    role: '',
-    location: ''
-  })
+    role: "",
+    location: "",
+  });
 
-  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -50,17 +47,14 @@ export default function SHS() {
     fetchUsers();
   }, [localStorage, users]);
 
-  const onUserChange = e => {
-    setNewProfile(prev => ({...prev, [e.target.name]: e.target.value}))
-  }
-  
-  useEffect(()=> {
+  const onUserChange = (e) => {
+    setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  useEffect(() => {
     // console.log(newProfile)
-  },[newProfile])
- 
+  }, [newProfile]);
 
-
-  
   return (
     <>
       <div>
@@ -99,7 +93,13 @@ export default function SHS() {
           <p className="mt-2">Add new profile.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input className="h-7 border-2" type="text" placeholder="Name" name="name" onChange={onUserChange}/>
+              <input
+                className="h-7 border-2"
+                type="text"
+                placeholder="Name"
+                name="name"
+                onChange={onUserChange}
+              />
               <select onChange={onUserChange} className="h-7 w-1/5" name="role">
                 <option value="">--</option>
                 <option value="Parent">Parent</option>
@@ -107,18 +107,46 @@ export default function SHS() {
                 <option value="Guest">Guest</option>
                 <option value="Stranger">Stranger</option>
               </select>
-              <select className="h-7 w-1/5" name="location" onChange={onUserChange}>
-              <option value="">--</option>
-              <option name="LivingRoom" value="LivingRoom"> Living Room</option>
-                <option name="Kitchen" value="Kitchen"> Kitchen</option>
-                <option name="Garage" value="Garage"> Garage</option>
-                <option name="Bedroom" value="Bedroom"> Bedroom</option>
-                <option name="BuildingEntrance" value="BuildingEntrance"> Building Entrance</option>
-                <option name="Outdoor" value="Outdoor"> Outdoor</option>
-                <option name="Backyard" value="Backyard"> Backyard</option>
+              <select
+                className="h-7 w-1/5"
+                name="location"
+                onChange={onUserChange}
+              >
+                <option value="">--</option>
+                <option name="LivingRoom" value="LivingRoom">
+                  {" "}
+                  Living Room
+                </option>
+                <option name="Kitchen" value="Kitchen">
+                  {" "}
+                  Kitchen
+                </option>
+                <option name="Garage" value="Garage">
+                  {" "}
+                  Garage
+                </option>
+                <option name="Bedroom" value="Bedroom">
+                  {" "}
+                  Bedroom
+                </option>
+                <option name="BuildingEntrance" value="BuildingEntrance">
+                  {" "}
+                  Building Entrance
+                </option>
+                <option name="Outdoor" value="Outdoor">
+                  {" "}
+                  Outdoor
+                </option>
+                <option name="Backyard" value="Backyard">
+                  {" "}
+                  Backyard
+                </option>
               </select>
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={()=>onAddUser(newProfile)}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={() => onAddUser(newProfile)}
+            >
               Add+
             </button>
           </div>
@@ -127,9 +155,18 @@ export default function SHS() {
           <p className="mt-2">Change Outdoor temp.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" onChange={handleOutDoorChange} />°C  
+              <input
+                type="number"
+                name="outdoorTemp"
+                className="w-16 text-center border-slate-800 border-2"
+                onChange={handleOutDoorChange}
+              />
+              °C
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={handleSetOutdoorTemp}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={handleSetOutdoorTemp}
+            >
               SET
             </button>
           </div>
@@ -137,24 +174,33 @@ export default function SHS() {
           <p className="mt-2">Change Indoor temp.</p>
           <div className="flex flex-row ">
             <div className="flex justify-between rounded-md border-slate-800 ">
-              <input type="number" name="outdoorTemp"  className="w-16 text-center border-slate-800 border-2" onChange={handleIndoorChange}/>°C  
+              <input
+                type="number"
+                name="outdoorTemp"
+                className="w-16 text-center border-slate-800 border-2"
+                onChange={handleIndoorChange}
+              />
+              °C
             </div>
-            <button className="w-1/5 rounded-md bg-slate-800 text-white ml-4" onClick={handleSetIndoorTemp}>
+            <button
+              className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+              onClick={handleSetIndoorTemp}
+            >
               SET
             </button>
           </div>
-          
         </div>
       </div>
-      <div className= 'h-full relative'>
-              <PermissionModal
-                module={'SHS'}
-                parents={'Full access'}
-                children={'Half'}
-                guest={'guest'}
-                stranger={'stranger'}
-              />
-        </div>
+      <div className="h-full relative">
+        <PermissionModal
+          module={"SHS"}
+          parents={"Full access"}
+          // eslint-disable-next-line react/no-children-prop
+          children={"Half"}
+          guest={"guest"}
+          stranger={"stranger"}
+        />
+      </div>
     </>
   );
 }

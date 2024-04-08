@@ -49,7 +49,6 @@ export default function SHH() {
 
   const handleZoneAssignment = async (e) => {
     e.preventDefault();
-    console.log(assignedSelectedRoom, assignedZone);
     if (!assignedSelectedRoom || !assignedZone) {
       console.log("Please select a room and a zone");
       return;

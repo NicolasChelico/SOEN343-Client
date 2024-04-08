@@ -10,7 +10,12 @@ import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
 import SHP from "../Modules/SHP";
 
-import { getHomeLayout, toggleAllLights, toggleRoomLights } from "../lib/home";
+import {
+  getHomeLayout,
+  getOutsideTemp,
+  toggleAllLights,
+  toggleRoomLights,
+} from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
 import { LogsContainer } from "../Logger/Console";
@@ -33,7 +38,8 @@ export default function SmartHomeSimulator() {
 
   const [houseLayout, setHouseLayout] = useState(null);
   const [rooms, setRooms] = useState([]);
-  const [activeElement, setActiveElement] = useState("SHS");
+  const [outsideTemp, setOutsideTemp] = useState(0);
+  const [activeElement, setActiveElement] = useState("SHH");
   const [open, setOpen] = useState(false);
   const [latestState, setLatestState] = useState("");
   const [simulation, setSimulation] = useState(true);
@@ -56,6 +62,14 @@ export default function SmartHomeSimulator() {
       setHouseLayout(data);
       setRooms(data.roomList);
     });
+
+    getOutsideTemp()
+      .then((data) => {
+        setOutsideTemp(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   useEffect(() => {
@@ -67,7 +81,10 @@ export default function SmartHomeSimulator() {
       const newHomeLayout = await getHomeLayout();
       setHouseLayout(newHomeLayout);
       setRooms(newHomeLayout.roomList);
-    }, 2000); // 2-second delay
+
+      const newOutsideTemp = await getOutsideTemp();
+      setOutsideTemp(newOutsideTemp);
+    }, 3000); // 2-second delay
   }, [houseLayout]);
 
   const handleChange = (e) => {
@@ -209,7 +226,11 @@ export default function SmartHomeSimulator() {
         {activeElement === "SHP" && <SHP />}
       </CommandsContainer>
       <div className="flex flex-col w-1/2">
-        <HouseContainer houseLayout={houseLayout} rooms={rooms} />
+        <HouseContainer
+          houseLayout={houseLayout}
+          rooms={rooms}
+          outsideTemp={outsideTemp}
+        />
 
         <LogsContainer />
       </div>

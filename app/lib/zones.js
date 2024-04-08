@@ -25,8 +25,8 @@ const addZone = async (zone) => {
 const addRoomToZone = async (zoneId, roomId) => {
   return await axios
     .post("http://localhost:8080/ZoneController/AddRoomToZone", {
-      roomId,
       zoneId,
+      roomId,
     })
     .then((res) => {
       return res.data;

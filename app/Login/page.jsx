@@ -7,16 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "../Store/user.store";
 
 export default function Login() {
-  const {
-    userId,
-    role,
-    userName,
-    location,
-    setUserId,
-    setRole,
-    setUserName,
-    setLocation,
-  } = useAuthStore();
+  const {setUserId,setRole,setUserName, setLocation} = useAuthStore();
   const router = useRouter();
 
   const [credentials, setCredentials] = useState({

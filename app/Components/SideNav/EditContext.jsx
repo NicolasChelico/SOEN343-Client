@@ -4,7 +4,7 @@ import { useModal } from "../../Modals/Modal";
 import axios from "axios";
 import { updateCurrentUserLocation } from "@/app/lib/users";
 import { getHomeLayout } from "../../lib/home";
-import useAuthStore from "@/app/Zustand/userStore";
+import { useAuthStore } from "../../Store/user.store";
 
 export default function EditContext({ name }) {
   const { toggle } = useModal();

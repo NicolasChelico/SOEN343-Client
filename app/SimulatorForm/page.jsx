@@ -4,7 +4,7 @@ import FormHolder from "../Components/FormHolder";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import useAuthStore from "../Store/user.store";
+import { useAuthStore } from "../Store/user.store";
 export default function SimulatorFormContainer() {
   const router = useRouter();
   const [homeSpecifications, setHomeSpecifications] = useState({

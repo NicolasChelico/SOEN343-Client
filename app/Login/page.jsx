@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import FormHolder from "../Components/FormHolder";
 import { useRouter } from "next/navigation";
-import useAuthStore from "../Store/user.store";
+import { useAuthStore } from "../Store/user.store";
 
 export default function Login() {
   const {

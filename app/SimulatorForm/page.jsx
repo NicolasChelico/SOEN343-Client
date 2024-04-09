@@ -4,18 +4,20 @@ import FormHolder from "../Components/FormHolder";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useAuthStore } from "../Store/user.store";
+import useAuthStore from "../Zustand/userStore";
+import useSimlulationStore from "../Zustand/simulationStore";
 export default function SimulatorFormContainer() {
   const router = useRouter();
   const [homeSpecifications, setHomeSpecifications] = useState({
     date: new Date().toISOString().slice(0, 10), // Set default date to current date
-    time: null,
+    time: null, 
+    outdoorTemp: '',
+    insideTemp: ''
   });
 
-  const { userName } = useAuthStore();
-  console.log("usernme of zustand: ", userName);
-
-  const handleChange = (e) => {
+  const {setDate, setOutdoorTemp, setInsideTemp} = useSimlulationStore();
+  
+  const handleChange = e => {
     const { name, value } = e.target;
 
     // If the date input changes, update the time to the current time
@@ -39,8 +41,8 @@ export default function SimulatorFormContainer() {
 
   const submitSpecifications = async (e) => {
     e.preventDefault();
-
-    try {
+    
+    // try {
       // Format date and time strings
       const formattedDate = homeSpecifications.date;
       const formattedTime = homeSpecifications.time
@@ -50,30 +52,28 @@ export default function SimulatorFormContainer() {
       // Concatenate date and time strings
       const dateTimeString = new Date(formattedDate + " " + formattedTime);
       const dateSeconds = dateTimeString.getTime().toString();
-
-      const response = await axios.post(
-        "http://localhost:8080/SimClock/UpdateSimulationTime",
-        {
-          date: dateSeconds,
-        }
-      );
-
-      if (response.status === 200) {
-        localStorage.setItem("indoorTemp", homeSpecifications.indoorTemp);
-        localStorage.setItem("outdoorTemp", homeSpecifications.outdoorTemp);
-        localStorage.setItem("date", formattedDate);
-        localStorage.setItem("time", formattedTime);
-        router.push("/Dashboard");
-      }
-    } catch (error) {
-      console.error("Failed to update simulation time:", error);
-      // Handle error appropriately
-    }
+      
+      setDate(formattedDate)
+      setOutdoorTemp(homeSpecifications.outdoorTemp)
+      setInsideTemp(homeSpecifications.insideTemp)
+    //   const response = await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', {
+    //     date: dateSeconds
+    //   });
+      
+    //   if (response.status === 200) {
+    //     localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp);
+    //     localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp);
+    //     localStorage.setItem('date', formattedDate);
+    //     localStorage.setItem('time', formattedTime);
+        router.push('/Dashboard');
+    //   }
+    // } catch (error) {
+    //   console.error('Failed to update simulation time:', error);
+    //   // Handle error appropriately
+    // }
   };
-  // localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp)
-  // localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp)
-  // localStorage.setItem('date', homeSpecifications.date)
-  // router.push('/Dashboard')
+
+  
 
   return (
     <FormHolder>
@@ -84,11 +84,12 @@ export default function SimulatorFormContainer() {
         </p>
       </div>
       <div className="flex flex-col text-justify w-3/4 justify-center ml-24">
-        {/* <div className=" flex flex-row my-2">
+ 
+        <div className=" flex flex-row my-2">
             <label>Inside temperature:</label>
             <input
               type="number"
-              name="indoorTemp"
+              name="insideTemp"
               className="w-16 text-center inline-block"
               onChange={handleChange}
             />
@@ -104,7 +105,7 @@ export default function SimulatorFormContainer() {
               onChange={handleChange}
             />
             <p className="">°C</p>
-          </div> */}
+          </div>
 
         <div className="my-2">
           <label htmlFor="">Set Date: </label>

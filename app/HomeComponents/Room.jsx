@@ -5,10 +5,16 @@ import Window from "../SmartElements/window";
 import { IoMan } from "react-icons/io5";
 import { FaFan } from "react-icons/fa";
 import { ConsoleLogger } from "../Logger/Console";
+import { MdLocalFireDepartment } from "react-icons/md";
+import { MdSensors } from "react-icons/md";
+import { useSimlulationStore } from "../Store/simulation.store";
+import { useAuthStore } from "../Store/user.store";
 
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
   const [userRoom, setUserRoom] = useState(false);
+  const{awayMode} = useSimlulationStore()
+  const {location} = useAuthStore()
   const [airConditioner, setAirConditioner] = useState(
     roomData.smartElementList.filter(
       (element) => element.elementType === "AirConditioner"
@@ -28,6 +34,10 @@ export default function Room({ roomData }) {
   const [windows, setWindows] = useState(
     room.smartElementList.filter((element) => element.elementType === "Window")
   );
+
+  const [sensors, setSensors] = useState(
+    room.smartElementList.filter(element => element.elementType === "MotionDetector" )
+  )
 
   if (room.temperature < 0) {
     ConsoleLogger(
@@ -59,6 +69,11 @@ export default function Room({ roomData }) {
         (element) => element.elementType === "Window"
       )
     );
+    setSensors(
+      roomData.smartElementList.filter(
+        element => element.elementType === "MotionDetector"
+      )
+    )
   }, [roomData]);
 
   // console.log(userRoom , ' room status in ' , room.roomId)
@@ -88,7 +103,12 @@ export default function Room({ roomData }) {
           ))}
         {userRoom ? <IoMan size={30} /> : ""}
         {airConditioner.length > 0 ? <FaFan size={30} /> : ""}
-        {heater.length > 0 ? <p className="text-2xl">🥵</p> : ""}
+        {heater.length > 0 ? <p className="text-2xl"><MdLocalFireDepartment /></p> : ""}
+        {sensors.length > 0 ? 
+          (awayMode === 'ON' ? <MdSensors size={30} color='red' /> : <MdSensors size={30}/>)
+        : 
+        ""
+        }
       </div>
     </div>
   );

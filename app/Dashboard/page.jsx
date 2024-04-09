@@ -23,16 +23,18 @@ import { LogsContainer } from "../Logger/Console";
 import { useHomeStore } from "../Store/home.store";
 import { useAuthStore } from "../Store/user.store";
 import { toggleClock } from "../lib/clock";
+import { useTempStore } from "../Store/temp.store";
+import { useSimlulationStore } from "../Store/simulation.store";
 
 import Modal from "../Modals/Modal";
 import ModalContent from "../Modals/ModalContent";
 import ModalToggler from "../Modals/ModalToggler";
 import EditContext from "../Components/SideNav/EditContext";
-import { useTempStore } from "../Store/temp.store";
 
 export default function SmartHomeSimulator() {
   const router = useRouter();
-
+  const{awayMode} = useSimlulationStore()
+  const {location} = useAuthStore()
   let role = localStorage.getItem("role");
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
@@ -99,6 +101,7 @@ export default function SmartHomeSimulator() {
   const handleClick = (e) => {
     setActiveElement(e);
   };
+
 
   return (
     <div className="flex flex-row">

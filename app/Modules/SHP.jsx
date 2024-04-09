@@ -1,25 +1,68 @@
 import React, { useState, useEffect } from "react";
 import PermissionModal from "../Permissions/PermissionModal";
 import { getHomeLayout } from "../lib/home";
-import { addMotionDetectors } from "../lib/zones";
+import { addMotionDetectors } from "../lib/home";
+import { useAuthStore } from "../Store/user.store";
+import { ConsoleLogger } from "../Logger/Console";
 import axios from "axios";
+import { useSimlulationStore } from "../Store/simulation.store";
 export default function SHP() {
-  const [awayMode, setAwayMode] = useState(false);
-  const [roomList, setRoomList] = useState([]);
+  const {location} = useAuthStore();
 
+  const {awayMode,setAwayMode} = useSimlulationStore()
+
+  const [isAway, setIsAway] = useState(false);
+  const [roomList, setRoomList] = useState([]);
+  const [counter, setCounter] = useState(0)
+  const [policeTrigger, setPoliceTrigger] = useState(false)
   const [sensor, setSensor] = useState({
-    id: "",
     roomId: 0,
   });
+  useEffect(() => {
+    stopCounter()
+    if (location !== '' && isAway) {
+      const interval = setInterval(() => {  
+        setCounter(prevCounter => prevCounter + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [location, isAway]);
+
   const onClickSetActive = () => {
-    setAwayMode(!awayMode);
-  };
+    setIsAway(!isAway);
+
+  }
+
+  const stopCounter = () =>{
+    setCounter(0)
+  } 
+
+  useEffect(() => {
+    if(counter > 2 && location !== ''){
+      setAwayMode('ON')
+    }else{
+      setAwayMode('OFF')
+    }
+  }, [counter]);
+
+  useEffect(() => {
+    if (awayMode === "ON") {
+      ConsoleLogger(
+        `Police Alert! person in ${location}`,
+        location,
+        " when system is in away mode.",
+        {
+          reason: "System Alert",
+        },
+      );
+    }
+  }, [awayMode]);
 
   const onSensorChange = (e) => {
     setSensor((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(sensor);
   };
-
+ 
   useEffect(() => {
     async function fetchData() {
       const homeLayout = await getHomeLayout();
@@ -30,12 +73,8 @@ export default function SHP() {
 
   const onAddMotionDetector = async (e) => {
     e.preventDefault();
-    try {
       const response = await addMotionDetectors(sensor);
       console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -45,21 +84,14 @@ export default function SHP() {
           <button onClick={onClickSetActive}>
             <span>
               <p className="bg-slate-800 text-white border px-8 py-2">
-                Away Mode: {!awayMode ? "ON" : "OFF"}
+                Away Mode: {isAway ? "ON" : "OFF"} 
               </p>
             </span>
           </button>
         </div>
-        <p className="mt-2 font-bold">Set Motion Detector: </p>
-        <div className="flex flex-row ">
+        <p className="mt-2 ml-4 font-bold">Set Motion Detector: </p>
+        <div className="ml-4 flex flex-row ">
           <div className="flex justify-between rounded-md border-slate-800 ">
-            <input
-              className="h-7 w-1/5 border-2"
-              type="number"
-              placeholder="id#"
-              name="id"
-              onChange={onSensorChange}
-            />
             <select
               className="h-7 border-2"
               name="roomId"

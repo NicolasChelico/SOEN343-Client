@@ -65,14 +65,6 @@ export default function SmartHomeSimulator() {
         });
       }
     });
-
-    getOutsideTemp()
-      .then((data) => {
-        setOutsideTemp(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, []);
 
   const handleChange = (e) => {

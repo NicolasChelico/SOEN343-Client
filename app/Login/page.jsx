@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import FormHolder from "../Components/FormHolder";
 import { useRouter } from "next/navigation";
-import useAuthStore from "../Zustand/userStore";
+import { useAuthStore } from "../Store/user.store";
 
 export default function Login() {
   const {setUserId,setRole,setUserName, setLocation} = useAuthStore();

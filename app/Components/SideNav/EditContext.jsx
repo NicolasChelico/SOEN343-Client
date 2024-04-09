@@ -1,33 +1,31 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {useModal} from "../../Modals/Modal";
-import axios from 'axios';
-import { updateCurrentUserLocation } from '@/app/lib/users';
-import { getHomeLayout } from "../../lib/home"
-import useAuthStore from '@/app/Zustand/userStore';
-import useSimlulationStore from '@/app/Zustand/simulationStore';
-export default function EditContext({name}) {
-    const {date, setDate, outdoorTemp, setOutdoorTemp, insideTemp, setInsideTemp} = useSimlulationStore()
-    const { toggle } = useModal();
-    const {location, userName, role, setLocation, setUserName, setRole} = useAuthStore();
-    const [users, setUsers] = useState([])
-    const [roomList, setRoomList] = useState([]);
-    // const originalLocation = localStorage.getItem('location');
-    const originalLocation = location;
-  
-    const [simulationUser, setSimulationUser] = useState({
-        userName: userName,
-        role: '',
-        location: location
-    })
-    const [simulationContext, setSimulationContext] = useState({
-        indoorTemp: localStorage.getItem("indoorTemp"),
-        outdoorTemp: outdoorTemp,
-        insideTemp: insideTemp,
-        date: date,
-        time: null
-      })
+/* eslint-disable import/no-anonymous-default-export */
+import React, { useState, useEffect, useRef } from "react";
+import { useModal } from "../../Modals/Modal";
+import axios from "axios";
+import { updateCurrentUserLocation } from "@/app/lib/users";
+import { getHomeLayout } from "../../lib/home";
+import { useAuthStore } from "../../Store/user.store";
 
+export default function EditContext({ name }) {
+  const { toggle } = useModal();
+  const { location, userName, role, setLocation, setUserName, setRole } =
+    useAuthStore();
+  const [users, setUsers] = useState([]);
+  const [roomList, setRoomList] = useState([]);
+  // const originalLocation = localStorage.getItem('location');
+  const originalLocation = location;
 
+  const [simulationUser, setSimulationUser] = useState({
+    userName: userName,
+    role: "",
+    location: location,
+  });
+  const [simulationContext, setSimulationContext] = useState({
+    indoorTemp: localStorage.getItem("indoorTemp"),
+    outdoorTemp: localStorage.getItem("outdoorTemp"),
+    date: localStorage.getItem("date"),
+    time: null,
+  });
 
   useEffect(() => {
     async function fetchData() {

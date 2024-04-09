@@ -29,8 +29,8 @@ export default function SHS() {
 
   const [newProfile, setNewProfile] = useState({
     name: "",
-    userName: randomUsername,
-    password: randomPassword,
+    userName: "",
+    password: "",
     role: "",
     location: "",
   });

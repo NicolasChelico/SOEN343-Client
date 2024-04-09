@@ -32,6 +32,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     localStorage.clear();
+
     try {
       const response = await axios.post(
         "http://localhost:8080/User/AuthenticateUser",
@@ -41,7 +42,6 @@ export default function Login() {
       setRole(response.data.role);
       setUserName(response.data.userName);
       setLocation(response.data.location);
-      console.log(response.data);
       // localStorage.setItem('userId', response.data.userId);
       // localStorage.setItem('role', response.data.role);
       // localStorage.setItem('userName', response.data.userName);

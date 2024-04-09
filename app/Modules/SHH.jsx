@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import SimulationOff from "../Dashboard/SimulationOff";
 import PermissionModal from "../Permissions/PermissionModal";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from "@chakra-ui/react";
 
 import { useHomeStore } from "../Store/home.store";
 import { useZoneStore } from "../Store/zone.store";
@@ -43,6 +54,10 @@ export default function SHH() {
     try {
       // Call addZone function to add the new zone
       addZone(newZone);
+      newZone.zone = 0.0;
+      newZone.AM = 0.0;
+      newZone.PM = 0.0;
+      newZone.NIGHT = 0.0;
 
       // // Update the zones state with the updated data
     } catch (error) {
@@ -72,7 +87,7 @@ export default function SHH() {
       <div>
         {active ? (
           <div>
-            <div className="mx-4 my-4">
+            <div className="m-4">
               <button onClick={onClickSetActive}>
                 <span>
                   <p className="bg-slate-800 text-white border px-8 py-2">
@@ -81,95 +96,98 @@ export default function SHH() {
                 </span>
               </button>
             </div>
-            <div>
-              <table className="w-3/4 border-2 my-4">
-                <thead className="bg-gray-500 text-white">
-                  <tr>
-                    <th>Zone #</th>
-                    <th>AM</th>
-                    <th>PM</th>
-                    <th>NIGHT</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <TableContainer>
+              <Table variant="simple">
+                <TableCaption>Zone Settings</TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>Zone #</Th>
+                    <Th>AM</Th>
+                    <Th>PM</Th>
+                    <Th>NIGHT</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
                   {zones.length > 0 &&
                     zones.map((zone) => {
                       return (
-                        <tr className="border-2" key={zone.zoneId}>
-                          <td className="border-2">Zone {zone.zoneId}</td>
-                          <td className="border-2">{zone.amTemp}˚ C</td>
-                          <td className="border-2">{zone.pmTemp}˚ C</td>
-                          <td className="border-2">{zone.nightTemp}˚ C</td>
-                        </tr>
+                        <Tr key={zone.zoneId}>
+                          <Td>Zone {zone.zoneId}</Td>
+                          <Td>{zone.amTemp}˚ C</Td>
+                          <Td>{zone.pmTemp}˚ C</Td>
+                          <Td>{zone.nightTemp}˚ C</Td>
+                        </Tr>
                       );
                     })}
-                </tbody>
-              </table>
-            </div>
+                </Tbody>
+              </Table>
+            </TableContainer>
 
-            <p className="font-bold ml-4">Create Zone:</p>
-            <table className="w-full my-4 ">
-              <thead>
-                <tr>
-                  <th>Zone #</th>
-                  <th>AM</th>
-                  <th>PM</th>
-                  <th>NIGHT</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="text-center">
-                  <td>
-                    <input
-                      name="zone"
-                      min={zones.length + 1}
-                      type="number"
-                      onChange={onZoneChange}
-                      className="w-3/4 border-2 border-md"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      name="AM"
-                      type="number"
-                      onChange={onZoneChange}
-                      className="w-2/4 border-2 border-md"
-                    />
-                    °C{" "}
-                  </td>
-                  <td>
-                    <input
-                      name="PM"
-                      type="number"
-                      onChange={onZoneChange}
-                      className="w-2/4 border-2 border-md"
-                    />
-                    °C{" "}
-                  </td>
-                  <td>
-                    <input
-                      name="NIGHT"
-                      type="number"
-                      onChange={onZoneChange}
-                      className="w-2/4 border-2 border-md"
-                    />
-                    °C{" "}
-                  </td>
-                  <td>
-                    <button
-                      className="rounded-md bg-slate-800 text-white ml-4 px-8"
-                      onClick={onAddZone}
-                    >
-                      SET
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <p className="text-lg font-semibold mx-4 mt-2">Create Zone</p>
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Zone #</Th>
+                    <Th>AM</Th>
+                    <Th>PM</Th>
+                    <Th>NIGHT</Th>
+                    <Th></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td>
+                      <input
+                        name="zone"
+                        min={zones.length + 1}
+                        type="number"
+                        onChange={onZoneChange}
+                        className="w-3/4 border-2 border-md"
+                      />
+                    </Td>
+                    <Td>
+                      <input
+                        name="AM"
+                        type="number"
+                        onChange={onZoneChange}
+                        className="w-2/4 border-2 border-md"
+                      />
+                      °C{" "}
+                    </Td>
+                    <Td>
+                      <input
+                        name="PM"
+                        type="number"
+                        onChange={onZoneChange}
+                        className="w-2/4 border-2 border-md"
+                      />
+                      °C{" "}
+                    </Td>
+                    <Td>
+                      <input
+                        name="NIGHT"
+                        type="number"
+                        onChange={onZoneChange}
+                        className="w-2/4 border-2 border-md"
+                      />
+                      °C{" "}
+                    </Td>
+                    <Td>
+                      <button
+                        className="rounded-md bg-slate-800 text-white ml-4 px-8"
+                        onClick={onAddZone}
+                      >
+                        SET
+                      </button>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
 
-            <p className="mt-2 font-bold">Set Zone Settings</p>
-            <div className="flex flex-row ">
+            <p className="text-lg font-semibold m-4">Set Zone Settings</p>
+            <div className="flex flex-row px-4">
               <div className="flex justify-between rounded-md border-slate-800 ">
                 <select
                   className="h-7 w-1/5 border-2"
@@ -214,8 +232,8 @@ export default function SHH() {
                 SET
               </button>
             </div>
-            <p className="mt-2 font-bold">Set Room Temperature</p>
-            <div className="flex flex-row ">
+            <p className="text-lg font-semibold m-4">Set Room Temperature</p>
+            <div className="flex flex-row px-4">
               <div className="flex justify-between rounded-md border-slate-800 ">
                 <select className="h-7 border-2" name="role">
                   {roomList &&
@@ -241,8 +259,8 @@ export default function SHH() {
                 SET
               </button>
             </div>
-            <p className="mt-2 font-bold">Assign Room to Zone</p>
-            <div className="flex flex-row ">
+            <p className="text-lg font-semibold m-4">Assign Room to Zone</p>
+            <div className="flex flex-row px-4">
               <div className="flex justify-between items-center rounded-md border-slate-800 ">
                 <select
                   className="h-7 border-2"

@@ -5,11 +5,11 @@ import axios from "axios";
 import { updateCurrentUserLocation } from "@/app/lib/users";
 import { getHomeLayout } from "../../lib/home";
 import { useAuthStore } from "../../Store/user.store";
-
+import { useSimlulationStore } from "@/app/Store/simulation.store";
 export default function EditContext({ name }) {
   const { toggle } = useModal();
-  const { location, userName, role, setLocation, setUserName, setRole } =
-    useAuthStore();
+  const { location, userName, role, setLocation, setUserName, setRole } = useAuthStore();
+  const {date, insideTemp, outdoorTemp, setInsideTemp, setOutdoorTemp, setDate} = useSimlulationStore();
   const [users, setUsers] = useState([]);
   const [roomList, setRoomList] = useState([]);
   // const originalLocation = localStorage.getItem('location');
@@ -21,9 +21,9 @@ export default function EditContext({ name }) {
     location: location,
   });
   const [simulationContext, setSimulationContext] = useState({
-    indoorTemp: localStorage.getItem("indoorTemp"),
-    outdoorTemp: localStorage.getItem("outdoorTemp"),
-    date: localStorage.getItem("date"),
+    insideTemp: insideTemp,
+    outdoorTemp: outdoorTemp,
+    date: date,
     time: null,
   });
 
@@ -45,7 +45,6 @@ export default function EditContext({ name }) {
         console.log(simulationUser, ' ', users)
       }
 
-      
       const submitSpecifications = async e => {
         e.preventDefault();
         const role = users.find((user) =>  simulationUser.userName === user.name)
@@ -66,11 +65,8 @@ export default function EditContext({ name }) {
         setLocation(simulationUser.location)
         setDate(simulationContext.date)
         setOutdoorTemp(simulationContext.outdoorTemp)
-        setInsideTemp(simulationContext.insideTemp)
-        localStorage.setItem('date', simulationContext.date)
-      
+        setInsideTemp(simulationContext.insideTemp)  
         toggle();
-        
       }
 
   useEffect(() => {
@@ -125,7 +121,9 @@ export default function EditContext({ name }) {
                       </option>
                     );
                   })}
-
+                <option key='100' value='' >
+                  " "        
+                </option>
 
         </select>
           </div>

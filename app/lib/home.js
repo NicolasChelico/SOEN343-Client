@@ -135,6 +135,16 @@ const resetRoomTemp = async (roomId) => {
     });
 };
 
+const addMotionDetectors = async (sensor) => {
+  return await axios
+  .post("http://localhost:8080/MotionDetectorController/AddByRoomId", sensor)
+  .then( res => {
+    return res.data;
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
 export {
   getHomeLayout,
   toggleSmartElement,
@@ -143,4 +153,5 @@ export {
   getOutsideTemp,
   setRoomTemp,
   resetRoomTemp,
+  addMotionDetectors
 };

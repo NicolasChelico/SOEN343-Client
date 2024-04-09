@@ -92,12 +92,26 @@ export default function SHS() {
         <div>
           <p className="mt-2">Add new profile.</p>
           <div className="flex flex-row ">
-            <div className="flex justify-between rounded-md border-slate-800 ">
+            <div className="flex justify-between gap-4 rounded-md border-slate-800 ">
               <input
-                className="h-7 border-2"
+                className="h-7 w-24 border-2"
+                type="text"
+                placeholder="Username"
+                name="name"
+                onChange={onUserChange}
+              />
+              <input
+                className="h-7 w-24 border-2"
                 type="text"
                 placeholder="Name"
-                name="name"
+                name="userName"
+                onChange={onUserChange}
+              />
+              <input
+                className="h-7 w-24 border-2"
+                type="text"
+                placeholder="Password"
+                name="password"
                 onChange={onUserChange}
               />
               <select onChange={onUserChange} className="h-7 w-1/5" name="role">

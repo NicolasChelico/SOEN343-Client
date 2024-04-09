@@ -35,54 +35,43 @@ export default function EditContext({ name }) {
     fetchData();
   }, []);
 
-  const handleChange = (e) => {
-    setSimulationContext((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleUserChange = (e) => {
-    setSimulationUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    // console.log(users.find((user) =>  simulationUser.userName === user.name))
-    console.log(simulationUser, " ", users);
-  };
-
-  const submitSpecifications = async (e) => {
-    e.preventDefault();
-    const role = users.find((user) => simulationUser.userName === user.name);
-
-    if (simulationUser.location !== originalLocation) {
-      const originalLocationId = roomList.find(
-        (room) => originalLocation === room.roomType
-      );
-      const newLocationId = roomList.find(
-        (room) => simulationUser.location === room.roomType
-      );
-
-      try {
-        const response = await updateCurrentUserLocation(
-          role.userName,
-          originalLocationId.roomId,
-          newLocationId.roomId
-        );
-        // console.log(response)
-      } catch (err) {
-        console.log(err);
+      const handleChange = e => {
+        setSimulationContext((prev) => ({...prev,[e.target.name]: e.target.value}))
       }
-    }
-    setUserName(role.name);
-    setRole(role.role);
-    setLocation(simulationUser.location);
-    //localStorage.setItem("userName", role.name)
-    // localStorage.setItem("role", role.role)
-    // localStorage.setItem("location",simulationUser.location)
-    // localStorage.setItem('indoorTemp', simulationContext.indoorTemp)
-    // localStorage.setItem('outdoorTemp', simulationContext.outdoorTemp)
-    localStorage.setItem("date", simulationContext.date);
 
-    toggle();
-  };
+      const handleUserChange = e => {
+        setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
+        // console.log(users.find((user) =>  simulationUser.userName === user.name))
+        console.log(simulationUser, ' ', users)
+      }
+
+      
+      const submitSpecifications = async e => {
+        e.preventDefault();
+        const role = users.find((user) =>  simulationUser.userName === user.name)
+       
+        if(simulationUser.location !== originalLocation){
+          const originalLocationId = roomList.find((room) => originalLocation === room.roomType)
+          const newLocationId = roomList.find((room) => simulationUser.location === room.roomType)
+        
+          try{
+            const response = await updateCurrentUserLocation(role.userName, originalLocationId.roomId, newLocationId.roomId)
+            // console.log(response)
+          }catch(err){
+            console.log(err)
+          }
+        }
+        setUserName(role.name)
+        setRole(role.role)
+        setLocation(simulationUser.location)
+        setDate(simulationContext.date)
+        setOutdoorTemp(simulationContext.outdoorTemp)
+        setInsideTemp(simulationContext.insideTemp)
+        localStorage.setItem('date', simulationContext.date)
+      
+        toggle();
+        
+      }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -117,47 +106,42 @@ export default function EditContext({ name }) {
               );
             })}
         </select>
-      </div>
-      <div className=" flex flex-row ml-16 mt-8 mb-2">
-        <label className="text-black">Set User location:</label>
-        <select
-          name="location"
-          id=""
-          value={simulationUser.location}
-          onChange={handleUserChange}
-          className="text-black border-2 border-gray-300 rounded-md"
-        >
-          {roomList &&
-            roomList.map((room, index) => {
-              return (
-                <option key={index} value={room.roomType}>
-                  {room.roomType}
-                </option>
-              );
-            })}
 
-          {/* <option name="location" value="LivingRoom"> Living Room</option>
-                <option name="location" value="Kitchen"> Kitchen</option>
-                <option name="location" value="Garage"> Garage</option>
-                <option name="location" value="Bedroom"> Bedroom</option>
-                <option name="location" value="BuildingEntrance"> Building Entrance</option>
-                <option name="location" value="Outdoor"> Outdoor</option>
-                <option name="location" value="Backyard"> Backyard</option> */}
+          </div>
+          <div className=" flex flex-row ml-16 mt-8 mb-2">
+            <label className="text-black">Set User location:</label>
+              <select 
+                name="location" 
+                id="" 
+                value={simulationUser.location} 
+                onChange={handleUserChange}
+                className="text-black border-2 border-gray-300 rounded-md"
+                >
+                {roomList &&
+                  roomList.map((room, index) => {
+                    return (
+                      <option key={index} value={room.roomType} >
+                        {room.roomType}
+                      </option>
+                    );
+                  })}
+
+
         </select>
-      </div>
-      {/* <div className=" flex flex-row ml-16 mb-2">
+          </div>
+        <div className=" flex flex-row ml-16 mb-2">
             <label className="text-black">Inside temperature:</label>
             <input
               type="number"
-              name="indoorTemp"
-              value={simulationContext.indoorTemp}
+              name="insideTemp"
+              value={simulationContext.insideTemp}
               className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div> */}
+          </div>
 
-      {/* <div className=" flex flex-row ml-16 my-2">
+          <div className=" flex flex-row ml-16 my-2">
             <label className="text-black">Outdoor temperature:</label>
             <input
               type="number"
@@ -167,7 +151,7 @@ export default function EditContext({ name }) {
               onChange={handleChange}
             />
             <p className="text-black">°C</p>
-          </div> */}
+          </div>
 
       <div className="my-2 ml-16">
         <label className="text-black" htmlFor="">

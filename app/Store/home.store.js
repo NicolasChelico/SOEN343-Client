@@ -13,8 +13,11 @@ export const useHomeStore = create((set, get) => ({
     // Start the interval to update home every 3 seconds
     const intervalId = setInterval(async () => {
       const updatedHomeData = await getHomeLayout();
-      set({ home: updatedHomeData });
+      if (JSON.stringify(updatedHomeData) !== JSON.stringify(get().home)) {
+        set({ home: updatedHomeData });
+      }
     }, 3000);
+
     // Store the interval ID so it can be cleared later
     set({ intervalId });
   },

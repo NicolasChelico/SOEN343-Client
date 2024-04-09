@@ -22,7 +22,6 @@ const deleteUser = async (user) => {
     const res = await axios.delete(`http://localhost:8080/User/DeleteUser`, {
       data: { id: user.id },
     });
-    console.log(res.data);
   } catch (error) {
     console.log(error);
   }

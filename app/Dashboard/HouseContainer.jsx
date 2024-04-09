@@ -4,8 +4,23 @@ import { useHomeStore } from "../Store/home.store";
 import { useTempStore } from "../Store/temp.store";
 
 export default function HouseContainer() {
-  const { getRooms } = useHomeStore();
-  const { getTemp } = useTempStore();
+  const { getRooms, initHome, getHome } = useHomeStore();
+  const { getTemp, initTemp } = useTempStore();
+  useEffect(() => {
+    initHome();
+    initTemp();
+    getHome().roomList.map((room) => {
+      if (room.roomType === localStorage.getItem("location")) {
+        room.userList.push({
+          userId: localStorage.getItem("userId"),
+          role: localStorage.getItem("role"),
+          userName: localStorage.getItem("userName"),
+          location: localStorage.getItem("location"),
+        });
+      }
+    });
+  }, []);
+
   const rooms = getRooms();
   const temp = getTemp();
 

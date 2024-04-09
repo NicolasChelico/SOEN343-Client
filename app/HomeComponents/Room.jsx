@@ -61,7 +61,6 @@ export default function Room({ roomData }) {
     );
   }, [roomData]);
 
-  // console.log(userRoom , ' room status in ' , room.roomId)
   return (
     <div className="bg-slate-400 border border-black flex flex-1 flex-col items-start justify-start">
       <div className="flex">

@@ -1,25 +1,17 @@
 "use client";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
 
 import SideNav from "../Components/SideNav/SideNav";
 import CommandsContainer from "./CommandsContainer";
 import HouseContainer from "./HouseContainer";
-import Room from "../HomeComponents/Room";
+
 import SHC from "../Modules/SHC";
 import SHS from "../Modules/SHS";
 import SHP from "../Modules/SHP";
-
-import {
-  getHomeLayout,
-  getOutsideTemp,
-  toggleAllLights,
-  toggleRoomLights,
-} from "../lib/home";
 import SHH from "../Modules/SHH";
 import SimulationOff from "./SimulationOff";
-import { LogsContainer } from "../Logger/Console";
 
+import { LogsContainer } from "../Logger/Console";
 import { useHomeStore } from "../Store/home.store";
 import { useAuthStore } from "../Store/user.store";
 import { toggleClock } from "../lib/clock";
@@ -31,17 +23,11 @@ import EditContext from "../Components/SideNav/EditContext";
 import { useTempStore } from "../Store/temp.store";
 
 export default function SmartHomeSimulator() {
-  const router = useRouter();
-
   let role = localStorage.getItem("role");
   let userName = localStorage.getItem("userName");
   let outdoorTemp = localStorage.getItem("outdoorTemp");
   let indoorTemp = localStorage.getItem("indoorTemp");
   let date = localStorage.getItem("date");
-
-  const { initHome, setSelectedRoom, setRooms, getHome } = useHomeStore();
-  const { initTemp, getTemp } = useTempStore();
-  const outsideTemp = getTemp();
 
   const [activeElement, setActiveElement] = useState("SHS");
   const [open, setOpen] = useState(false);
@@ -52,35 +38,7 @@ export default function SmartHomeSimulator() {
   // Fetch home layout on component mount
   useEffect(() => {
     toggleClock(true);
-    initHome();
-    initTemp();
-    const home = getHome();
-    home.roomList.map((room) => {
-      if (room.roomType === localStorage.getItem("location")) {
-        room.userList.push({
-          userId: localStorage.getItem("userId"),
-          role: localStorage.getItem("role"),
-          userName: localStorage.getItem("userName"),
-          location: localStorage.getItem("location"),
-        });
-      }
-    });
   }, []);
-
-  const handleChange = (e) => {
-    roomNumberRef.current = e.target.value;
-  };
-
-  const changeRoomLights = async (roomId) => {
-    const roomIdInt = parseInt(roomId);
-    const updatedRoom = await toggleRoomLights(roomIdInt);
-    setSelectedRoom(updatedRoom);
-  };
-
-  const changeAllLights = async (isOpen) => {
-    const updatedHouseLayout = await toggleAllLights(isOpen);
-    setRooms(updatedHouseLayout.roomList);
-  };
 
   const onClickSimumlation = async (e) => {
     e.preventDefault();
@@ -105,7 +63,6 @@ export default function SmartHomeSimulator() {
       <SideNav
         role={role}
         name={userName}
-        outdoorTemp={outsideTemp}
         indoorTemp={indoorTemp}
         date={date}
         location={location}
@@ -182,13 +139,7 @@ export default function SmartHomeSimulator() {
         )}
         {/* Depending which element is chosen from the nav, load the appropriate module. */}
 
-        {activeElement === "SHC" && (
-          <SHC
-            toggleAllLights={changeAllLights}
-            toggleRoomLights={changeRoomLights}
-            changeRoomRef={handleChange}
-          />
-        )}
+        {activeElement === "SHC" && <SHC />}
         {activeElement === "SHS" && <SHS />}
         {activeElement === "SHH" && <SHH />}
         {activeElement === "SHP" && <SHP />}

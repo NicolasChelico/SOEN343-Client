@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import PermissionModal from "../Permissions/PermissionModal";
-import {
-  toggleAllLights,
-  toggleRoomLights,
-  toggleSmartElement,
-} from "../lib/home";
+import { toggleRoomLights } from "../lib/element";
+import { toggleAllLights } from "../lib/element";
+import { toggleSmartElement } from "../lib/element";
 import { useAuthStore } from "../Store/user.store";
 import { useHomeStore } from "../Store/home.store";
+import { useSimlulationStore } from "../Store/simulation.store";
 
 export default function SHC() {
   const [selectValue, setSelectValue] = useState("true");
   const { role, location } = useAuthStore();
   const { getRooms, setRooms, setSelectedRoom } = useHomeStore();
+  const { awayMode } = useSimlulationStore();
   const rooms = getRooms();
 
   const handleSelectChange = (event) => {
@@ -39,7 +39,6 @@ export default function SHC() {
   // Function to check if the user is in the room
   const isUserInRoom = () => {
     const room = rooms.find((room) => room.roomId == roomNumber);
-
     return room && room.roomType === location;
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaDoorOpen } from "react-icons/fa";
 import { FaDoorClosed } from "react-icons/fa";
-import { toggleSmartElement } from "../lib/home";
+import { toggleSmartElement } from "../lib/element";
 
 export default function Door({ doorData, roomId }) {
   const [door, setDoor] = useState(doorData);
@@ -21,7 +21,7 @@ export default function Door({ doorData, roomId }) {
   }, [doorData]);
 
   return (
-    <button onClick={handleClick} className={`p-2 m-1`}>
+    <button onClick={handleClick}>
       {door.isOpen ? (
         <FaDoorClosed size={30} color="black" />
       ) : (

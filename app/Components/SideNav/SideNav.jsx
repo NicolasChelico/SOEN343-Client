@@ -4,12 +4,7 @@ import Link from "next/link";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
 import Clock from "./Clock";
-import Modal from "../../Modals/Modal";
-import ModalContent from "@/app/Modals/ModalContent";
-import ModalToggler from "@/app/Modals/ModalToggler";
-import SimulatorForm from "@/app/SimulatorForm/SimulatorForm";
-import EditContext from "./EditContext";
-import useSimlulationStore from "@/app/Zustand/simulationStore";
+import { useSimlulationStore } from "@/app/Store/simulation.store";
 export default function SideNav(props) {
   // const [simulation, setSimulation] = useState(false);
   const { date, outdoorTemp, insideTemp } = useSimlulationStore();

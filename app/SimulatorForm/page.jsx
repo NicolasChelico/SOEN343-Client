@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSimlulationStore } from "../Store/simulation.store";
+import { setSimulationTime } from "../lib/clock";
 export default function SimulatorFormContainer() {
   const router = useRouter();
   const [homeSpecifications, setHomeSpecifications] = useState({
@@ -55,21 +56,26 @@ export default function SimulatorFormContainer() {
     setDate(formattedDate);
     setOutdoorTemp(homeSpecifications.outdoorTemp);
     setInsideTemp(homeSpecifications.insideTemp);
-    //   const response = await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', {
-    //     date: dateSeconds
-    //   });
+    console.log(dateTimeString);
 
-    //   if (response.status === 200) {
-    //     localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp);
-    //     localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp);
-    //     localStorage.setItem('date', formattedDate);
-    //     localStorage.setItem('time', formattedTime);
-    router.push("/Dashboard");
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to update simulation time:', error);
-    //   // Handle error appropriately
-    // }
+    await setSimulationTime(dateTimeString).then((response) => {
+      router.push("/Dashboard");
+    });
+    // //   const response = await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', {
+    // //     date: dateSeconds
+    // //   });
+
+    // //   if (response.status === 200) {
+    // //     localStorage.setItem('indoorTemp', homeSpecifications.indoorTemp);
+    // //     localStorage.setItem('outdoorTemp', homeSpecifications.outdoorTemp);
+    // //     localStorage.setItem('date', formattedDate);
+    // //     localStorage.setItem('time', formattedTime);
+    // router.push("/Dashboard");
+    // //   }
+    // // } catch (error) {
+    // //   console.error('Failed to update simulation time:', error);
+    // //   // Handle error appropriately
+    // // }
   };
 
   return (

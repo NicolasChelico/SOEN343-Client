@@ -24,6 +24,19 @@ const setTimeSpeed = async (speed) => {
     });
 };
 
+const setSimulationTime = async (date) => {
+  return await axios
+    .post("http://localhost:8080/SimClock/UpdateSimulationTime", {
+      date: date,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 const toggleClock = async (simulation) => {
   return await axios
     .post("http://localhost:8080/SimClock/UpdateTimeSpeed", {
@@ -37,10 +50,4 @@ const toggleClock = async (simulation) => {
     });
 };
 
-
-const setInitialDate = async (date) => {
-  return await axios.post('http://localhost:8080/SimClock/UpdateSimulationTime', date)
-}
-
-
-export { getClock, setTimeSpeed, toggleClock };
+export { getClock, setTimeSpeed, toggleClock, setSimulationTime };

@@ -8,8 +8,16 @@ import { useAuthStore } from "../../Store/user.store";
 import { useSimlulationStore } from "@/app/Store/simulation.store";
 export default function EditContext({ name }) {
   const { toggle } = useModal();
-  const { location, userName, role, setLocation, setUserName, setRole } = useAuthStore();
-  const {date, insideTemp, outdoorTemp, setInsideTemp, setOutdoorTemp, setDate} = useSimlulationStore();
+  const { location, userName, role, setLocation, setUserName, setRole } =
+    useAuthStore();
+  const {
+    date,
+    insideTemp,
+    outdoorTemp,
+    setInsideTemp,
+    setOutdoorTemp,
+    setDate,
+  } = useSimlulationStore();
   const [users, setUsers] = useState([]);
   const [roomList, setRoomList] = useState([]);
   // const originalLocation = localStorage.getItem('location');
@@ -35,39 +43,50 @@ export default function EditContext({ name }) {
     fetchData();
   }, []);
 
-      const handleChange = e => {
-        setSimulationContext((prev) => ({...prev,[e.target.name]: e.target.value}))
-      }
+  const handleChange = (e) => {
+    setSimulationContext((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-      const handleUserChange = e => {
-        setSimulationUser((prev) => ({...prev,[e.target.name]: e.target.value}))
-        // console.log(users.find((user) =>  simulationUser.userName === user.name))
-        console.log(simulationUser, ' ', users)
-      }
+  const handleUserChange = (e) => {
+    setSimulationUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    // console.log(users.find((user) =>  simulationUser.userName === user.name))
+    console.log(simulationUser, " ", users);
+  };
 
-      const submitSpecifications = async e => {
-        e.preventDefault();
-        const role = users.find((user) =>  simulationUser.userName === user.name)
-       
-        if(simulationUser.location !== originalLocation){
-          const originalLocationId = roomList.find((room) => originalLocation === room.roomType)
-          const newLocationId = roomList.find((room) => simulationUser.location === room.roomType)
-        
-          try{
-            const response = await updateCurrentUserLocation(role.userName, originalLocationId.roomId, newLocationId.roomId)
-            // console.log(response)
-          }catch(err){
-            console.log(err)
-          }
-        }
-        setUserName(role.name)
-        setRole(role.role)
-        setLocation(simulationUser.location)
-        setDate(simulationContext.date)
-        setOutdoorTemp(simulationContext.outdoorTemp)
-        setInsideTemp(simulationContext.insideTemp)  
-        toggle();
+  const submitSpecifications = async (e) => {
+    e.preventDefault();
+    const role = users.find((user) => simulationUser.userName === user.name);
+
+    if (simulationUser.location !== originalLocation) {
+      const originalLocationId = roomList.find(
+        (room) => originalLocation === room.roomType
+      );
+      const newLocationId = roomList.find(
+        (room) => simulationUser.location === room.roomType
+      );
+
+      try {
+        const response = await updateCurrentUserLocation(
+          role.userName,
+          originalLocationId.roomId,
+          newLocationId.roomId
+        );
+        // console.log(response)
+      } catch (err) {
+        console.log(err);
       }
+    }
+    setUserName(role.name);
+    setRole(role.role);
+    setLocation(simulationUser.location);
+    setDate(simulationContext.date);
+    setOutdoorTemp(simulationContext.outdoorTemp);
+    setInsideTemp(simulationContext.insideTemp);
+    toggle();
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -102,54 +121,52 @@ export default function EditContext({ name }) {
               );
             })}
         </select>
-
-          </div>
-          <div className=" flex flex-row ml-16 mt-8 mb-2">
-            <label className="text-black">Set User location:</label>
-              <select 
-                name="location" 
-                id="" 
-                value={simulationUser.location} 
-                onChange={handleUserChange}
-                className="text-black border-2 border-gray-300 rounded-md"
-                >
-                {roomList &&
-                  roomList.map((room, index) => {
-                    return (
-                      <option key={index} value={room.roomType} >
-                        {room.roomType}
-                      </option>
-                    );
-                  })}
-                <option key='100' value='' >
-                  " "        
+      </div>
+      <div className=" flex flex-row ml-16 mt-8 mb-2">
+        <label className="text-black">Set User location:</label>
+        <select
+          name="location"
+          id=""
+          value={simulationUser.location}
+          onChange={handleUserChange}
+          className="text-black border-2 border-gray-300 rounded-md"
+        >
+          {roomList &&
+            roomList.map((room, index) => {
+              return (
+                <option key={index} value={room.roomType}>
+                  {room.roomType}
                 </option>
-
+              );
+            })}
+          <option key="100" value="">
+            {" "}
+          </option>
         </select>
-          </div>
-        <div className=" flex flex-row ml-16 mb-2">
-            <label className="text-black">Inside temperature:</label>
-            <input
-              type="number"
-              name="insideTemp"
-              value={simulationContext.insideTemp}
-              className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
-              onChange={handleChange}
-            />
-            <p className="text-black">°C</p>
-          </div>
+      </div>
+      <div className=" flex flex-row ml-16 mb-2">
+        <label className="text-black">Inside temperature:</label>
+        <input
+          type="number"
+          name="insideTemp"
+          value={simulationContext.insideTemp}
+          className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
+          onChange={handleChange}
+        />
+        <p className="text-black">°C</p>
+      </div>
 
-          <div className=" flex flex-row ml-16 my-2">
-            <label className="text-black">Outdoor temperature:</label>
-            <input
-              type="number"
-              name="outdoorTemp"
-              value={simulationContext.outdoorTemp}
-              className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
-              onChange={handleChange}
-            />
-            <p className="text-black">°C</p>
-          </div>
+      <div className=" flex flex-row ml-16 my-2">
+        <label className="text-black">Outdoor temperature:</label>
+        <input
+          type="number"
+          name="outdoorTemp"
+          value={simulationContext.outdoorTemp}
+          className="w-16 text-center inline-block border-2 border-gray-300 rounded-md text-black"
+          onChange={handleChange}
+        />
+        <p className="text-black">°C</p>
+      </div>
 
       <div className="my-2 ml-16">
         <label className="text-black" htmlFor="">

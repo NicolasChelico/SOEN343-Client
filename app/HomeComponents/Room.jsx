@@ -13,7 +13,7 @@ import { useAuthStore } from "../Store/user.store";
 export default function Room({ roomData }) {
   const [room, setRoom] = useState(roomData);
   const [userRoom, setUserRoom] = useState(false);
-  const { awayMode } = useSimlulationStore();
+  const { awayMode, setAwayMode } = useSimlulationStore();
   const { location } = useAuthStore();
   const [airConditioner, setAirConditioner] = useState(
     roomData.smartElementList.filter(
@@ -49,6 +49,32 @@ export default function Room({ roomData }) {
         reason: "System Alert",
       }
     );
+  }
+
+  if (room.temperature > 135) {
+    ConsoleLogger(
+      "Temperature Alert!",
+      "Temperature in " +
+        room.roomType +
+        " is above 135˚C. Turning off away mode.",
+      {
+        reason: "System Alert",
+      }
+    );
+    setAwayMode("OFF");
+  }
+
+  if (room.temperature - room.prevRoomTemp > 15 && awayMode === "ON") {
+    ConsoleLogger(
+      "Temperature Alert!",
+      "Temperature in " +
+        room.roomType +
+        " increased by 15˚C. Turning off away mode.",
+      {
+        reason: "System Alert",
+      }
+    );
+    setAwayMode("OFF");
   }
 
   useEffect(() => {

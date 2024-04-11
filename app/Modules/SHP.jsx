@@ -62,11 +62,10 @@ export default function SHP() {
             reason: "System Alert",
           }
         );
-        if (awayMode === "ON") {
-          await toggleSmartElementsType("Light", false);
-          await toggleSmartElementsType("Door", false);
-          await toggleSmartElementsType("Window", false);
-        }
+
+        await toggleSmartElementsType("Light", false);
+        await toggleSmartElementsType("Door", false);
+        await toggleSmartElementsType("Window", false);
       }
     }
     fetchData();

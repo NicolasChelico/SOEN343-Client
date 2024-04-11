@@ -15,10 +15,13 @@ import {
 
 import { useHomeStore } from "../Store/home.store";
 import { useZoneStore } from "../Store/zone.store";
+import { useAuthStore } from "../Store/user.store";
+import { setRoomTemp, resetRoomTemp } from "../lib/home";
 
 export default function SHH() {
   const { initZone, getZones, addZone, addRoomToZone } = useZoneStore();
   const { getRooms } = useHomeStore();
+  const { role, location } = useAuthStore();
   const zones = getZones();
   const roomList = getRooms();
 
@@ -65,6 +68,12 @@ export default function SHH() {
     }
   };
 
+  // Function to check if the user is in the room
+  const isUserInRoom = () => {
+    const room = roomList.find((room) => room.roomId == tempRoomId);
+    return room && room.roomType === location;
+  };
+
   const handleZoneAssignment = async (e) => {
     e.preventDefault();
     if (!assignedSelectedRoom || !assignedZone) {
@@ -75,6 +84,10 @@ export default function SHH() {
   };
 
   const handleSetTemp = async (e) => {
+    if (!isUserInRoom()) {
+      console.log("You are not in the room");
+      return;
+    }
     await setRoomTemp(tempRoomId, setTemp);
   };
 
@@ -83,159 +96,167 @@ export default function SHH() {
   };
 
   return (
-    <>
-      <div>
+    <div className="h-full">
+      <div className="h-full overflow-scroll ">
         {active ? (
           <div>
-            <div className="m-4">
-              <button onClick={onClickSetActive}>
-                <span>
-                  <p className="bg-slate-800 text-white border px-8 py-2">
-                    SHH: {active ? "ON" : "OFF"}
-                  </p>
-                </span>
-              </button>
-            </div>
-            <TableContainer>
-              <Table variant="simple">
-                <TableCaption>Zone Settings</TableCaption>
-                <Thead>
-                  <Tr>
-                    <Th>Zone #</Th>
-                    <Th>AM</Th>
-                    <Th>PM</Th>
-                    <Th>NIGHT</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {zones.length > 0 &&
-                    zones.map((zone) => {
-                      return (
-                        <Tr key={zone.zoneId}>
-                          <Td>Zone {zone.zoneId}</Td>
-                          <Td>{zone.amTemp}˚ C</Td>
-                          <Td>{zone.pmTemp}˚ C</Td>
-                          <Td>{zone.nightTemp}˚ C</Td>
-                        </Tr>
-                      );
-                    })}
-                </Tbody>
-              </Table>
-            </TableContainer>
+            {role === "Parent" && (
+              <>
+                <div className="m-4">
+                  <button onClick={onClickSetActive}>
+                    <span>
+                      <p className="bg-slate-800 text-white border px-8 py-2">
+                        SHH: {active ? "ON" : "OFF"}
+                      </p>
+                    </span>
+                  </button>
+                </div>
+                <TableContainer>
+                  <Table variant="simple">
+                    <TableCaption>Zone Settings</TableCaption>
+                    <Thead>
+                      <Tr>
+                        <Th>Zone #</Th>
+                        <Th>AM</Th>
+                        <Th>PM</Th>
+                        <Th>NIGHT</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {zones.length > 0 &&
+                        zones.map((zone) => {
+                          return (
+                            <Tr key={zone.zoneId}>
+                              <Td>Zone {zone.zoneId}</Td>
+                              <Td>{zone.amTemp}˚ C</Td>
+                              <Td>{zone.pmTemp}˚ C</Td>
+                              <Td>{zone.nightTemp}˚ C</Td>
+                            </Tr>
+                          );
+                        })}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+                <p className="text-lg font-semibold mx-4 mt-2">Create Zone</p>
+                <TableContainer>
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>Zone #</Th>
+                        <Th>AM</Th>
+                        <Th>PM</Th>
+                        <Th>NIGHT</Th>
+                        <Th></Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          <input
+                            name="zone"
+                            min={zones.length + 1}
+                            type="number"
+                            onChange={onZoneChange}
+                            className="w-3/4 border-2 border-md"
+                          />
+                        </Td>
+                        <Td>
+                          <input
+                            name="AM"
+                            type="number"
+                            onChange={onZoneChange}
+                            className="w-2/4 border-2 border-md"
+                          />
+                          °C{" "}
+                        </Td>
+                        <Td>
+                          <input
+                            name="PM"
+                            type="number"
+                            onChange={onZoneChange}
+                            className="w-2/4 border-2 border-md"
+                          />
+                          °C{" "}
+                        </Td>
+                        <Td>
+                          <input
+                            name="NIGHT"
+                            type="number"
+                            onChange={onZoneChange}
+                            className="w-2/4 border-2 border-md"
+                          />
+                          °C{" "}
+                        </Td>
+                        <Td>
+                          <button
+                            className="rounded-md bg-slate-800 text-white ml-4 px-8"
+                            onClick={onAddZone}
+                          >
+                            SET
+                          </button>
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>{" "}
+                <p className="text-lg font-semibold m-4">Set Zone Settings</p>
+                <div className="flex flex-row px-4">
+                  <div className="flex justify-between rounded-md border-slate-800 ">
+                    <select
+                      className="h-7 w-1/5 border-2"
+                      name="role"
+                      placeholder="zone#"
+                    >
+                      {zones &&
+                        zones.map((zone) => {
+                          return (
+                            <option key={zone.zoneId} value={zone.zoneId}>
+                              {zone.zoneId}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    <select
+                      onChange={onZoneChange}
+                      className="h-7 border-2 w-1/4"
+                      name="role"
+                    >
+                      <option name="AM" value="AM">
+                        AM
+                      </option>
+                      <option name="PM" value="PM">
+                        PM
+                      </option>
+                      <option name="NIGHT" value="NIGHT">
+                        NIGHT
+                      </option>
+                    </select>
+                    <input
+                      className="h-7 w-2/5 border-2"
+                      type="text"
+                      placeholder="Temperature"
+                      name="temperature"
+                    />
+                  </div>
+                  <button
+                    className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+                    onClick={() => onAddUser(newProfile)}
+                  >
+                    SET
+                  </button>
+                </div>{" "}
+              </>
+            )}
 
-            <p className="text-lg font-semibold mx-4 mt-2">Create Zone</p>
-            <TableContainer>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Zone #</Th>
-                    <Th>AM</Th>
-                    <Th>PM</Th>
-                    <Th>NIGHT</Th>
-                    <Th></Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td>
-                      <input
-                        name="zone"
-                        min={zones.length + 1}
-                        type="number"
-                        onChange={onZoneChange}
-                        className="w-3/4 border-2 border-md"
-                      />
-                    </Td>
-                    <Td>
-                      <input
-                        name="AM"
-                        type="number"
-                        onChange={onZoneChange}
-                        className="w-2/4 border-2 border-md"
-                      />
-                      °C{" "}
-                    </Td>
-                    <Td>
-                      <input
-                        name="PM"
-                        type="number"
-                        onChange={onZoneChange}
-                        className="w-2/4 border-2 border-md"
-                      />
-                      °C{" "}
-                    </Td>
-                    <Td>
-                      <input
-                        name="NIGHT"
-                        type="number"
-                        onChange={onZoneChange}
-                        className="w-2/4 border-2 border-md"
-                      />
-                      °C{" "}
-                    </Td>
-                    <Td>
-                      <button
-                        className="rounded-md bg-slate-800 text-white ml-4 px-8"
-                        onClick={onAddZone}
-                      >
-                        SET
-                      </button>
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
-
-            <p className="text-lg font-semibold m-4">Set Zone Settings</p>
-            <div className="flex flex-row px-4">
-              <div className="flex justify-between rounded-md border-slate-800 ">
-                <select
-                  className="h-7 w-1/5 border-2"
-                  name="role"
-                  placeholder="zone#"
-                >
-                  {zones &&
-                    zones.map((zone) => {
-                      return (
-                        <option key={zone.zoneId} value={zone.zoneId}>
-                          {zone.zoneId}
-                        </option>
-                      );
-                    })}
-                </select>
-                <select
-                  onChange={onZoneChange}
-                  className="h-7 border-2 w-1/4"
-                  name="role"
-                >
-                  <option name="AM" value="AM">
-                    AM
-                  </option>
-                  <option name="PM" value="PM">
-                    PM
-                  </option>
-                  <option name="NIGHT" value="NIGHT">
-                    NIGHT
-                  </option>
-                </select>
-                <input
-                  className="h-7 w-2/5 border-2"
-                  type="text"
-                  placeholder="Temperature"
-                  name="temperature"
-                />
-              </div>
-              <button
-                className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-                onClick={() => onAddUser(newProfile)}
-              >
-                SET
-              </button>
-            </div>
             <p className="text-lg font-semibold m-4">Set Room Temperature</p>
-            <div className="flex flex-row px-4">
-              <div className="flex justify-between rounded-md border-slate-800 ">
-                <select className="h-7 border-2" name="role">
+            <div className="flex flex-row gap-4 px-4">
+              <div className="flex gap-4 rounded-md border-slate-800 ">
+                <select
+                  className="w-2/5 border-2"
+                  name="role"
+                  value={tempRoomId}
+                  onChange={(e) => setTempRoomId(e.target.value)}
+                >
                   {roomList &&
                     roomList.map((room, index) => {
                       return (
@@ -246,59 +267,70 @@ export default function SHH() {
                     })}
                 </select>
                 <input
-                  className="h-7 w-2/5 border-2"
-                  type="text"
-                  placeholder="Temperature"
-                  name="temperature"
+                  name="Temperature"
+                  type="number"
+                  onChange={(e) => setSetTemp(e.target.value)}
+                  className="w-1/5 border-2 border-md"
                 />
               </div>
               <button
                 className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-                onClick={() => onAddUser(newProfile)}
+                onClick={handleSetTemp}
               >
                 SET
               </button>
-            </div>
-            <p className="text-lg font-semibold m-4">Assign Room to Zone</p>
-            <div className="flex flex-row px-4">
-              <div className="flex justify-between items-center rounded-md border-slate-800 ">
-                <select
-                  className="h-7 border-2"
-                  name="role"
-                  onChange={(e) => setAssignedSelectedRoom(e.target.value)}
-                  value={assignedSelectedRoom}
-                >
-                  {roomList &&
-                    roomList.map((room) => {
-                      return (
-                        <option key={room.roomId} value={room.roomId}>
-                          {room.roomType}
-                        </option>
-                      );
-                    })}
-                </select>
-                <p>Zone #</p>
-                <select
-                  onChange={(e) => setAssignedZone(e.target.value)}
-                  value={assignedZone}
-                >
-                  {zones &&
-                    zones.map((zone) => {
-                      return (
-                        <option key={zone.zoneId} value={zone.zoneId}>
-                          {zone.zoneId}
-                        </option>
-                      );
-                    })}
-                </select>
-              </div>
               <button
                 className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-                onClick={handleZoneAssignment}
+                onClick={handleTempReset}
               >
-                SET
+                RESET
               </button>
             </div>
+
+            {role === "Parent" && (
+              <>
+                <p className="text-lg font-semibold m-4">Assign Room to Zone</p>
+                <div className="flex flex-row px-4">
+                  <div className="flex justify-between items-center rounded-md border-slate-800 ">
+                    <select
+                      className="h-7 border-2"
+                      name="role"
+                      onChange={(e) => setAssignedSelectedRoom(e.target.value)}
+                      value={assignedSelectedRoom}
+                    >
+                      {roomList &&
+                        roomList.map((room) => {
+                          return (
+                            <option key={room.roomId} value={room.roomId}>
+                              {room.roomType}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    <p>Zone #</p>
+                    <select
+                      onChange={(e) => setAssignedZone(e.target.value)}
+                      value={assignedZone}
+                    >
+                      {zones &&
+                        zones.map((zone) => {
+                          return (
+                            <option key={zone.zoneId} value={zone.zoneId}>
+                              {zone.zoneId}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  </div>
+                  <button
+                    className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
+                    onClick={handleZoneAssignment}
+                  >
+                    SET
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <SimulationOff title={"SHH MODULE OFF"}>
@@ -312,7 +344,7 @@ export default function SHH() {
           </SimulationOff>
         )}
       </div>
-      <div className="h-full relative">
+      <div className="relative">
         <PermissionModal
           module={"SHH"}
           parents={
@@ -330,6 +362,6 @@ export default function SHH() {
           }
         />
       </div>
-    </>
+    </div>
   );
 }

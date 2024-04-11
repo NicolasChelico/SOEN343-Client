@@ -10,7 +10,7 @@ export default function SignUp() {
   const [user, setUser] = useState({
     name: "",
     userName: "",
-    role: "",
+    role: "Stranger",
     password: "",
     confirmPass: "",
   });
@@ -30,8 +30,7 @@ export default function SignUp() {
       user.name === "" ||
       user.userName === "" ||
       user.password === "" ||
-      user.confirmPass === "" ||
-      user.role === ""
+      user.confirmPass === ""
     ) {
       setErrorMessage("Please fill in all fields");
       return;
@@ -88,20 +87,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
       </div>
-      <div className="flex justify-between px-12 items-center">
-        <label className="text-xl">Role</label>
-        <select
-          name="role"
-          className="ml-4 mr-15 py-3 w-1/2 px-5 rounded-lg border-2 border-black"
-          onChange={handleChange}
-        >
-          <option value="Admin">Admin</option>
-          <option value="Parent">Parent</option>
-          <option value="Child">Child</option>
-          <option value="Guest">Guest</option>
-          <option value="Stranger">Stranger</option>
-        </select>
-      </div>
+
       <div className="flex justify-between px-12 items-center">
         <label className="text-xl">Password</label>
         <input

@@ -24,7 +24,6 @@ import ModalToggler from "../Modals/ModalToggler";
 import EditContext from "../Components/SideNav/EditContext";
 
 export default function SmartHomeSimulator() {
-  const router = useRouter();
   const { awayMode } = useSimlulationStore();
   const { location } = useAuthStore();
   let role = localStorage.getItem("role");

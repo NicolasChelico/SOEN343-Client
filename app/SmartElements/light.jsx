@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { toggleSmartElement } from "../lib/home";
+import { toggleSmartElement } from "../lib/element";
 
 export default function Light({ lightData, roomId }) {
   const [light, setLight] = useState(lightData);

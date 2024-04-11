@@ -24,6 +24,7 @@ export default function SHP() {
     roomId: 0,
   });
   const [timer, setTimer] = useState(0);
+
   useEffect(() => {
     stopCounter();
     if (location !== "" && awayMode === "ON") {
@@ -42,13 +43,13 @@ export default function SHP() {
     setCounter(0);
   };
 
-  // useEffect(() => {
-  //   if (counter > 2 && location !== "") {
-  //     setAwayMode("ON");
-  //   } else {
-  //     setAwayMode("OFF");
-  //   }
-  // }, [counter]);
+  useEffect(() => {
+    if (counter > 2 && location !== "") {
+      setAwayMode("ON");
+    } else {
+      setAwayMode("OFF");
+    }
+  }, [counter]);
 
   useEffect(() => {
     async function fetchData() {

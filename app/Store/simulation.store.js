@@ -5,7 +5,7 @@ export const useSimlulationStore = create((set, get) => ({
   date: localStorage.getItem("date") || "",
   outdoorTemp: localStorage.getItem("outdoorTemp") || "",
   insideTemp: localStorage.getItem("insideTemp") || "",
-  awayMode: "OFF",
+  awayMode: localStorage.getItem("awayMode") || "OFF",
   setDate: (date) => {
     localStorage.setItem("date", date);
     set({ date });
@@ -22,7 +22,6 @@ export const useSimlulationStore = create((set, get) => ({
     if (awayMode === "ON") await toggleAwayModeOn(); //
     else if (awayMode === "OFF") await toggleAwayModeOff(); //
     localStorage.setItem("awayMode", awayMode);
-    console.log(awayMode);
     set({ awayMode });
   },
   toggleAwayMode: async () => {
@@ -32,5 +31,6 @@ export const useSimlulationStore = create((set, get) => ({
     else if (newAwayMode === "OFF") await toggleAwayModeOff();
     localStorage.setItem("awayMode", newAwayMode);
     set({ awayMode: newAwayMode });
+    console.log(newAwayMode);
   },
 }));

@@ -23,17 +23,7 @@ export default function SHP() {
   const [sensor, setSensor] = useState({
     roomId: 0,
   });
-  const [timer, setTimer] = useState(0);
-
-  useEffect(() => {
-    stopCounter();
-    if (location !== "" && awayMode === "ON") {
-      const interval = setInterval(() => {
-        setCounter((prevCounter) => prevCounter + 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [location, awayMode]);
+  const [timer, setTimer] = useState(10);
 
   const onClickSetActive = async () => {
     await toggleAwayMode();
@@ -43,17 +33,14 @@ export default function SHP() {
     setCounter(0);
   };
 
-  useEffect(() => {
-    if (counter > 2 && location !== "") {
-      setAwayMode("ON");
-    } else {
-      setAwayMode("OFF");
-    }
-  }, [counter]);
+  const onTimerChange = (setTime) => {
+    setTimer(setTime);
+    ConsoleLogger("Timer Alert!", "Timer set to " + timer + " seconds", {
+      reason: "System Alert",
+    });
 
-  useEffect(() => {
-    async function fetchData() {
-      if (awayMode === "ON") {
+    setTimeout(() => {
+      if (awayMode === "ON" && location !== "") {
         ConsoleLogger(
           `Police Alert! person in ${location}`,
           location,
@@ -62,10 +49,21 @@ export default function SHP() {
             reason: "System Alert",
           }
         );
+      }
+    }, timer * 1000);
+    setTimer(10);
+  };
 
+  useEffect(() => {
+    async function fetchData() {
+      if (awayMode === "ON") {
         await toggleSmartElementsType("Light", false);
         await toggleSmartElementsType("Door", false);
         await toggleSmartElementsType("Window", false);
+
+        ConsoleLogger("Away Mode Alert!", "Away mode is activated.", {
+          reason: "System Alert",
+        });
       }
     }
     fetchData();
@@ -73,10 +71,6 @@ export default function SHP() {
 
   const onSensorChange = (e) => {
     setSensor((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const onTimerChange = (time) => {
-    setTimer(time);
   };
 
   const onAddMotionDetector = async (e) => {
@@ -132,7 +126,7 @@ export default function SHP() {
         <p className="text-lg font-semibold m-4">Set Motion Timer: </p>
         <div className="ml-4 flex flex-row ">
           <div className="flex justify-between rounded-md border-slate-800 ">
-            <NumberInput value={timer} onChange={(time) => onTimerChange(time)}>
+            <NumberInput value={timer} onChange={setTimer}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -142,7 +136,7 @@ export default function SHP() {
           </div>
           <button
             className="w-1/5 rounded-md bg-slate-800 text-white ml-4"
-            onClick={onAddMotionDetector}
+            onClick={onTimerChange}
           >
             SET
           </button>
